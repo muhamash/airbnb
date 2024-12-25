@@ -1,5 +1,6 @@
 {
     "nav": {
-        "login": "Login"
+        "login": "Login",
+        "placeholder": "Where to?"
     }
 }

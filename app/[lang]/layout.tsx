@@ -1,3 +1,4 @@
+import Nav from "@/components/common/Nav";
 import { kanit, playfairDisplay, rubik, ubuntu } from "@/components/fonts/font";
 import type { Metadata } from "next";
 import "../globals.css";
@@ -9,14 +10,24 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  params
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}> )
+{
+  // console.log(params)
   return (
-    <html lang="en">
+    <html lang={params?.lang}>
+      <head>
+        <link
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          rel="stylesheet"
+        />
+      </head>
       <body
-        className={`${ kanit.className } ${ playfairDisplay.className } ${rubik.className} ${ubuntu.className} antialiased`}
+        className={`${ kanit.className } ${ playfairDisplay.className } ${ rubik.className } ${ ubuntu.className } antialiased`}
       >
+        <Nav params={ params } />
         {children}
       </body>
     </html>

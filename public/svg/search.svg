@@ -1,0 +1,49 @@
+<svg
+      id="icons"
+      xmlns="http://www.w3.org/2000/svg"
+      x={0}
+      y={0}
+      viewBox="0 0 64 64"
+      xmlSpace="preserve"
+    >
+      <style>
+        {
+          ".st3{fill:none;stroke:#414042;stroke-miterlimit:10}.st27{fill:#f5ab35}"
+        }
+      </style>
+      <g id="XMLID_4_">
+        <circle id="XMLID_1063_" className="st27" cx={24.8} cy={24.7} r={9.2} />
+        <circle id="XMLID_1062_" cx={24.8} cy={24.7} r={7.1} fill="#f1f2f2" />
+        <circle id="XMLID_1061_" className="st27" cx={24.8} cy={24.7} r={5} />
+        <circle id="XMLID_1055_" cx={24.8} cy={24.7} r={2.9} fill="#e6e7e8" />
+        <g id="XMLID_425_">
+          <path id="XMLID_434_" className="st3" d="M33 33l3.5 3.5" />
+          <path
+            id="XMLID_431_"
+            d="M16.2 16.2c-4.8 4.8-4.8 12.5 0 17.2 4.8 4.8 12.5 4.8 17.2 0 4.8-4.8 4.8-12.5 0-17.2-4.7-4.7-12.4-4.7-17.2 0zm16.2 16.2c-4.2 4.2-11.1 4.2-15.3 0-4.2-4.2-4.2-11.1 0-15.3 4.2-4.2 11.1-4.2 15.3 0 4.3 4.3 4.3 11.1 0 15.3z"
+            fill="#a7a9ac"
+          />
+          <path
+            id="XMLID_429_"
+            d="M33.8 37.2l13.5 13.5c.9.9 2.5.9 3.4 0L35.5 35.5l-1.7 1.7z"
+            fill="#5edfc5"
+          />
+          <path
+            id="XMLID_428_"
+            d="M35.5 35.5l15.2 15.2c.9-.9.9-2.5 0-3.4L37.2 33.8l-1.7 1.7z"
+            fill="#36d7b7"
+          />
+          <path id="XMLID_427_" className="st3" d="M36.1 39.7l3.6-3.6" />
+          <path id="XMLID_426_" className="st3" d="M37.6 41.2l3.6-3.6" />
+        </g>
+        <g id="XMLID_1067_">
+          <path id="XMLID_1064_" className="st3" d="M24.9 24.7h23.2" />
+          <path id="XMLID_1065_" className="st3" d="M41.2 24.7l2.1-2" />
+          <path id="XMLID_430_" className="st3" d="M43.3 24.7l2.1-2" />
+          <path id="XMLID_1066_" className="st3" d="M45.4 24.7l2-2" />
+          <path id="XMLID_1070_" className="st3" d="M47.4 26.7l-2-2" />
+          <path id="XMLID_1069_" className="st3" d="M45.4 26.7l-2.1-2" />
+          <path id="XMLID_1068_" className="st3" d="M43.3 26.7l-2.1-2" />
+        </g>
+      </g>
+    </svg>
