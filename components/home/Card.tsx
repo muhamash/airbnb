@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 interface CardProps
 {
-    param: Params;
+    params: Params;
 
 }
 

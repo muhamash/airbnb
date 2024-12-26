@@ -1,4 +1,4 @@
-export async function fetchDictionary(locale) {
+export async function fetchDictionary(locale: string) {
   try {
     const response = await fetch(`http://localhost:3000/api/language?locale=${locale}`, {
       cache: "no-store",

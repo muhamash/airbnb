@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
-    const locale = url.searchParams.get("locale")
+    const locale: string = url.searchParams.get("locale") || "en";
     
     // console.log('Locale:', locale, url);
 

@@ -10,7 +10,7 @@ export default async function Write() {
             <h3 className="text-xl font-semibold">Write a review</h3>
             <button
               className="text-gray-400 hover:text-gray-600"
-              onclick="document.getElementById('reviewModal').style.display = 'none'"
+            //   onclick="document.getElementById('reviewModal').style.display = 'none'"
             >
               <i className="fas fa-times text-xl"></i>
             </button>
@@ -63,7 +63,7 @@ export default async function Write() {
               <label className="block text-gray-700 font-medium mb-2"
                 >Your Review</label>
               <textarea
-                rows="4"
+                rows= {4}
                 placeholder="Share your experience with other travelers..."
                 className="w-full px-4 py-3 rounded-lg border focus:border-gray-500 focus:ring-0 resize-none"
               ></textarea>
@@ -76,7 +76,7 @@ export default async function Write() {
           <div className="flex justify-end gap-4">
             <button
               className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
-              onclick="document.getElementById('reviewModal').style.display = 'none'"
+            //   onclick="document.getElementById('reviewModal').style.display = 'none'"
             >
               Cancel
             </button>

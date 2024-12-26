@@ -13,8 +13,8 @@ export default async function Payment ( )
     return (
         <div className="max-w-7xl mx-auto px-6 py-[100px]">
             <div className="mb-8">
-                <Link href="/details" class="text-zinc-800 hover:underline">
-                    <i class="fas fa-chevron-left mr-2"></i>
+                <Link href="/details" className="text-zinc-800 hover:underline">
+                    <i className="fas fa-chevron-left mr-2"></i>
                     Requests to book
                 </Link>
             </div>
