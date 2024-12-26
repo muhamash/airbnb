@@ -1,6 +1,7 @@
 import Footer from "@/components/common/Footer";
 import Nav from "@/components/common/Nav";
 import { kanit, playfairDisplay, rubik, ubuntu } from "@/components/fonts/font";
+import type { Params } from "next/dist/shared/lib/router/utils/route-matcher"; 
 import type { Metadata } from "next";
 import "../globals.css";
 
@@ -11,9 +12,10 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-  Params: params
+  params
 }: Readonly<{
   children: React.ReactNode;
+  params: Params;
 }> )
 {
   // console.log(params)
