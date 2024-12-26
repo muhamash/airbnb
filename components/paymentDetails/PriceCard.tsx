@@ -1,4 +1,4 @@
-export default function PriceCard() {
+export default async function PriceCard() {
     return (
         <div className="bg-white p-6 rounded-lg shadow-sm mb-8 sticky top-0">
             <div className="flex items-start gap-4 mb-6">

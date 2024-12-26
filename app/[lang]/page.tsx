@@ -1,7 +1,13 @@
 import Pagination from "@/components/common/Pagination";
 import CardContainer from "@/components/home/CardContainer";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
-export default async function Home ( { params } )
+interface HomeProps
+{
+  params: Params;
+}
+
+export default async function Home ( { params } : HomeProps )
 {
   console.log( params );
 

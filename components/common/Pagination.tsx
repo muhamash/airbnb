@@ -1,5 +1,5 @@
 
-export default function Pagination() {
+export default async function Pagination() {
     return (
         <div className="mt-8 flex justify-center">
             <nav aria-label="Page navigation">

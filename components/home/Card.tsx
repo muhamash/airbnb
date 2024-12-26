@@ -1,7 +1,14 @@
 import { fetchDictionary } from '@/utils/fetchFunction';
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import Link from 'next/link';
 
-export default async function Card ( { params } )
+interface CardProps
+{
+    param: Params;
+
+}
+
+export default async function Card ( { params }: CardProps )
 {
     const responseData = await fetchDictionary( params?.lang );
     // console.log( responseData.home, params );

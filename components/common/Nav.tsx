@@ -1,8 +1,14 @@
 import { fetchDictionary } from "@/utils/fetchFunction";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
 import LanguageSwitch from "./LanguageSwitch";
 
-export default async function Nav ({params})
+interface NavProps
+{
+    params: Params;
+}
+
+export default async function Nav ({params}:NavProps)
 {
     const responseData = await fetchDictionary(params?.lang);
     // console.log( responseData, params?.lang );

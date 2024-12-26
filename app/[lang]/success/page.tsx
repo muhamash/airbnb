@@ -1,5 +1,5 @@
 
-export default function Success() {
+export default async function Success() {
     return (
         <div className='py-[100px] max-w-3xl mx-auto p-6'>
             {/* <!-- Success Message Section --> */}

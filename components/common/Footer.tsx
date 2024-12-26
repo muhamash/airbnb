@@ -1,6 +1,12 @@
 import { fetchDictionary } from "@/utils/fetchFunction";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
-export default async function Footer ( {params })
+interface FooterProps
+{
+  params: Params;
+}
+
+export default async function Footer ( {params }: FooterProps)
 {
     const responseData = await fetchDictionary( params?.lang );
     

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function PaymentForm() {
+export default async function PaymentForm() {
     return (
         <div>
             <section className="mb-8">
