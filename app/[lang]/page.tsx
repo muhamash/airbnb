@@ -16,7 +16,7 @@ export default async function Home ( { params } : HomeProps )
       <div className="px-6">
           <CardContainer params={params}/>
       </div>
-      <Pagination params={ params } />
+      <Pagination/>
     </div>
   );
 };
