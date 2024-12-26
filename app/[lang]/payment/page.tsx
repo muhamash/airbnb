@@ -1,16 +1,15 @@
 import PaymentForm from "@/components/paymentDetails/PaymentForm";
 import PriceCard from "@/components/paymentDetails/PriceCard";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
 
-interface PaymentProps
-{
-  params: Params;
-}
+// interface PaymentProps
+// {
+//   params: Params;
+// }
 
-export default async function Payment ( {params}: PaymentProps )
+export default async function Payment ( )
 {
-    console.log(params)
+    // console.log(params)
     return (
         <div className="max-w-7xl mx-auto px-6 py-[100px]">
             <div className="mb-8">
