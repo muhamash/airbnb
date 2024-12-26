@@ -3,7 +3,7 @@ import Card from "./Card";
 
 interface ContainerProps
 {
-    param: Params;
+    params: Params;
 }
 
 export default async function CardContainer({params}: ContainerProps) {
