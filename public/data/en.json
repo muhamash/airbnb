@@ -2,5 +2,11 @@
     "nav": {
         "login": "Login",
         "placeholder": "Where to?"
+    },
+    "home":{
+        "roomsLeft": "3 Rooms Left",
+        "perNight": "per night",
+        "location": "Himmafushi, Maldives",
+        "ratings": "4.9"
     }
 }

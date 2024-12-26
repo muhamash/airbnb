@@ -1,10 +1,16 @@
+import Pagination from "@/components/common/Pagination";
+import CardContainer from "@/components/home/CardContainer";
+
 export default async function Home ( { params } )
 {
   console.log( params );
 
   return (
-    <div className="py-20 my-20 w-full flex flex-col justify-center items-center gap-5">
-      h
+    <div className="py-[100px]">
+      <div className="px-6">
+          <CardContainer params={params}/>
+      </div>
+      <Pagination params={ params } />
     </div>
   );
 };

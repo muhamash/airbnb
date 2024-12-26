@@ -8,7 +8,7 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const locale = url.searchParams.get("locale")
     
-    console.log('Locale:', locale);
+    // console.log('Locale:', locale, url);
 
     const dictionary = await getDictionary(locale);
 

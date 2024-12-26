@@ -1,3 +1,4 @@
+import Footer from "@/components/common/Footer";
 import Nav from "@/components/common/Nav";
 import { kanit, playfairDisplay, rubik, ubuntu } from "@/components/fonts/font";
 import type { Metadata } from "next";
@@ -29,6 +30,7 @@ export default async function RootLayout({
       >
         <Nav params={ params } />
         {children}
+        <Footer/>
       </body>
     </html>
   );

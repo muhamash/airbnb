@@ -2,5 +2,11 @@
     "nav": {
         "login": "লগইন",
         "placeholder": "কিছু খুজচ্ছেন?"
+    },
+    "home": {
+        "roomsLeft": "৩টি রুম বাকি",
+        "perNight": "প্রতি রাত",
+        "location": "হিমাফুশি, মালদ্বীপ",
+        "ratings": "৪.৯"
     }
 }
