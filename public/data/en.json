@@ -3,10 +3,11 @@
         "login": "Login",
         "placeholder": "Where to?"
     },
-    "home":{
+    "home": {
         "roomsLeft": "3 Rooms Left",
         "perNight": "per night",
         "location": "Himmafushi, Maldives",
         "ratings": "4.9"
-    }
+    },
+    "footer": "© 2024 Learn with Sumit • Terms • Privacy • Your Privacy Choices"
 }

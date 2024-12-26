@@ -24,13 +24,17 @@ export default async function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
           rel="stylesheet"
         />
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        />
       </head>
       <body
-        className={`${ kanit.className } ${ playfairDisplay.className } ${ rubik.className } ${ ubuntu.className } antialiased`}
+        className={`${ kanit.className } ${ playfairDisplay.className } ${ rubik.className } ${ ubuntu.className } antialiased bg-gray-100`}
       >
-        <Nav params={ params } />
+        <Nav params={params} />
         {children}
-        <Footer/>
+        <Footer params={params} />
       </body>
     </html>
   );

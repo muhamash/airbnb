@@ -8,7 +8,7 @@ export const RotateTriangle = () => {
             visible={true}
             height="80"
             width="80"
-            color="#4fa94d"
+            colors="#4fa94d"
             ariaLabel="rotating-triangles-loading"
             wrapperStyle={{}}
             wrapperClass=""
@@ -27,7 +27,7 @@ export const  Search = ()=>
             wrapperStyle={{}}
             wrapperClass="magnifying-glass-wrapper"
             glassColor="#c0efff"
-            color="#e15b64"
+            colors="#e15b64"
         />
     );
 }
@@ -38,7 +38,7 @@ export const InfinitySpinner = () =>
         <InfinitySpin
             visible={true}
             width="200"
-            color="#4fa94d"
+            colors="#4fa94d"
             ariaLabel="infinity-spin-loading"
         />
     );
@@ -68,7 +68,7 @@ export const DiscussSpinner = () =>
             ariaLabel="discuss-loading"
             wrapperStyle={{}}
             wrapperClass="discuss-wrapper"
-            color="#fff"
+            colors="#fff"
             backgroundColor="#F4442E"
         />
     );
@@ -110,7 +110,7 @@ export const  TriangleSpinner = ()=> {
             visible={true}
             height="80"
             width="100"
-            color="#4fa94d"
+            colors="#4fa94d"
             ariaLabel="triangle-loading"
             wrapperStyle={{}}
             wrapperClass=""
