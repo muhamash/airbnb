@@ -1,8 +1,9 @@
 import Footer from "@/components/common/Footer";
 import Nav from "@/components/common/Nav";
 import { kanit, playfairDisplay, rubik, ubuntu } from "@/components/fonts/font";
-import type { Params } from "next/dist/shared/lib/router/utils/route-matcher"; 
+import { dbConnect } from "@/services/mongoDB";
 import type { Metadata } from "next";
+import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -19,6 +20,8 @@ export default async function RootLayout({
 }> )
 {
   // console.log(params)
+  await dbConnect();
+  
   return (
     <html lang={params?.lang}>
       <head>
