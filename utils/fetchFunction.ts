@@ -1,6 +1,6 @@
 export async function fetchDictionary(locale: string) {
   try {
-    const response = await fetch(`http://localhost:3000/api/language?locale=${locale}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/language?locale=${locale}`, {
       cache: "no-store",
     });
 
