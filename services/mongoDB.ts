@@ -11,4 +11,4 @@ export async function dbConnect(): Promise<Connection | undefined> {
     } catch (err) {
         console.error("Database connection error:", err);
     }
-}
+};

@@ -21,6 +21,7 @@ export default async function RootLayout({
 {
   // console.log(params)
   await dbConnect();
+  // console.log(connection.name)
   
   return (
     <html lang={params?.lang}>
