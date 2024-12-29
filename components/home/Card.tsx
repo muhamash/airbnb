@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 interface CardProps {
   params?: Params;
-  hotel: {
+  hotel?: {
     id: string;
     name?: string;
     address?: string;

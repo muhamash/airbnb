@@ -1,16 +1,12 @@
-export const replaceMongoIdInArray = <T extends { _id: any }> (
-    array: T[]
-): ( Omit<T, "_id"> & { id: string } )[] =>
-{
-    return array.map( ( item ) =>
-    {
-        const { _id, ...rest } = item;
-        return {
-            id: _id.toString(),
-            ...rest,
-        };
-    } );
-};
+import { IHotel } from "@/models/hotels";
+
+export function replaceMongoIdInArray(hotels: any[]): IHotel[] {
+    return hotels.map( hotel => ( {
+        ...hotel,
+        id: hotel._id.toString(),
+        _id: undefined
+    } ) );
+}
 
 export const replaceMongoIdInObject = <T extends { _id: string }> ( obj: T ): Omit<T, "_id"> & { id: string } =>
 {

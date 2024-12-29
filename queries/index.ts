@@ -1,12 +1,11 @@
 import { hotelModel, IHotel } from "@/models/hotels";
 import { dbConnect } from "@/services/mongoDB";
 import { replaceMongoIdInArray } from "@/utils/mongoData";
-import { Hotel } from "./types";
 
-export async function getAllHotels(): Promise<Hotel[]> {
+export async function getAllHotels(): Promise<IHotel[]> {
   await dbConnect();
 
-  const hotels = await hotelModel.find().lean<IHotel[]>();
+  const hotels = await hotelModel.find().lean();
 
-  return replaceMongoIdInArray(hotels) as Hotel[];
+  return replaceMongoIdInArray( hotels ) as IHotel[];
 }
