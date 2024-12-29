@@ -82,8 +82,8 @@ export default function UserActions({ session }: UserActionsProps) {
                                     {session.user.name}
                                 </li>
                             </p>
-                            <p className="w-fit">
-                                <li className="px-3 py-2 text-sm text-white transition-all hover:bg-white hover:text-green-800 hover:pl-4 rounded-md w-[90%] overflow-hidden text-ellipsis whitespace-nowrap">
+                            <p className="w-full">
+                                <li className="px-3 w-full py-2 text-sm text-white transition-all hover:bg-white hover:text-green-800 hover:pl-4 rounded-md overflow-hidden text-ellipsis whitespace-nowrap">
                                     {session.user.email}
                                 </li>
                             </p>
