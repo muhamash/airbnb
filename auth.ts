@@ -34,10 +34,10 @@ export const {
                     console.log( { user } );
                     if ( user )
                     {
-                        const isMatch = await bcrypt.compare(
-                            credentials.password,
-                            user.password
-                        );
+                        const password = credentials.password as string;
+                        const userPassword = user.password as string;
+
+                        const isMatch = await bcrypt.compare( password, userPassword );
                         
                         if ( isMatch )
                         {

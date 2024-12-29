@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { login } from '@/utils/serverActions';
@@ -12,7 +11,7 @@ interface FormProps {
     isLogIn?: boolean;
 }
 
-interface FormData {
+interface FormFields {
     name?: string;
     email: string;
     password: string;
@@ -20,21 +19,21 @@ interface FormData {
 }
 
 export default function Form({ isLogIn }: FormProps) {
-    const { register, watch, handleSubmit, formState: { errors } } = useForm<FormData>();
+    const { register, watch, handleSubmit, formState: { errors } } = useForm<FormFields>();
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
     // Convert data to FormData
-    const toFormData = (data: FormData): FormData => {
+    const toFormData = (data: FormFields): FormData => {
         const formData = new FormData();
         Object.keys(data).forEach((key) => {
-            formData.append(key, data[key as keyof FormData] as string);
+            formData.append(key, data[key as keyof FormFields] as string);
         });
         return formData;
     };
 
     // Submit handler
-    const onSubmit: SubmitHandler<FormData> = async (data) => {
+    const onSubmit: SubmitHandler<FormFields> = async (data) => {
         const formData = toFormData(data);
         if (isLogIn) {
             handleLogin(formData);
@@ -65,7 +64,7 @@ export default function Form({ isLogIn }: FormProps) {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(Object.fromEntries(formData)),
+                body: JSON.stringify(Object.fromEntries(formData.entries())),
             });
 
             if (res.status === 201) {
@@ -79,7 +78,7 @@ export default function Form({ isLogIn }: FormProps) {
         }
     };
 
-    const renderInput = (name: keyof FormData, type: string, placeholder: string, validation: object = {}) => (
+    const renderInput = (name: keyof FormFields, type: string, placeholder: string, validation: object = {}) => (
         <div>
             <input
                 {...register(name, { ...validation })}
@@ -103,7 +102,7 @@ export default function Form({ isLogIn }: FormProps) {
                         {isLogIn ? "Log in to Hotel Booking" : "Register as a new user"}
                     </h2>
                     <p className="text-gray-600 text-sm mt-2 font-kanit">
-                        {isLogIn ? "Welcome back! Let's get you signed in." : "You are welcome to be a user!! Please Register your account!!"}
+                        {isLogIn ? "Welcome back! Let&apos;s get you signed in." : "You are welcome to be a user!! Please Register your account!!"}
                     </p>
                 </div>
 
@@ -118,7 +117,7 @@ export default function Form({ isLogIn }: FormProps) {
                         {renderInput("password", "password", "Password", { required: "Password is required" })}
                         {!isLogIn && renderInput("confirmPassword", "password", "Re-Type your password", {
                             required: "Please confirm your password",
-                            validate: (value) => value === watch('password') || "Passwords do not match"
+                            validate: (value : string) => value === watch('password') || "Passwords do not match"
                         })}
 
                         <button
@@ -134,7 +133,7 @@ export default function Form({ isLogIn }: FormProps) {
                 <div className="text-center text-sm text-gray-600">
                     {isLogIn ? (
                         <p>
-                            Don't have an account? 
+                            Don&apos;t have an account? 
                             <Link
                                 href="/registration"
                                 className="text-primary hover:underline px-1 font-semibold text-yellow-500"
