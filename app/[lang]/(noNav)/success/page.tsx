@@ -1,5 +1,16 @@
+import { auth } from "@/auth";
+import { Session } from 'next-auth';
+import { redirect } from 'next/navigation';
 
-export default async function Success() {
+export default async function Success ()
+{
+    const session: Session | null = await auth();
+    
+    if ( !session?.user )
+    {
+        redirect( "/login" );
+    }
+
     return (
         <div className='py-[100px] max-w-3xl mx-auto p-6'>
             {/* <!-- Success Message Section --> */}
