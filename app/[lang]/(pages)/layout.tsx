@@ -24,7 +24,6 @@ export default async function RootLayout({
   
   return (
     <>
-      
       <Nav params={params} />
       {children}
       <Footer params={params} />

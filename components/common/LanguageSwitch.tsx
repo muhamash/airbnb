@@ -33,7 +33,7 @@ export default function LanguageSwitch() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
             >
-                <ul>
+                <ul className='hover:z-50'>
                     <li
                         className={`px-3 py-2 text-sm  transition-all hover:bg-zinc-50 hover:text-green-600 hover:pl-4 cursor-pointer rounded-lg font-semibold`}
                         onClick={() => handleLanguageChange( 'bn' )}
