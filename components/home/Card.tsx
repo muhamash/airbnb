@@ -4,11 +4,26 @@ import Link from 'next/link';
 
 interface CardProps
 {
-    params: Params;
+    params?: Params;
+    hotel?: {
+        id: string;
+        name: string;
+        address: string;
+        airportCode?: string;
+        city?: string;
+        countryCode?: string;
+        rate?: number;
+        propertyCategory?: number;
+        stateProvinceCode?: string;
+        thumbNailUrl?: string;
+        gallery?: string[];
+        overview?: string;
+        amenities?: string[];
+    };
 
 }
 
-export default async function Card ( { params }: CardProps )
+export default async function Card ( { params, hotel }: CardProps )
 {
     const responseData = await fetchDictionary( params?.lang );
     // console.log( responseData.home, params );
@@ -30,7 +45,7 @@ export default async function Card ( { params }: CardProps )
             </div>
             <div className="mt-3">
                 <div className="flex justify-between items-center">
-                    <h3 className="font-bold text-lg">Maldives Paradise</h3>
+                    <h3 className="font-bold text-lg">{ hotel?.name }</h3>
                     <div className="flex items-center">
                         <svg
                             className="w-4 h-4 text-yellow-500"
@@ -44,11 +59,11 @@ export default async function Card ( { params }: CardProps )
                         <span className="ml-1 text-zinc-600">4.9</span>
                     </div>
                 </div>
-                <p className="text-zinc-500 text-sm mt-1 font-playfairDisplay">{ responseData.home.location }</p>
+                <p className="text-zinc-500 text-sm mt-1 font-kanit">{ hotel?.address }</p>
                 <div className="mt-2 flex justify-between items-center font-kanit">
                     <div>
-                        <span className="font-bold">$450</span>
-                        <span className="text-zinc-500 text-sm px-2">{responseData.home.perNight }</span>
+                        <span className="font-bold">$<span className='font-bold text-cyan-700'>{ hotel?.rate }</span></span>
+                        <span className="text-zinc-500 text-sm px-2 font-playfairDisplay">{responseData.home.perNight }</span>
                     </div>
                 </div>
             </div>

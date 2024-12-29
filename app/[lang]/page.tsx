@@ -9,7 +9,7 @@ interface HomeProps
 
 export default async function Home ( { params } : HomeProps )
 {
-  console.log( params );
+  // console.log( params );
 
   return (
     <div className="py-[100px]">
