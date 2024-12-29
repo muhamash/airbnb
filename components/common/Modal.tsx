@@ -2,58 +2,51 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { KeyboardEvent, MouseEvent, ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState, MouseEvent } from "react";
 
 interface ModalProps {
-  children: ReactNode;
+    children: ReactNode;
 }
 
-const Modal = ( { children }: ModalProps ) =>
-{
-    const [ isVisible, setIsVisible ] = useState( true );
-    const overlay = useRef<HTMLDivElement>( null );
-    const wrapper = useRef<HTMLDivElement>( null );
+const Modal = ({ children }: ModalProps) => {
+    const [isVisible, setIsVisible] = useState(true);
+    const overlay = useRef<HTMLDivElement>(null);
+    const wrapper = useRef<HTMLDivElement>(null);
     const router = useRouter();
 
-    const onDismiss = useCallback( () =>
-    {
-        setIsVisible( false );
-        router.push( "/" );
-    }, [ router ] );
+    const onDismiss = useCallback(() => {
+        setIsVisible(false);
+        router.push("/");
+    }, [router]);
 
     const onClick = useCallback(
-        ( e: MouseEvent<HTMLDivElement> ) =>
-        {
-            if ( e.target === overlay.current || e.target === wrapper.current )
-            {
+        (e: MouseEvent<HTMLDivElement>) => {
+            if (e.target === overlay.current || e.target === wrapper.current) {
                 onDismiss();
             }
         },
-        [ onDismiss, overlay, wrapper ]
+        [onDismiss, overlay, wrapper]
     );
 
     const onKeyDown = useCallback(
-        ( e: KeyboardEvent ) =>
-        {
-            if ( e.key === "Escape" ) onDismiss();
+        (e: KeyboardEvent) => {
+            if (e.key === "Escape") onDismiss();
         },
-        [ onDismiss ]
+        [onDismiss]
     );
 
-    useEffect( () =>
-    {
-        document.addEventListener( "keydown", onKeyDown );
-        return () => document.removeEventListener( "keydown", onKeyDown );
-    }, [ onKeyDown ] );
+    useEffect(() => {
+        document.addEventListener("keydown", onKeyDown as EventListener);
+        return () => document.removeEventListener("keydown", onKeyDown as EventListener);
+    }, [onKeyDown]);
 
-    const handleClose = useCallback( () =>
-    {
-        setIsVisible( false );
+    const handleClose = useCallback(() => {
+        setIsVisible(false);
         window.location.href = "/";
-    }, [] );
+    }, []);
 
     return (
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
             {isVisible && (
                 <motion.div
                     ref={overlay}

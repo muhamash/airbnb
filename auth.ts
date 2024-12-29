@@ -56,4 +56,5 @@ export const {
             clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET_ID as string,
         } ),
     ],
+    // trustHost: process.env.NODE_ENV === "development",
 } );
