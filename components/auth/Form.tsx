@@ -4,65 +4,107 @@
 import { login } from '@/utils/serverActions';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { useState } from 'react';
+import { SubmitHandler, useForm } from "react-hook-form";
 import SocialLogins from './SocialLogins';
 
 interface FormProps {
     isLogIn?: boolean;
 }
 
+interface FormData {
+    name?: string;
+    email: string;
+    password: string;
+    confirmPassword?: string;
+}
+
 export default function Form({ isLogIn }: FormProps) {
-    const [error, setError] = useState<string>("");
+    const { register, watch, handleSubmit, formState: { errors } } = useForm<FormData>();
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    async function onSubmit(event: FormEvent<HTMLFormElement>) {
-        event.preventDefault();
+    // Convert data to FormData
+    const toFormData = (data: FormData): FormData => {
+        const formData = new FormData();
+        Object.keys(data).forEach((key) => {
+            formData.append(key, data[key as keyof FormData] as string);
+        });
+        return formData;
+    };
 
+    // Submit handler
+    const onSubmit: SubmitHandler<FormData> = async (data) => {
+        const formData = toFormData(data);
+        if (isLogIn) {
+            handleLogin(formData);
+        } else {
+            handleRegistration(formData);
+        }
+    };
+
+    // Login handling
+    const handleLogin = async (formData: FormData) => {
         try {
-            const formData = new FormData(event.currentTarget);
             const response = await login(formData);
-            console.log(response);
-
             if (response?.error) {
                 setError(response.error);
             } else {
                 router.push("/bookings");
             }
         } catch (err) {
-            const errorMessage = (err as Error).message || "An unknown error occurred.";
-            setError(errorMessage);
+            setError((err as Error).message || "An unknown error occurred.");
         }
-    }
+    };
+
+    // Registration handling
+    const handleRegistration = async (formData: FormData) => {
+        try {
+            const res = await fetch("http://localhost:3000/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(Object.fromEntries(formData)),
+            });
+
+            if (res.status === 201) {
+                router.push("/login");
+            } else {
+                const result = await res.json();
+                setError(result.message || "Registration failed.");
+            }
+        } catch (err) {
+            setError((err as Error).message || "An unknown error occurred.");
+        }
+    };
+
+    const renderInput = (name: keyof FormData, type: string, placeholder: string, validation: object = {}) => (
+        <div>
+            <input
+                {...register(name, { ...validation })}
+                type={type}
+                placeholder={placeholder}
+                className="w-full border border-gray-300 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            {errors[name] && <span className="text-red-500 text-sm">{errors[name]?.message}</span>}
+        </div>
+    );
 
     return (
         <>
             {error && (
-                <div className="text-xl text-red-500 text-center">{error}</div>
+                <div className="text-xl p-3 m-2 bg-white rounded-lg text-red-500 text-center">{error}</div>
             )}
             <div className="bg-white rounded-xl shadow-2xl w-96 p-6 relative shadow-black/50">
                 {/* Modal Header */}
                 <div className="text-center mb-6">
-                    {isLogIn ? (
-                        <h2 className="text-2xl font-bold text-gray-800">
-                            Log in to Hotel Booking
-                        </h2>
-                    ) : (
-                        <h2 className="text-2xl font-bold text-gray-800">
-                            Register as a new user??
-                        </h2>
-                    )}
-                    {isLogIn ? (
-                        <p className="text-gray-600 text-sm mt-2 font-kanit">
-                            Welcome back! Let&#39;s get you signed in.
-                        </p>
-                    ) : (
-                        <p className="text-gray-600 text-sm mt-2 font-">
-                            You are welcome to be a user!!{" "}
-                            <span className="px-2 text-lg font-rubik font-bold text-slate-800">
-                                Please Register your account!!
-                            </span>
-                        </p>
-                    )}
+                    <h2 className="text-2xl font-bold text-gray-800">
+                        {isLogIn ? "Log in to Hotel Booking" : "Register as a new user"}
+                    </h2>
+                    <p className="text-gray-600 text-sm mt-2 font-kanit">
+                        {isLogIn ? "Welcome back! Let's get you signed in." : "You are welcome to be a user!! Please Register your account!!"}
+                    </p>
                 </div>
 
                 {/* Social Login */}
@@ -70,30 +112,14 @@ export default function Form({ isLogIn }: FormProps) {
                     <SocialLogins />
 
                     {/* Email Login Form */}
-                    <form onSubmit={onSubmit} className="space-y-4">
-                        <input
-                            name="email"
-                            type="email"
-                            placeholder="Email"
-                            className="w-full border border-gray-300 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
-                            required
-                        />
-                        <input
-                            name="password"
-                            type="password"
-                            placeholder="Password"
-                            className="w-full border border-gray-300 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
-                            required
-                        />
-                        {!isLogIn && (
-                            <input
-                                name="confirmPassword"
-                                type="password"
-                                placeholder="Re-Type your password"
-                                className="w-full border border-gray-300 rounded-full px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary"
-                                required
-                            />
-                        )}
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        {!isLogIn && renderInput("name", "text", "Type your name", { required: "Name is required" })}
+                        {renderInput("email", "email", "Email", { required: "Email is required" })}
+                        {renderInput("password", "password", "Password", { required: "Password is required" })}
+                        {!isLogIn && renderInput("confirmPassword", "password", "Re-Type your password", {
+                            required: "Please confirm your password",
+                            validate: (value) => value === watch('password') || "Passwords do not match"
+                        })}
 
                         <button
                             type="submit"
@@ -108,7 +134,7 @@ export default function Form({ isLogIn }: FormProps) {
                 <div className="text-center text-sm text-gray-600">
                     {isLogIn ? (
                         <p>
-                            Don&#39;t have an account?
+                            Don't have an account? 
                             <Link
                                 href="/registration"
                                 className="text-primary hover:underline px-1 font-semibold text-yellow-500"
@@ -118,7 +144,7 @@ export default function Form({ isLogIn }: FormProps) {
                         </p>
                     ) : (
                         <p>
-                            Already have an account?
+                            Already have an account? 
                             <Link
                                 href="/login"
                                 className="text-primary hover:underline px-1 font-semibold text-yellow-500"

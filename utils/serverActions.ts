@@ -9,10 +9,6 @@ interface LoginResponse {
     url?: string;
 }
 
-interface FormData {
-    get(key: string): string | undefined;
-}
-
 export async function login(formData: FormData): Promise<LoginResponse> {
     try {
         const response = await signIn("credentials", {
