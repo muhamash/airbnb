@@ -24,7 +24,7 @@ interface CardProps {
 export default async function Card ( { params, hotel }: CardProps )
 {
     const responseData = await fetchDictionary( params?.lang );
-    console.log(hotel, params );
+    // console.log(hotel, params );
 
     return (
         <Link href="/details" className="block group">

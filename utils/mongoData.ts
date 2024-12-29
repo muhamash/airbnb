@@ -1,13 +1,13 @@
-export const replaceMongoIdInArray = <T extends { _id: string }> (
-    array: ( Omit<T, "_id"> & { id: string } )[]
+export const replaceMongoIdInArray = <T extends { _id: any }> (
+    array: T[]
 ): ( Omit<T, "_id"> & { id: string } )[] =>
 {
-    return array.map( item =>
+    return array.map( ( item ) =>
     {
         const { _id, ...rest } = item;
         return {
             id: _id.toString(),
-            ...rest
+            ...rest,
         };
     } );
 };
