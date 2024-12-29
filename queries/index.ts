@@ -6,6 +6,5 @@ export async function getAllHotels(): Promise<IHotel[]> {
   await dbConnect();
 
   const hotels = await hotelModel.find().lean();
-
   return replaceMongoIdInArray( hotels ) as IHotel[];
 }

@@ -14,6 +14,6 @@ export function replaceMongoIdInArray ( hotels: any[] ): IHotel[]
         } as IHotel;
     } );
 
-    console.log( data );
+    // console.log( data );
     return data;
 };

@@ -1,9 +1,10 @@
 import Form from "@/components/auth/Form";
+import Modal from "@/components/common/Modal";
 
 export default function RegistrationPage() {
   return (
-    <div className="flex items-center justify-center w-full h-screen">
+    <Modal>
       <Form isLogIn={ false }/>
-    </div>
+    </Modal>
   );
 }
