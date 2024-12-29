@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-export const replaceMongoIdInArray = <T extends { _id: string }> ( array: T[] ): ( Omit<T, "_id"> & { id: string } )[] =>
+export const replaceMongoIdInArray = <T extends { _id: string }> (
+    array: ( Omit<T, "_id"> & { id: string } )[]
+): ( Omit<T, "_id"> & { id: string } )[] =>
 {
-    const mappedArray = array.map( item =>
+    return array.map( item =>
     {
+        const { _id, ...rest } = item;
         return {
-            id: item._id.toString(),
-            ...item
+            id: _id.toString(),
+            ...rest
         };
-    } ).map( ( { _id, ...rest } ) => rest );
-
-    return mappedArray;
+    } );
 };
 
 export const replaceMongoIdInObject = <T extends { _id: string }> ( obj: T ): Omit<T, "_id"> & { id: string } =>

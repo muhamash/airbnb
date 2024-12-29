@@ -1,9 +1,9 @@
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import mongoClientPromise from "./database/mongoClientPromise";
-import { userModel } from "./models/user-model";
+import { userModel } from "./models/users";
+import mongoClientPromise from "./services/monoClientPromise";
 
 export const {
     handlers: { GET, POST },
@@ -11,7 +11,8 @@ export const {
     signIn,
     signOut,
 } = NextAuth( {
-    adapter: MongoDBAdapter( mongoClientPromise, { databaseName: process.env.ENVIRONMENT as string } ),
+    adapter: MongoDBAdapter( mongoClientPromise, { databaseName: "airbnb" as string } ),
+    secret: process.env.NEXTAUTH_SECRET,
     session: {
         strategy: 'jwt',
     },
@@ -46,7 +47,7 @@ export const {
                     }
                 } catch ( error: unknown )
                 {
-                    throw new Error( error.message );
+                    throw error;
                 }
             }
         } ),
@@ -55,4 +56,4 @@ export const {
             clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET_ID as string,
         } ),
     ],
-} as NextAuthOptions );
+} );

@@ -2,31 +2,29 @@ import { fetchDictionary } from '@/utils/fetchFunction';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import Link from 'next/link';
 
-interface CardProps
-{
-    params?: Params;
-    hotel?: {
-        id: string;
-        name: string;
-        address: string;
-        airportCode?: string;
-        city?: string;
-        countryCode?: string;
-        rate?: number;
-        propertyCategory?: number;
-        stateProvinceCode?: string;
-        thumbNailUrl?: string;
-        gallery?: string[];
-        overview?: string;
-        amenities?: string[];
-    };
-
+interface CardProps {
+  params?: Params;
+  hotel: {
+    id: string;
+    name?: string;
+    address?: string;
+    airportCode?: string;
+    city?: string;
+    countryCode?: string;
+    rate?: number;
+    propertyCategory?: number;
+    stateProvinceCode?: string;
+    thumbNailUrl?: string;
+    gallery?: string[];
+    overview?: string;
+    amenities?: string[];
+  };
 }
 
 export default async function Card ( { params, hotel }: CardProps )
 {
     const responseData = await fetchDictionary( params?.lang );
-    // console.log( responseData.home, params );
+    console.log(hotel, params );
 
     return (
         <Link href="/details" className="block group">

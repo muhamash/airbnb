@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
-
-export interface IHotel extends Document {
+export interface IHotel extends Document
+{
   name: string;
   address: string;
   airportCode: string;
@@ -66,5 +66,4 @@ const hotelSchema: Schema<IHotel> = new Schema( {
     }
 } );
 
-export const hotelModel: Model<IHotel> =
-    mongoose.models.hotels || mongoose.model<IHotel>( "hotels", hotelSchema );
+export const hotelModel: Model<IHotel> = mongoose.models.hotels || mongoose.model<IHotel>( "hotels", hotelSchema );
