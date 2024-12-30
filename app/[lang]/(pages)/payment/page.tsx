@@ -1,9 +1,6 @@
 import PaymentForm from "@/components/paymentDetails/PaymentForm";
 import PriceCard from "@/components/paymentDetails/PriceCard";
 import Link from "next/link";
-import { auth } from "@/auth";
-import { Session } from 'next-auth';
-import { redirect } from 'next/navigation';
 
 
 // interface PaymentProps
@@ -13,12 +10,12 @@ import { redirect } from 'next/navigation';
 
 export default async function Payment ( )
 {
-    const session: Session | null = await auth();
+    // const session: Session | null = await auth();
     
-    if ( !session?.user )
-    {
-        redirect( "/login" );
-    }
+    // if ( !session?.user )
+    // {
+    //     redirect( "/login" );
+    // }
     
     // console.log(params)
     return (

@@ -1,16 +1,13 @@
-import { auth } from "@/auth";
 import BookingListCard from "@/components/bookings/BookingListCard";
 import Empty from "@/components/bookings/Empty";
-import { Session } from 'next-auth';
-import { redirect } from 'next/navigation';
 
 export default async function Bookings ()
 {
-  const session: Session | null = await auth();
-      if ( !session?.user )
-      {
-          redirect( "/login" );
-  };
+  // const session: Session | null = await auth();
+  //     if ( !session?.user )
+  //     {
+  //         redirect( "/login" );
+  // };
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-[100px]">

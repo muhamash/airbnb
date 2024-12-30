@@ -1,18 +1,13 @@
-'use client'
-import { signIn } from "next-auth/react";
+import { handleAuth } from "@/utils/serverActions";
 
 export default function SocialLogins ()
 {
-    const handleAuth = () =>
-    {
-        signIn( "google", { callbackUrl: 'http://localhost:3000/bookings' } );
-    }
     return (
-        <div className="space-y-4 mb-4">
-            {/* <!-- Google Login Button --> */}
+        <form action={handleAuth} className="space-y-4 mb-4">
             <button
-                onClick={handleAuth}
                 type="submit"
+                value={"google"}
+                name="action"
                 className="w-full flex items-center justify-center border border-gray-300 rounded-full py-3 hover:bg-gray-50 transition"
             >
                 <svg
@@ -48,6 +43,6 @@ export default function SocialLogins ()
                 <span className="mx-4 text-gray-500 text-sm">or</span>
                 <div className="flex-grow border-t border-gray-300"></div>
             </div>
-        </div>
+        </form>
     );
 }

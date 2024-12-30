@@ -1,15 +1,12 @@
-import { auth } from "@/auth";
-import { Session } from 'next-auth';
-import { redirect } from 'next/navigation';
 
 export default async function Create ()
 {
-    const session: Session | null = await auth();
+    // const session: Session | null = await auth();
     
-    if ( !session?.user )
-    {
-        redirect( "/login" );
-    }
+    // if ( !session?.user )
+    // {
+    //     redirect( "/login" );
+    // }
     
     return (
         <div className="max-w-7xl mx-auto px-6 my-[100px] relative">

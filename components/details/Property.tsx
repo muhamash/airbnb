@@ -139,7 +139,7 @@ export default async function Property() {
                         </div>
 
                         <Link
-                            href="/paymentProcess"
+                            href="/payment"
                             className="w-full block text-center bg-cyan-600 text-white py-3 rounded-lg transition-all hover:brightness-90"
                         >
                             Reserve

@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import { authConfig } from "./auth.config";
 import { userModel } from "./models/users";
 import mongoClientPromise from "./services/monoClientPromise";
 
@@ -14,13 +15,14 @@ export const {
 } = NextAuth( {
     adapter: MongoDBAdapter( mongoClientPromise, { databaseName: "airbnb" as string } ),
     secret: process.env.NEXTAUTH_SECRET,
-    session: {
-        strategy: 'jwt',
-    },
+    // session: {
+    //     strategy: 'jwt',
+    // },
+    ...authConfig,
     providers: [
         CredentialsProvider( {
             credentials: {
-                email: { label: "Email", type: "text" },
+                email: { label : "Email", type: "text" },
                 password: { label: "Password", type: "password" },
             },
 
@@ -59,6 +61,13 @@ export const {
         GoogleProvider( {
             clientId: process.env.GOOGLE_AUTH_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET_ID as string,
+            authorization: {
+                params: {
+                    prompt: "consent",
+                    access_type: "offline",
+                    response_type: "code",
+                },
+            },
         } ),
     ],
     // trustHost: process.env.NODE_ENV === "development",

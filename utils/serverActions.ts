@@ -26,3 +26,9 @@ export async function login(formData: FormData): Promise<LoginResponse> {
         throw new Error((error as Error).message || "An unknown error occurred.");
     }
 }
+
+export async function handleAuth (formData)
+{
+    const action = formData.get( "action" );
+    await signIn( action, { callbackUrl: '/bookings' } );
+}
