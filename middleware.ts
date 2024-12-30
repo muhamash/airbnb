@@ -19,36 +19,49 @@ function getLocale(request: NextRequest): string {
   return match(languages, locales, defaultLocale);
 }
 
-export default auth(async function middleware(request: NextRequest): Promise<NextResponse | void> {
+export default auth( async function middleware ( request: NextRequest ): Promise<NextResponse | void>
+{
   const { nextUrl } = request;
   const pathname = nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes(pathname)
+  const isProtectedRoute = protectedRoutes.includes( pathname )
   // const isPublicRoute = publicRoutes.includes(pathname)
-
   const isAuthenticated = !!request.auth;
 
-  if (isProtectedRoute && !isAuthenticated) {
-    return NextResponse.redirect(new URL('/login', request.nextUrl))
+  // Skip API routes explicitly
+  if (pathname.startsWith('/api')) {
+    return;
   }
 
-  if (pathname === ROOT) {
-    const locale = getLocale(request);
-    return NextResponse.redirect(new URL(`/${locale}${pathname}`, nextUrl.origin));
+  if ( isProtectedRoute && !isAuthenticated )
+  {
+    return NextResponse.redirect( new URL( '/login', request.nextUrl ) )
+  }
+
+  // if ( isAuthenticated )
+  // {
+  //   return NextResponse.redirect( new URL( '/', request.nextUrl ) )
+  // }
+
+  if ( pathname === ROOT )
+  {
+    const locale = getLocale( request );
+    return NextResponse.redirect( new URL( `/${ locale }${ pathname }`, nextUrl.origin ) );
   }
 
   const pathnameIsMissingLocale = locales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
+    ( locale ) => !pathname.startsWith( `/${ locale }/` ) && pathname !== `/${ locale }`
   );
 
-  if (pathnameIsMissingLocale) {
-    const locale = getLocale(request);
-    return NextResponse.redirect(new URL(`/${locale}${pathname}`, nextUrl.origin));
+  if ( pathnameIsMissingLocale )
+  {
+    const locale = getLocale( request );
+    return NextResponse.redirect( new URL( `/${ locale }${ pathname }`, nextUrl.origin ) );
   }
-});
+} );
 
 export const config = {
   matcher: [
-    '/((?!api|assets|.*\\..*|_next).*)',
-    // "/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"
+    '/((?!api|assets|_next|.*\\..*).*)',
+    '/',
   ],
 };
