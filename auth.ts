@@ -1,5 +1,5 @@
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import bcrypt from "bcryptjs";
+import bcrypt from 'bcryptjs';
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -7,22 +7,109 @@ import { authConfig } from "./auth.config";
 import { userModel } from "./models/users";
 import mongoClientPromise from "./services/monoClientPromise";
 
+// Types for account and user
+interface GoogleAccount {
+    access_token: string;
+    expires_in: number;
+    refresh_token: string;
+    scope: string;
+    token_type: string;
+    id_token: string;
+    expires_at: number;
+    provider: string;
+    type: string;
+    providerAccountId: string;
+}
+
+interface User {
+    id: string;
+    name: string;
+    email: string;
+    image: string;
+    emailVerified: string | null;
+}
+
+// Updated token interface using the above types
+interface MyToken {
+    accessToken: string;
+    accessTokenExpires: number;
+    refreshToken: string;
+    user: User;
+    error?: string;
+}
+
+interface RefreshedTokens {
+    access_token: string;
+    expires_in: number;
+    refresh_token: string;
+}
+
+interface MySession {
+    user: User;
+    accessToken: string;
+    error?: string;
+}
+
+// Helper function to check if the token is valid
+function isTokenValid(token: MyToken): boolean {
+    return Date.now() < (token.accessTokenExpires || 0);
+}
+
+// Function to refresh the access token
+async function refreshAccessToken(token: MyToken): Promise<MyToken> {
+    try {
+        const url =
+            "https://oauth2.googleapis.com/token?" +
+            new URLSearchParams({
+                client_id: process.env.GOOGLE_AUTH_CLIENT_ID,
+                client_secret: process.env.GOOGLE_AUTH_CLIENT_SECRET_ID,
+                grant_type: "refresh_token",
+                refresh_token: token.refreshToken,
+            }).toString();
+
+        const response = await fetch(url, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            method: 'POST'
+        });
+
+        const refreshedTokens: RefreshedTokens = await response.json();
+
+        if (!response.ok) {
+            throw refreshedTokens;
+        }
+
+        return {
+            ...token,
+            accessToken: refreshedTokens.access_token,
+            accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
+            refreshToken: refreshedTokens.refresh_token,
+        };
+    } catch (error) {
+        console.error("Error refreshing access token:", error);
+
+        return {
+            ...token,
+            error: "RefreshAccessTokenError"
+        };
+    }
+}
+
 export const {
     handlers: { GET, POST },
     auth,
     signIn,
     signOut,
 } = NextAuth( {
-    adapter: MongoDBAdapter( mongoClientPromise, { databaseName: "airbnb" as string } ),
+    adapter: MongoDBAdapter( mongoClientPromise, { databaseName: "airbnb" } ),
     secret: process.env.NEXTAUTH_SECRET,
-    // session: {
-    //     strategy: 'jwt',
-    // },
     ...authConfig,
     providers: [
         CredentialsProvider( {
+            
             credentials: {
-                email: { label : "Email", type: "text" },
+                email: { label: "Email", type: "text" },
                 password: { label: "Password", type: "password" },
             },
 
@@ -30,33 +117,28 @@ export const {
             {
                 if ( !credentials ) return null;
 
-                try
-                {
-                    const user = await userModel.findOne( { email: credentials.email } );
-                    console.log( { user } );
-                    if ( user )
-                    {
-                        const password = credentials.password as string;
-                        const userPassword = user.password as string;
+                const user = await userModel.findOne( { email: credentials.email } );
 
-                        const isMatch = await bcrypt.compare( password, userPassword );
-                        
-                        if ( isMatch )
-                        {
-                            return user;
-                        } else
-                        {
-                            throw new Error( 'Email or password mismatch' );
-                        }
+                if ( !user )
+                {
+                    throw new Error( "User not found" );
+                }
+
+                if ( typeof user.password === 'string' && typeof credentials.password === 'string' )
+                {
+                    const isMatch = await bcrypt.compare( credentials.password, user.password );
+
+                    if ( isMatch )
+                    {
+                        return user;
                     } else
                     {
-                        throw new Error( 'User not found' );
+                        throw new Error( "Invalid credentials" );
                     }
-                } catch ( error: unknown )
-                {
-                    throw error;
                 }
-            }
+
+                return null;
+            },
         } ),
         GoogleProvider( {
             clientId: process.env.GOOGLE_AUTH_CLIENT_ID as string,
@@ -70,5 +152,42 @@ export const {
             },
         } ),
     ],
-    // trustHost: process.env.NODE_ENV === "development",
+    callbacks: {
+        async jwt ( { token, user, account }: { token: MyToken; user?: User; account?: GoogleAccount } ): Promise<MyToken>
+        {
+            console.log( account, user );
+
+            // If account and user are present, add access token, refresh token, and expiration info to the token
+            if ( account && user )
+            {
+                return {
+                    accessToken: account.access_token,
+                    accessTokenExpires: Date.now() + ( account.expires_in || 0 ) * 1000,
+                    refreshToken: account.refresh_token,
+                    user,
+                };
+            }
+
+            // If the token is valid, return it
+            if ( isTokenValid( token ) )
+            {
+                console.log( `At ${ new Date( Date.now() ) }, Using old access token` );
+                return token;
+            }
+
+            // If the token is expired, refresh it
+            console.log( `Token Expired at ${ new Date( Date.now() ) }` );
+            return refreshAccessToken( token );
+        },
+
+        async session ( { session, token }: { session: MySession; token: MyToken } ): Promise<MySession>
+        {
+            session.user = token.user;
+            session.accessToken = token.accessToken;
+            session.error = token.error;
+
+            console.log( `Returning Session ${ JSON.stringify( session ) }` );
+            return session;
+        },
+    },
 } );

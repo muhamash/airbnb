@@ -1,12 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-export const authConfig: { 
-    session: { 
-        strategy: string; 
-    }; 
-    providers: any[]; 
-} = {
+import type { NextAuthConfig } from "next-auth";
+
+export const authConfig: NextAuthConfig = {
     session: {
-        strategy: 'jwt',
+        strategy: "jwt",
     },
     providers: [],
 };

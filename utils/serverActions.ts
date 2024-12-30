@@ -27,8 +27,11 @@ export async function login(formData: FormData): Promise<LoginResponse> {
     }
 }
 
-export async function handleAuth (formData)
-{
-    const action = formData.get( "action" );
-    await signIn( action, { callbackUrl: '/bookings' } );
+export async function handleAuth(formData: FormData) {
+    const action = formData.get("action");
+    if (typeof action === "string") {
+        await signIn(action, { redirectTo: '/bookings' });
+    } else {
+        console.error("Action is missing or invalid.");
+    }
 }

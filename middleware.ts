@@ -5,10 +5,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authConfig } from './auth.config';
 
 const protectedRoutes = ['/success', '/payment', '/bookings'];
-// const publicRoutes = ['/login', '/registration', '/details', '/api/auth/callback/google', '/'];
 const defaultLocale = 'en';
 const locales = ['bn', 'en'];
 const ROOT = '/'; 
+
 const { auth } = NextAuth(authConfig);
 
 function getLocale(request: NextRequest): string {
@@ -19,45 +19,37 @@ function getLocale(request: NextRequest): string {
   return match(languages, locales, defaultLocale);
 }
 
-export default auth( async function middleware ( request: NextRequest ): Promise<NextResponse | void>
-{
+export default auth(async function middleware(request: NextRequest): Promise<NextResponse | void> {
   const { nextUrl } = request;
   const pathname = nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.includes( pathname )
-  // const isPublicRoute = publicRoutes.includes(pathname)
-  const isAuthenticated = !!request.auth;
+  const isProtectedRoute = protectedRoutes.includes(pathname);
+  const isAuthenticated = !!request.auth; 
+
+  console.log(typeof request.auth, typeof isAuthenticated, typeof isProtectedRoute);
 
   // Skip API routes explicitly
   if (pathname.startsWith('/api')) {
     return;
   }
 
-  if ( isProtectedRoute && !isAuthenticated )
-  {
-    return NextResponse.redirect( new URL( '/login', request.nextUrl ) )
+  if (isProtectedRoute as boolean && !isAuthenticated as boolean) {
+    return NextResponse.redirect(new URL('/login', request.nextUrl));
   }
 
-  // if ( isAuthenticated )
-  // {
-  //   return NextResponse.redirect( new URL( '/', request.nextUrl ) )
-  // }
-
-  if ( pathname === ROOT )
-  {
-    const locale = getLocale( request );
-    return NextResponse.redirect( new URL( `/${ locale }${ pathname }`, nextUrl.origin ) );
+  if (pathname === ROOT) {
+    const locale = getLocale(request);
+    return NextResponse.redirect(new URL(`/${locale}${pathname}`, nextUrl.origin));
   }
 
   const pathnameIsMissingLocale = locales.every(
-    ( locale ) => !pathname.startsWith( `/${ locale }/` ) && pathname !== `/${ locale }`
+    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
   );
 
-  if ( pathnameIsMissingLocale )
-  {
-    const locale = getLocale( request );
-    return NextResponse.redirect( new URL( `/${ locale }${ pathname }`, nextUrl.origin ) );
+  if (pathnameIsMissingLocale) {
+    const locale = getLocale(request);
+    return NextResponse.redirect(new URL(`/${locale}${pathname}`, nextUrl.origin));
   }
-} );
+});
 
 export const config = {
   matcher: [
