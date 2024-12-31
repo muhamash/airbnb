@@ -57,28 +57,32 @@ function isTokenValid(token: MyToken): boolean {
 
 // Function to refresh the access token
 async function refreshAccessToken(token: MyToken): Promise<MyToken> {
-    try
-    {
-        
-        // 
-        const url =
+    console.log("refresh token function", token);
+    try {
+        const url = token?.user?.password ? (
+            `http://localhost:3000/api/auth/token`
+        ) : (
             "https://oauth2.googleapis.com/token?" +
             new URLSearchParams({
-                client_id: process.env.GOOGLE_AUTH_CLIENT_ID,
-                client_secret: process.env.GOOGLE_AUTH_CLIENT_SECRET_ID,
+                client_id: process.env.GOOGLE_AUTH_CLIENT_ID!,
+                client_secret: process.env.GOOGLE_AUTH_CLIENT_SECRET_ID!,
                 grant_type: "refresh_token",
                 refresh_token: token.refreshToken,
-            }).toString();
+            }).toString()
+        );
 
         const response = await fetch(url, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            method: 'POST'
+            method: 'POST',
+            body: token?.user?.password ? JSON.stringify({ email: token.user.email }) : undefined,
         });
 
         const refreshedTokens: RefreshedTokens = await response.json();
 
+        console.log( "response data: ", refreshedTokens );
+        
         if (!response.ok) {
             throw refreshedTokens;
         }
@@ -87,7 +91,7 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
             ...token,
             accessToken: refreshedTokens.access_token,
             accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-            refreshToken: refreshedTokens.refresh_token,
+            refreshToken: refreshedTokens.refresh_token || token?.refreshToken,
         };
     } catch (error) {
         console.error("Error refreshing access token:", error);
@@ -106,16 +110,14 @@ export const {
     signOut,
 } = NextAuth( {
     adapter: MongoDBAdapter( mongoClientPromise, { databaseName: "airbnb" } ),
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET!,
     ...authConfig,
     providers: [
         CredentialsProvider( {
-            
             credentials: {
                 email: { label: "Email", type: "text" },
                 password: { label: "Password", type: "password" },
             },
-
             async authorize ( credentials )
             {
                 if ( !credentials ) return null;
@@ -133,7 +135,6 @@ export const {
 
                     if ( isMatch )
                     {
-                        console.log( user );
                         return user;
                     } else
                     {
@@ -145,8 +146,8 @@ export const {
             },
         } ),
         GoogleProvider( {
-            clientId: process.env.GOOGLE_AUTH_CLIENT_ID as string,
-            clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET_ID as string,
+            clientId: process.env.GOOGLE_AUTH_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET_ID!,
             authorization: {
                 params: {
                     prompt: "consent",
@@ -159,9 +160,6 @@ export const {
     callbacks: {
         async jwt ( { token, user, account }: { token: MyToken; user?: User; account?: GoogleAccount } ): Promise<MyToken>
         {
-            console.log( account, user, token );
-
-            // If account and user are present, add access token, refresh token, and expiration info to the token
             if ( account && user )
             {
                 return {
@@ -172,25 +170,19 @@ export const {
                 };
             }
 
-            // If the token is valid, return it
             if ( isTokenValid( token ) )
             {
-                console.log( `At ${ new Date( Date.now() ) }, Using old access token` );
                 return token;
             }
-
-            // If the token is expired, refresh it
-            console.log( `Token Expired at ${ new Date( Date.now() ) }` );
+            console.log(token)
             return refreshAccessToken( token );
         },
-
         async session ( { session, token }: { session: MySession; token: MyToken } ): Promise<MySession>
         {
             session.user = token.user;
             session.accessToken = token.accessToken;
             session.error = token.error;
 
-            console.log( `Returning Session ${ JSON.stringify( session ) }` );
             return session;
         },
     },

@@ -1,3 +1,4 @@
+
 import { Session } from "@/models/sessions";
 import { userModel } from "@/models/users";
 import { dbConnect } from "@/services/mongoDB";
@@ -6,21 +7,18 @@ import { v4 as uuidv4 } from "uuid";
 
 interface UserRequestData {
     email: string;
-    password: string;
+    // password: string;
 }
 
 export const POST = async ( request: NextRequest ): Promise<NextResponse> =>
 {
-    const { email, password }: UserRequestData = await request.json();
-    console.log( "Requested from:", email, password );
+    const { email }: UserRequestData = await request.json();
 
     try
     {
-        // Connect to the database
         await dbConnect();
 
-        // Find the user by email
-        const user = await userModel.findOne( { email: email } );
+        const user = await userModel.findOne( { email } );
 
         if ( !user )
         {
@@ -29,22 +27,14 @@ export const POST = async ( request: NextRequest ): Promise<NextResponse> =>
             } );
         }
 
-        console.log( "User found:", user );
-
-        // Retrieve the current session for the user
         let session = await Session.findOne( { userId: user._id } );
 
         if ( session )
         {
-            // Check if the session is expired
             if ( new Date( session.expires ) < new Date() )
             {
-                console.log( "Session expired, creating a new one..." );
-
-                // Remove the expired session
                 await Session.deleteOne( { _id: session._id } );
 
-                // Generate a new session
                 const newSessionToken = uuidv4();
                 const newExpires = new Date( Date.now() + 1 * 60 * 1000 );
 
@@ -53,17 +43,9 @@ export const POST = async ( request: NextRequest ): Promise<NextResponse> =>
                     userId: user._id,
                     expires: newExpires,
                 } );
-
-                console.log( "New session created:", session );
-            } else
-            {
-                console.log( "Session is still valid:", session );
             }
         } else
         {
-            console.log( "No existing session, creating a new one..." );
-
-            // Generate a new session if none exists
             const newSessionToken = uuidv4();
             const newExpires = new Date( Date.now() + 1 * 60 * 1000 );
 
@@ -72,13 +54,10 @@ export const POST = async ( request: NextRequest ): Promise<NextResponse> =>
                 userId: user._id,
                 expires: newExpires,
             } );
-
-            console.log( "New session created:", session );
         }
 
-        // Return the session token and expiration
         return new NextResponse(
-            JSON.stringify( { token: session.sessionToken, expires: session.expires } ),
+            JSON.stringify( { access_token: session.sessionToken, expires_in: session.expires } ),
             {
                 status: 200,
                 headers: { "Content-Type": "application/json" },
@@ -86,7 +65,6 @@ export const POST = async ( request: NextRequest ): Promise<NextResponse> =>
         );
     } catch ( err )
     {
-        console.error( "Error:", err );
         return new NextResponse( err instanceof Error ? err.message : "Internal server error", {
             status: 500,
         } );
