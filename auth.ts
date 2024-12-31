@@ -81,7 +81,7 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
 
         const refreshedTokens: RefreshedTokens = await response.json();
 
-        console.log( "response data: ", refreshedTokens );
+        // console.log( "response data: ", refreshedTokens );
         
         if (!response.ok) {
             throw refreshedTokens;
@@ -184,7 +184,7 @@ export const {
             session.accessToken = token.accessToken;
             session.error = token.error;
 
-            console.log( "sessions auth--->>>>", session );
+            // console.log( "sessions auth--->>>>", session );
             return session;
         },
     },

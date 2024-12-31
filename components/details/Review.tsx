@@ -10,7 +10,7 @@ export default async function Review() {
             <i className="fas fa-star text-yellow-500 mr-2"></i>
             <span className="text-xl font-semibold">4.9</span>
             <span className="mx-2">·</span>
-            <span className="text-gray-600">2 reviews</span>
+            <span className="text-gray-600 font-ubuntu">2 reviews</span>
           </div>
         </div>
 
@@ -35,7 +35,7 @@ export default async function Review() {
               />
             </div>
             <div>
-              <h4 className="font-medium">John Smith</h4>
+              <h4 className="font-medium font-kanit">John Smith</h4>
               <p className="text-gray-500 text-sm">December 2024</p>
             </div>
           </div>
@@ -46,39 +46,10 @@ export default async function Review() {
             <i className="fas fa-star text-yellow-500"></i>
             <i className="fas fa-star text-yellow-500"></i>
           </div>
-          <p className="text-gray-600 leading-relaxed">
+          <p className="text-gray-600 leading-relaxed font-ubuntu">
             Amazing stay! The villa exceeded our expectations. The private pool
             and beach access were highlights of our trip. Sarah was an excellent
             host, always responsive and helpful.
-          </p>
-        </div>
-
-        {/* <!-- Review Card 2 --> */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
-              <img
-                src="/api/placeholder/48/48"
-                alt="User avatar"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <h4 className="font-medium">Emma Wilson</h4>
-              <p className="text-gray-500 text-sm">November 2024</p>
-            </div>
-          </div>
-          <div className="flex items-center">
-            <i className="fas fa-star text-yellow-500"></i>
-            <i className="fas fa-star text-yellow-500"></i>
-            <i className="fas fa-star text-yellow-500"></i>
-            <i className="fas fa-star text-yellow-500"></i>
-            <i className="fas fa-star text-yellow-500"></i>
-          </div>
-          <p className="text-gray-600 leading-relaxed">
-            Perfect location for a family vacation. The villa was spotlessly
-            clean and well-maintained. The kitchen was fully equipped, and we
-            loved cooking meals while enjoying the ocean view.
           </p>
         </div>
       </div>

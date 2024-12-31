@@ -1,63 +1,74 @@
+import Image from "next/image";
 import Link from "next/link";
 
-export default async function Property() {
+interface Hotel
+{
+  _id: mongoose.Schema.Types.ObjectId,
+  name?: string;
+  address?: string;
+  airportCode?: string;
+  city?: string;
+  countryCode?: string;
+  rate?: number;
+  propertyCategory?: number;
+  stateProvinceCode?: string;
+  thumbNailUrl?: string;
+  gallery?: string[];
+  overview?: string;
+  amenities?: string[];
+}
+
+export default async function Property ( { hotel }: Hotel )
+{
+    console.log( hotel );
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
             {/* !-- Property Title and Rating --> */}
             <div className="mb-6">
-                <h1 className="text-3xl font-bold mb-2">Maldives Paradise</h1>
+                <h1 className="text-3xl font-bold mb-2">{hotel?.name}</h1>
                 <div className="flex items-center text-gray-600">
                     <i className="fas fa-star text-yellow-500 mr-1"></i>
-                    <span>5 · </span>
-                    <span className="ml-2">2 reviews</span>
+                    <span className="font-ubuntu">5 · </span>
+                    <span className="ml-2 font-ubuntu">2 reviews</span>
                     <span className="mx-2">·</span>
-                    <span className="">Maldives, Tropical Paradise</span>
+                    <span className="font-ubuntu">{hotel?.address}</span>
                 </div>
             </div>
             {/* <!-- Image Gallery --> */}
-            <div className="grid grid-cols-4 grid-rows-2 gap-4 mb-8 h-[500px]">
-                <div className="col-span-2 row-span-2">
-                    <img
-                        src="https://images.unsplash.com/photo-1480074568708-e7b720bb3f09?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Main Room"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                </div>
-                <div>
-                    <img
-                        src="https://images.unsplash.com/photo-1464146072230-91cabc968266?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Room 1"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                </div>
-                <div>
-                    <img
-                        src="https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Room 2"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                </div>
-                <div>
-                    <img
-                        src="https://images.unsplash.com/photo-1472224371017-08207f84aaae?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Room 3"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                </div>
-                <div>
-                    <img
-                        src="https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                        alt="Room 4"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                </div>
+            <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-4 mb-8 h-auto">
+                {hotel?.gallery?.map( ( image, index ) =>
+                {
+                    const isLastImage = index === hotel?.gallery?.length - 1;
+
+                    return (
+                        <div
+                            key={index}
+                            className={`${ index === 0
+                                    ? "col-span-4 md:col-span-8 lg:col-span-6 row-span-2"
+                                    : isLastImage
+                                        ? "col-span-4 md:col-span-8 lg:col-span-6"
+                                        : "col-span-2 row-span-1"
+                                }`}
+                        >
+                            <Image
+                                width={500}
+                                height={500}
+                                src={image}
+                                alt={`Gallery image ${ index + 1 }`}
+                                className="w-full h-full object-cover rounded-lg"
+                            />
+                        </div>
+                    );
+                } )}
             </div>
+
             {/* <!-- Property Details --> */}
-            <div className="grid grid-cols-3 gap-8">
+            <div className="md:grid grid-cols-3 md:gap-8 flex flex-col-reverse gap-5">
                 {/* <!-- Left Column: Property Description --> */}
-                <div className="col-span-2">
+                <div className="md:col-span-2">
                     <div className="border-b pb-6 mb-6">
-                        <h2 className="text-2xl font-semibold mb-4">
+                        {/* hotel owner */}
+                        <h2 className="text-2xl font-semibold mb-4 font-kanit">
                             Entire villa hosted by Sarah
                         </h2>
                         <div className="grid grid-cols-3 gap-4 text-gray-600">
@@ -78,19 +89,15 @@ export default async function Property() {
 
                     {/* <!-- Description --> */}
                     <div className="mb-6">
-                        <h3 className="text-xl font-semibold mb-4">About this place</h3>
-                        <p className="text-gray-700 leading-relaxed">
-                            Experience luxury in this stunning beachfront villa nestled in the
-                            heart of the Maldives. Our spacious 3-bedroom villa offers
-                            breathtaking ocean views, private pool, and direct beach access.
-                            Enjoy modern amenities, traditional Maldivian architecture, and
-                            unparalleled comfort in this tropical paradise.
+                        <h3 className="text-xl font-semibold mb-4 font-ubuntu">About this place</h3>
+                        <p className="text-gray-700 leading-relaxed font-kanit">
+                            {hotel?.overview}
                         </p>
                     </div>
 
                     {/* <!-- Amenities --> */}
                     <div>
-                        <h3 className="text-xl font-semibold mb-4">What this place offers</h3>
+                        <h3 className="text-xl font-semibold mb-4 font-kanit">What this place offers</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="flex items-center gap-2">
                                 <i className="fa-solid fa-umbrella-beach"></i>
@@ -117,8 +124,8 @@ export default async function Property() {
                     <div className="bg-white shadow-lg rounded-xl p-6 border">
                         <div className="flex justify-between items-center mb-4">
                             <div>
-                                <span className="text-xl font-bold">$450</span>
-                                <span className="text-gray-600 ml-1">per night</span>
+                                <span className="text-xl font-bold">{ hotel?.rate } tk</span>
+                                <span className="text-gray-600 ml-1 px-1 font-ubuntu">per night</span>
                             </div>
                             <div className="flex items-center">
                                 <i className="fas fa-star text-yellow-500 mr-1"></i>
@@ -126,7 +133,7 @@ export default async function Property() {
                             </div>
                         </div>
 
-                        <div className="border rounded-lg mb-4">
+                        <div className="border rounded-lg mb-4 font-kanit text-sm">
                             <div className="grid grid-cols-2 border-b">
                                 <input
                                     type="text"
@@ -145,7 +152,7 @@ export default async function Property() {
                             Reserve
                         </Link>
 
-                        <div className="text-center mt-4 text-gray-600">
+                        <div className="text-center mt-4 text-gray-600 font-ubuntu text-sm">
                             <p>You won&#39;t be charged yet</p>
                         </div>
                     </div>

@@ -24,13 +24,13 @@ interface CardProps {
 export default async function Card ( { params, hotel }: CardProps )
 {
     const responseData = await fetchDictionary( params?.lang );
-    // console.log(hotel, params );
+    console.log(hotel[0], params );
 
     return (
-        <Link href="/details" className="block group">
+        <Link href={`/${params.lang}/details/${hotel?.id}`} className="block group">
             <div className="relative">
                 <img
-                    src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    src={hotel?.thumbNailUrl}
                     alt="Maldives Paradise"
                     className="w-full h-64 object-cover rounded-xl group-hover:scale-105 transition-transform"
                 />
