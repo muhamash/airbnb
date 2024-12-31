@@ -57,7 +57,10 @@ function isTokenValid(token: MyToken): boolean {
 
 // Function to refresh the access token
 async function refreshAccessToken(token: MyToken): Promise<MyToken> {
-    try {
+    try
+    {
+        
+        // 
         const url =
             "https://oauth2.googleapis.com/token?" +
             new URLSearchParams({
@@ -130,6 +133,7 @@ export const {
 
                     if ( isMatch )
                     {
+                        console.log( user );
                         return user;
                     } else
                     {
@@ -155,7 +159,7 @@ export const {
     callbacks: {
         async jwt ( { token, user, account }: { token: MyToken; user?: User; account?: GoogleAccount } ): Promise<MyToken>
         {
-            console.log( account, user );
+            console.log( account, user, token );
 
             // If account and user are present, add access token, refresh token, and expiration info to the token
             if ( account && user )
