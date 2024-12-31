@@ -91,7 +91,7 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
             ...token,
             accessToken: refreshedTokens.access_token,
             accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-            refreshToken: refreshedTokens.refresh_token || token?.refreshToken,
+            refreshToken: refreshedTokens?.refresh_token || refreshedTokens.access_token,
         };
     } catch (error) {
         console.error("Error refreshing access token:", error);
