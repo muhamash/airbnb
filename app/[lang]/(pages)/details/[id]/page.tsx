@@ -7,7 +7,7 @@ import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { notFound } from "next/navigation";
 
 export async function generateMetadata({params}:Params) {
-  const hotel = await hotelModel.findOne( { _id: new ObjectId( params?.id ) } );
+    const hotel = await hotelModel.findOne( { _id: new ObjectId( params?.id ) } );
   
     return {
         title: `Airbnb | Hotel | ${ hotel?.name }`,
@@ -27,8 +27,7 @@ export async function generateMetadata({params}:Params) {
 
 export default async function Details ( { params }: Params )
 {
-    console.log( params );
-
+    // console.log( params );
     const isValidObjectId = ObjectId.isValid( params?.id );
     if (!isValidObjectId) {
         notFound();
@@ -44,7 +43,7 @@ export default async function Details ( { params }: Params )
 
     return (
         <div className="py-[100px]">
-            <Property hotel={ hotel } />
+            <Property hotel={hotel} lang={ params?.lang } />
             <Review/>
         </div>
     );

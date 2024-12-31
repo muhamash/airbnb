@@ -1,26 +1,35 @@
+import { getStockByHotelId } from "@/queries";
+import { fetchDictionary } from "@/utils/fetchFunction";
+import { ObjectId } from "mongodb";
 import Image from "next/image";
 import Link from "next/link";
-
-interface Hotel
+import Amenities from './Ameniteis';
+interface HotelProps
 {
-  _id: mongoose.Schema.Types.ObjectId,
-  name?: string;
-  address?: string;
-  airportCode?: string;
-  city?: string;
-  countryCode?: string;
-  rate?: number;
-  propertyCategory?: number;
-  stateProvinceCode?: string;
-  thumbNailUrl?: string;
-  gallery?: string[];
-  overview?: string;
-  amenities?: string[];
-}
+    hotel: {
+        _id: mongoose.Schema.Types.ObjectId,
+        name?: string;
+        address?: string;
+        airportCode?: string;
+        city?: string;
+        countryCode?: string;
+        rate?: number;
+        propertyCategory?: number;
+        stateProvinceCode?: string;
+        thumbNailUrl?: string;
+        gallery?: string[];
+        overview?: string;
+        amenities?: string[];
+    };
+    lang: string;
+};
 
-export default async function Property ( { hotel }: Hotel )
+export default async function Property ( { hotel, lang }: HotelProps )
 {
-    console.log( hotel );
+    const responseData = await fetchDictionary(lang);
+    const stocks = await getStockByHotelId(new ObjectId(hotel._id));
+    console.log( stocks );
+
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
             {/* !-- Property Title and Rating --> */}
@@ -71,6 +80,7 @@ export default async function Property ( { hotel }: Hotel )
                         <h2 className="text-2xl font-semibold mb-4 font-kanit">
                             Entire villa hosted by Sarah
                         </h2>
+                        {/* details */}
                         <div className="grid grid-cols-3 gap-4 text-gray-600">
                             <div className="flex items-center gap-2">
                                 <i className="fas fa-person"></i>
@@ -89,7 +99,7 @@ export default async function Property ( { hotel }: Hotel )
 
                     {/* <!-- Description --> */}
                     <div className="mb-6">
-                        <h3 className="text-xl font-semibold mb-4 font-ubuntu">About this place</h3>
+                        <h3 className="text-xl font-semibold mb-4 font-ubuntu">{responseData?.details?.title}</h3>
                         <p className="text-gray-700 leading-relaxed font-kanit">
                             {hotel?.overview}
                         </p>
@@ -97,25 +107,10 @@ export default async function Property ( { hotel }: Hotel )
 
                     {/* <!-- Amenities --> */}
                     <div>
-                        <h3 className="text-xl font-semibold mb-4 font-kanit">What this place offers</h3>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="flex items-center gap-2">
-                                <i className="fa-solid fa-umbrella-beach"></i>
-                                <span>Beach access</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <i className="fa-solid fa-person-swimming"></i>
-                                <span>Private pool</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <i className="fa-solid fa-wifi"></i>
-                                <span>Free Wi-Fi</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <i className="fa-solid fa-sink"></i>
-                                <span>Kitchen</span>
-                            </div>
-                        </div>
+                        <h3 className="text-xl font-semibold mb-4 font-kanit">{ responseData?.details?.amenities }</h3>
+                        {
+                            hotel?.amenities && <Amenities amenities={hotel?.amenities}/>
+                        }
                     </div>
                 </div>
 
@@ -124,8 +119,8 @@ export default async function Property ( { hotel }: Hotel )
                     <div className="bg-white shadow-lg rounded-xl p-6 border">
                         <div className="flex justify-between items-center mb-4">
                             <div>
-                                <span className="text-xl font-bold">{ hotel?.rate } tk</span>
-                                <span className="text-gray-600 ml-1 px-1 font-ubuntu">per night</span>
+                                <span className="text-xl font-bold">{ hotel?.rate } Tk</span>
+                                <span className="text-gray-600 ml-1 px-1 font-ubuntu">{responseData?.details?.perNight}</span>
                             </div>
                             <div className="flex items-center">
                                 <i className="fas fa-star text-yellow-500 mr-1"></i>
@@ -137,23 +132,23 @@ export default async function Property ( { hotel }: Hotel )
                             <div className="grid grid-cols-2 border-b">
                                 <input
                                     type="text"
-                                    placeholder="Check in"
-                                    className="p-3 border-r"
+                                    placeholder={responseData?.details?.checkIn}
+                                    className="p-3 border-r text-violet-700"
                                 />
-                                <input type="text" placeholder="Check out" className="p-3" />
+                                <input type="text" placeholder={responseData?.details?.checkOut} className="p-3" />
                             </div>
-                            <input type="number" placeholder="Guests" className="w-full p-3" />
+                            <input type="number" placeholder={responseData?.details?.guest} className="w-full p-3" />
                         </div>
 
                         <Link
                             href="/payment"
                             className="w-full block text-center bg-cyan-600 text-white py-3 rounded-lg transition-all hover:brightness-90"
                         >
-                            Reserve
+                           {responseData?.details?.reserve}
                         </Link>
 
                         <div className="text-center mt-4 text-gray-600 font-ubuntu text-sm">
-                            <p>You won&#39;t be charged yet</p>
+                            <p>{responseData?.details?.text}</p>
                         </div>
                     </div>
                 </div>

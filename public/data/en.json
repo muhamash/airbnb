@@ -1,4 +1,5 @@
 {
+    "taka": "Taka",
     "nav": {
         "login": "Login",
         "placeholder": "Where to?"
@@ -8,6 +9,17 @@
         "perNight": "per night",
         "location": "Himmafushi, Maldives",
         "ratings": "4.9"
+    },
+    "details": {
+        "title": "About this place",
+        "description": "Description",
+        "amenities": "What this place offers",
+        "text": "You won't be charged yet",
+        "reserve": "Reserve",
+        "perNight": "per night",
+        "checkIn": "চেক ইন",
+        "guest": "অতিথি",
+        "checkOut": "চেক আউট"
     },
     "footer": "© 2024 Learn with Sumit • Terms • Privacy • Your Privacy Choices"
 }
