@@ -57,7 +57,7 @@ function isTokenValid(token: MyToken): boolean {
 
 // Function to refresh the access token
 async function refreshAccessToken(token: MyToken): Promise<MyToken> {
-    console.log("refresh token function", token);
+    // console.log("refresh token function", token);
     try {
         const url = token?.user?.password ? (
             `http://localhost:3000/api/auth/token`
@@ -172,9 +172,10 @@ export const {
 
             if ( isTokenValid( token ) )
             {
+                console.log( "old token", token );
                 return token;
             }
-            console.log(token)
+            console.log( "going to refresh token:--->>>>", token );
             return refreshAccessToken( token );
         },
         async session ( { session, token }: { session: MySession; token: MyToken } ): Promise<MySession>
@@ -183,6 +184,7 @@ export const {
             session.accessToken = token.accessToken;
             session.error = token.error;
 
+            console.log( "sessions auth--->>>>", session );
             return session;
         },
     },

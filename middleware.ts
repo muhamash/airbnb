@@ -25,8 +25,7 @@ export default auth(async function middleware(request: NextRequest): Promise<Nex
   const isProtectedRoute = protectedRoutes.includes(pathname);
   const isAuthenticated = !!request.auth; 
 
-  console.log(typeof request.auth, typeof isAuthenticated, typeof isProtectedRoute);
-
+  // console.log(typeof request.auth, typeof isAuthenticated, typeof isProtectedRoute);
   // Skip API routes explicitly
   if (pathname.startsWith('/api')) {
     return;
