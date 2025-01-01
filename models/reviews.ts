@@ -1,30 +1,27 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
-export interface IReviews extends Document {
-    hotelId: mongoose.Types.ObjectId;
-    userId: mongoose.Types.ObjectId;
+export interface IReview extends Document {
+    userId: mongoose.Types.ObjectId;  // Change to ObjectId for MongoDB reference
     image?: string;
     title: string;
-    text:string;
-};
+    text: string;
+}
 
-const ReviewsSchema: Schema = new mongoose.Schema(
+export interface IReviews extends Document {
+    hotelId: mongoose.Types.ObjectId;  // Change to ObjectId for MongoDB reference
+    reviews: IReview[];
+}
+
+const ReviewSchema: Schema = new mongoose.Schema(
     {
-        hotelId: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-        },
         userId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId, 
             required: true,
+            ref: 'users', 
         },
         image: {
             type: String,
             required: false,
-        },
-        title: {
-            type: String,
-            required: true,
         },
         text: {
             type: String,
@@ -34,4 +31,16 @@ const ReviewsSchema: Schema = new mongoose.Schema(
     { timestamps: true }
 );
 
-export const reviewsModel: Model<IReviews> = mongoose.models.reviews || mongoose.model<IReviews>( "reviews", ReviewsSchema );
+const ReviewsSchema: Schema = new mongoose.Schema(
+    {
+        hotelId: {
+            type: mongoose.Schema.Types.ObjectId,  // Use ObjectId type for references
+            required: true,
+            ref: 'hotels',  // Optional: specify which model 'hotelId' is referring to (if you have a Hotel model)
+        },
+        reviews: [ReviewSchema],
+    },
+    { timestamps: true }
+);
+
+export const reviewsModel: Model<IReviews> = mongoose.models.reviews || mongoose.model<IReviews>("reviews", ReviewsSchema);

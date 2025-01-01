@@ -1,6 +1,7 @@
 import Property from "@/components/details/Property";
 import Review from "@/components/details/Review";
 import { hotelModel } from "@/models/hotels";
+import { getReviewsByHotelId } from "@/queries";
 import { dbConnect } from "@/services/mongoDB";
 import { ObjectId } from "mongodb";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
@@ -31,10 +32,13 @@ export default async function Details ( { params }: Params )
         notFound();
     }
 
+    const reviewPromise = getReviewsByHotelId( params?.id );
+    // console.log( reviewPromise );
+
     return (
         <div className="py-[100px]">
             <Property hotel={hotel} lang={ params?.lang } />
-            <Review lang={ params?.lang }/>
+            <Review lang={params?.lang} reviewPromise={ reviewPromise } />
         </div>
     );
 }

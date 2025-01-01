@@ -2,11 +2,12 @@
     "taka": "Taka",
     "nav": {
         "login": "Login",
-        "placeholder": "Where to?"
+        "placeholder": "Looking for something?",
+        "search": "Search"
     },
     "home": {
-        "roomsLeft": "3 Rooms Left",
-        "perNight": "per night",
+        "roomsLeft": "3 rooms left",
+        "perNight": "Per night",
         "location": "Himmafushi, Maldives",
         "ratings": "4.9"
     },
@@ -14,12 +15,26 @@
         "title": "About this place",
         "description": "Description",
         "amenities": "What this place offers",
-        "text": "You won't be charged yet",
+        "text": "You will not be charged",
         "reserve": "Reserve",
-        "perNight": "per night",
-        "checkIn": "চেক ইন",
-        "guest": "অতিথি",
-        "checkOut": "চেক আউট"
+        "perNight": "Per night",
+        "checkIn": "Check in",
+        "guest": "Guest",
+        "checkOut": "Check out",
+        "bedrooms": "Bedrooms",
+        "beds": "Beds",
+        "footer": "Limited stock! Make sure you book it before it runs out! Book quickly to get exclusive offers.",
+        "review": "Review",
+        "writeReview": "Write a review",
+        "reviews": "Reviews",
+        "errors": {
+            "required": "This field is required",
+            "notStock": "This item is out of stock",
+            "guest": "Maximum allowed guests are",
+            "bedrooms": "Maximum allowed bedrooms are",
+            "beds": "Maximum allowed beds are",
+            "checkOut": "Check-out date must be after check-in date"
+        }
     },
-    "footer": "© 2024 Learn with Sumit • Terms • Privacy • Your Privacy Choices"
+    "footer": "© 2024, Learn with Sumit • Terms • Privacy • Your Choice Policy"
 }

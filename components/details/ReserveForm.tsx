@@ -2,6 +2,7 @@
 'use client';
 
 import { motion } from "framer-motion";
+import { mongo } from "mongoose";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -11,12 +12,14 @@ interface ReserveFormProps {
     langData: {
         checkIn: string;
         checkOut: string;
+        bedrooms: string;
+        beds: string;
         guest: string;
         reserve: string;
         text: string;
     };
     stocks: {
-        hotelId: string;
+        hotelId: mongo.ObjectId;
         personMax: number;
         roomMax: number;
         bedMax: number;
@@ -28,6 +31,7 @@ interface FormData {
     checkIn: string;
     checkOut: string;
     guest: number;
+    selection: string; 
 }
 
 export default function ReserveForm({ rate, perNight, langData, stocks }: ReserveFormProps) {
@@ -44,12 +48,22 @@ export default function ReserveForm({ rate, perNight, langData, stocks }: Reserv
         setError("");
 
         if (!stocks.available) {
-            setError("Rooms are not available.");
+            setError(`${langData?.errors?.notStock}`);
             return;
         }
 
-        if (data.guest > stocks.personMax) {
-            setError(`Maximum allowed guests are ${stocks.personMax}.`);
+        if (data.selection === "guest" && data.guest > stocks.personMax) {
+            setError(`${langData?.errors?.guest} : ${stocks.personMax}.`);
+            return;
+        }
+
+        if (data.selection === "bed" && data.guest > stocks.bedMax) {
+            setError(`${langData?.errors?.beds} : ${stocks.bedMax}.`);
+            return;
+        }
+
+        if (data.selection === "room" && data.guest > stocks.roomMax) {
+            setError(`${langData?.errors?.bedrooms} : ${stocks.roomMax}.`);
             return;
         }
 
@@ -57,7 +71,7 @@ export default function ReserveForm({ rate, perNight, langData, stocks }: Reserv
         const checkOutDate = new Date(data.checkOut);
 
         if (checkInDate >= checkOutDate) {
-            setError("Check-out date must be later than check-in date.");
+            setError(langData?.errors?.checkOut);
             return;
         }
 
@@ -65,10 +79,12 @@ export default function ReserveForm({ rate, perNight, langData, stocks }: Reserv
     };
 
     const guestValue = watch("guest", 0);
+    const selectionValue = watch( "selection", "guest" );
+    // console.log(langData);
 
     return (
         <form
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit( onSubmit )}
             className="bg-white shadow-lg rounded-xl p-6 border relative overflow-hidden"
         >
             <motion.div
@@ -91,52 +107,82 @@ export default function ReserveForm({ rate, perNight, langData, stocks }: Reserv
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8 }}
-                className="border rounded-lg mb-4 font-kanit text-sm"
+                className="rounded-lg mb-4 font-kanit text-sm"
             >
-                <div className="grid grid-cols-2 border-b">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 py-2 px-1">
+                    <motion.label
+                        className="block text-teal-800 font-semibold place-self-start self-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        {langData?.checkIn}
+                    </motion.label>
                     <motion.input
                         type="date"
-                        {...register("checkIn", { required: "Check-in date is required." })}
-                        placeholder={langData?.checkIn}
-                        className="p-3 border-r text-violet-700 transition-transform transform hover:scale-105"
+                        {...register( "checkIn", { required: langData?.errors?.required } )}
+                        className="w-full p-2 border rounded-lg text-teal-800 transition-all transform hover:scale-105 focus:ring-2 focus:ring-teal-500"
                     />
+    
+                    <motion.label
+                        className="block text-violet-800 font-semibold place-self-start self-center"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        {langData?.checkOut}
+                    </motion.label>
                     <motion.input
                         type="date"
-                        {...register("checkOut", { required: "Check-out date is required." })}
-                        placeholder={langData?.checkOut}
-                        className="p-3 transition-transform transform hover:scale-105"
+                        {...register( "checkOut", { required: langData?.errors?.required } )}
+                        className="w-full p-2 border rounded-lg text-violet-800 transition-all transform hover:scale-105 focus:ring-2 focus:ring-violet-500"
                     />
                 </div>
+
+                <motion.div
+                    className="flex space-x-4 mb-4"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.8 }}
+                >
+                    <select
+                        {...register( "selection" )}
+                        className="w-full p-2 border rounded-lg font-bold font-kanit text-amber-600"
+                    >
+                        <option value="guest">Guest</option>
+                        <option value="bed">Bed</option>
+                        <option value="room">Room</option>
+                    </select>
+                </motion.div>
                 <motion.input
                     type="number"
-                    {...register("guest", {
-                        required: "Number of guests is required.",
+                    {...register( "guest", {
+                        required: langData?.errors?.required,
                         min: { value: 1, message: "At least 1 guest is required." },
-                    })}
-                    placeholder={langData?.guest}
-                    className="w-full p-3 transition-transform transform hover:scale-105"
+                    } )}
+                    placeholder={selectionValue === "guest" ? langData?.guest : selectionValue === "bed" ? langData?.beds : langData?.bedrooms}
+                    className="w-full p-2 border rounded-lg transition-all transform hover:scale-105"
                 />
             </motion.div>
 
             {errors.checkIn && (
-                <p className="text-red-500 text-sm mb-2">{errors.checkIn.message}</p>
+                <span className="text-red-500 text-sm mb-2">{errors.checkIn.message}</span>
             )}
             {errors.checkOut && (
-                <p className="text-red-500 text-sm mb-2">{errors.checkOut.message}</p>
+                <span className="text-red-500 text-sm mb-2">{errors.checkOut.message}</span>
             )}
             {errors.guest && (
-                <p className="text-red-500 text-sm mb-2">{errors.guest.message}</p>
+                <span className="text-red-500 text-sm mb-2">{errors.guest.message}</span>
             )}
-            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+            {error && <span className="text-red-500 text-sm mb-2">{error}</span>}
 
             <motion.button
                 type="submit"
                 disabled={!stocks.available}
-                className={`w-full block text-center py-3 rounded-lg transition-all ${
-                    !stocks.available
+                className={`w-full block text-center py-3 rounded-lg transition-all ${ !stocks.available
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-cyan-600 text-white hover:brightness-90"
-                }`}
+                    }`}
                 whileHover={{ scale: 1.05 }}
             >
                 {langData?.reserve}

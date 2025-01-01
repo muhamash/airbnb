@@ -12,7 +12,7 @@ interface UserActionsProps {
 
 export default function UserActions({ session }: UserActionsProps) {
     const [isHovered, setIsHovered] = useState(false);
-    console.log( session );
+    // console.log( session );
     const handleLogout = async () => {
         try {
             await signOut({ callbackUrl: 'http://localhost:3000' });

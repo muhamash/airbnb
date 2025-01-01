@@ -91,11 +91,11 @@ export default async function Property ( { hotel, lang }: HotelProps )
                         </div>
 
                         <div className="grid grid-cols-3 gap-4 text-gray-600">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
                                 <i className="fas fa-person"></i>
                                 <span>{stocks?.personMax} {responseData?.details?.guest}</span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
                                 <i className="fas fa-door-open"></i>
                                 <span>{stocks?.roomMax} {responseData?.details?.bedrooms}</span>
                             </div>

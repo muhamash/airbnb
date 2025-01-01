@@ -14,7 +14,7 @@ export async function login(formData: FormData): Promise<LoginResponse> {
         const response = await signIn("credentials", {
             email: formData.get("email"),
             password: formData.get("password"),
-            redirect: false,
+            redirect: true,
         });
 
         if (!response) {
