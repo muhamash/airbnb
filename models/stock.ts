@@ -25,8 +25,12 @@ const StockSchema: Schema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    available: {
+      type: Boolean,
+      require: true,
+    }
   },
-//   { timestamps: true }
+    { timestamps: true }
 );
 
 export const stockModel: Model<IStock> = mongoose.models.stocks || mongoose.model<IStock>("stocks", StockSchema);

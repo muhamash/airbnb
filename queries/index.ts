@@ -17,7 +17,7 @@ export async function getStockByHotelId(hotelId: string): Promise<IStock[]| null
   await dbConnect();
 
   try {
-    console.log("hotelId:", hotelId);
+    // console.log("hotelId:", hotelId);
     const stock = await stockModel.findOne( { hotelId: new ObjectId( hotelId ) } );
 
     if (stock) {
@@ -25,7 +25,7 @@ export async function getStockByHotelId(hotelId: string): Promise<IStock[]| null
       stock.hotelId = stock.hotelId.toString();
     }
 
-    console.log("stock:", stock);
+    // console.log("stock:", stock);
     return stock;
   } catch (error) {
     console.error( "Error fetching stock by hotelId:", error );

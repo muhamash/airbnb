@@ -53,10 +53,10 @@ export default async function Property ( { hotel, lang }: HotelProps )
                         <div
                             key={index}
                             className={`${ index === 0
-                                    ? "col-span-4 md:col-span-8 lg:col-span-6 row-span-2"
-                                    : isLastImage
-                                        ? "col-span-4 md:col-span-8 lg:col-span-6"
-                                        : "col-span-2 row-span-1"
+                                ? "col-span-4 md:col-span-8 lg:col-span-6 row-span-2"
+                                : isLastImage
+                                    ? "col-span-4 md:col-span-8 lg:col-span-6"
+                                    : "col-span-2 row-span-1"
                                 }`}
                         >
                             <Image
@@ -81,18 +81,27 @@ export default async function Property ( { hotel, lang }: HotelProps )
                             Entire villa hosted by Sarah
                         </h2>
                         {/* details */}
+                        <div className="py-2 flex gap-3 items-center w-fit p-1">
+                            <div class="flex justify-center items-center h-[10px] w-[10px]">
+                                <i class="fas fa-bell text-xl p-2 bg-gradient-to-r from-yellow-500 via-blue-500 to-pink-500 text-transparent bg-clip-text animate-pulse"></i>
+                            </div>
+                            <p class="text-[11px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-green-700 via-purple-600 to-pink-500 animate-text font-thin animate-pulse">
+                                {responseData?.details?.footer} ***
+                            </p>
+                        </div>
+
                         <div className="grid grid-cols-3 gap-4 text-gray-600">
                             <div className="flex items-center gap-2">
                                 <i className="fas fa-person"></i>
-                                <span>6 guests</span>
+                                <span>{stocks?.personMax} {responseData?.details?.guest}</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <i className="fas fa-door-open"></i>
-                                <span>3 bedrooms</span>
+                                <span>{stocks?.roomMax} {responseData?.details?.bedrooms}</span>
                             </div>
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
                                 <i className="fas fa-bed"></i>
-                                <span>4 beds</span>
+                                <span>{stocks?.bedMax} {responseData?.details?.beds}</span>
                             </div>
                         </div>
                     </div>
@@ -107,9 +116,9 @@ export default async function Property ( { hotel, lang }: HotelProps )
 
                     {/* <!-- Amenities --> */}
                     <div>
-                        <h3 className="text-xl font-semibold mb-4 font-kanit">{ responseData?.details?.amenities }</h3>
+                        <h3 className="text-xl font-semibold mb-4 font-kanit">{responseData?.details?.amenities}</h3>
                         {
-                            hotel?.amenities && <Amenities amenities={hotel?.amenities}/>
+                            hotel?.amenities && <Amenities amenities={hotel?.amenities} />
                         }
                     </div>
                 </div>
@@ -119,7 +128,7 @@ export default async function Property ( { hotel, lang }: HotelProps )
                     <div className="bg-white shadow-lg rounded-xl p-6 border">
                         <div className="flex justify-between items-center mb-4">
                             <div>
-                                <span className="text-xl font-bold">{ hotel?.rate } Tk</span>
+                                <span className="text-xl font-bold">{hotel?.rate} Tk</span>
                                 <span className="text-gray-600 ml-1 px-1 font-ubuntu">{responseData?.details?.perNight}</span>
                             </div>
                             <div className="flex items-center">
@@ -144,7 +153,7 @@ export default async function Property ( { hotel, lang }: HotelProps )
                             href="/payment"
                             className="w-full block text-center bg-cyan-600 text-white py-3 rounded-lg transition-all hover:brightness-90"
                         >
-                           {responseData?.details?.reserve}
+                            {responseData?.details?.reserve}
                         </Link>
 
                         <div className="text-center mt-4 text-gray-600 font-ubuntu text-sm">

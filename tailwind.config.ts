@@ -12,8 +12,22 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      animation: {
+        'text': 'text-animation 2s ease infinite',
+      },
+      keyframes: {
+        'text-animation': {
+          '0%, 100%': {
+            backgroundPosition: '0% 50%',
+          },
+          '50%': {
+            backgroundPosition: '100% 50%',
+          },
+        },
+      }, 
     },
   },
   plugins: [],
 };
+
 export default config;
