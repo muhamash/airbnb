@@ -35,3 +35,4 @@ export async function handleAuth(formData: FormData) {
         console.error("Action is missing or invalid.");
     }
 }
+

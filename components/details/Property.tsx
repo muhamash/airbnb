@@ -2,8 +2,8 @@ import { getStockByHotelId } from "@/queries";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { ObjectId } from "mongodb";
 import Image from "next/image";
-import Link from "next/link";
 import Amenities from './Ameniteis';
+import ReserveForm from "./ReserveForm";
 interface HotelProps
 {
     hotel: {
@@ -27,8 +27,8 @@ interface HotelProps
 export default async function Property ( { hotel, lang }: HotelProps )
 {
     const responseData = await fetchDictionary(lang);
-    const stocks = await getStockByHotelId(new ObjectId(hotel._id));
-    console.log( stocks );
+    const stocks = await getStockByHotelId( new ObjectId( hotel._id ) );
+    // console.log( stocks );
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
@@ -85,7 +85,7 @@ export default async function Property ( { hotel, lang }: HotelProps )
                             <div class="flex justify-center items-center h-[10px] w-[10px]">
                                 <i class="fas fa-bell text-xl p-2 bg-gradient-to-r from-yellow-500 via-blue-500 to-pink-500 text-transparent bg-clip-text animate-pulse"></i>
                             </div>
-                            <p class="text-[11px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-green-700 via-purple-600 to-pink-500 animate-text font-thin animate-pulse">
+                            <p class="text-[11px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-green-700 via-purple-600 to-pink-500  animate-pulse">
                                 {responseData?.details?.footer} ***
                             </p>
                         </div>
@@ -125,41 +125,12 @@ export default async function Property ( { hotel, lang }: HotelProps )
 
                 {/* <!-- Right Column: Booking Card --> */}
                 <div>
-                    <div className="bg-white shadow-lg rounded-xl p-6 border">
-                        <div className="flex justify-between items-center mb-4">
-                            <div>
-                                <span className="text-xl font-bold">{hotel?.rate} Tk</span>
-                                <span className="text-gray-600 ml-1 px-1 font-ubuntu">{responseData?.details?.perNight}</span>
-                            </div>
-                            <div className="flex items-center">
-                                <i className="fas fa-star text-yellow-500 mr-1"></i>
-                                <span>5</span>
-                            </div>
-                        </div>
-
-                        <div className="border rounded-lg mb-4 font-kanit text-sm">
-                            <div className="grid grid-cols-2 border-b">
-                                <input
-                                    type="text"
-                                    placeholder={responseData?.details?.checkIn}
-                                    className="p-3 border-r text-violet-700"
-                                />
-                                <input type="text" placeholder={responseData?.details?.checkOut} className="p-3" />
-                            </div>
-                            <input type="number" placeholder={responseData?.details?.guest} className="w-full p-3" />
-                        </div>
-
-                        <Link
-                            href="/payment"
-                            className="w-full block text-center bg-cyan-600 text-white py-3 rounded-lg transition-all hover:brightness-90"
-                        >
-                            {responseData?.details?.reserve}
-                        </Link>
-
-                        <div className="text-center mt-4 text-gray-600 font-ubuntu text-sm">
-                            <p>{responseData?.details?.text}</p>
-                        </div>
-                    </div>
+                    <ReserveForm
+                        rate={hotel?.rate}
+                        perNight={responseData?.details?.perNight}
+                        langData={responseData?.details}
+                        stocks={stocks}
+                    />
                 </div>
             </div>
         </div>

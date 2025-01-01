@@ -5,6 +5,7 @@ export interface IStock extends Document {
   personMax: number;
   roomMax: number;
   bedMax: number;
+  available: boolean;
 }
 
 const StockSchema: Schema = new mongoose.Schema(

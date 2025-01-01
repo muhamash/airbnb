@@ -11,17 +11,7 @@ export async function generateMetadata({params}:Params) {
   
     return {
         title: `Airbnb | Hotel | ${ hotel?.name }`,
-        description: hotel?.overview,
-        // openGraph: {
-        //   images:
-        //   {
-        //     url : `${process.env.NEXT_PUBLIC_API_URL}/og?title=${encodeURIComponent(
-        //       movieInfo?.movieDataById?.original_title
-        //     )}&description=${encodeURIComponent( movieInfo?.movieDataById?.overview )}&cover=${encodeURIComponent( `https://image.tmdb.org/t/p/original${movieInfo?.movieDataById?.poster_path}` )}`,
-        //     width: 1200,
-        //     height: 600,
-        //   }
-        // }
+        description: hotel?.overview
     };
 };
 
@@ -44,7 +34,7 @@ export default async function Details ( { params }: Params )
     return (
         <div className="py-[100px]">
             <Property hotel={hotel} lang={ params?.lang } />
-            <Review/>
+            <Review lang={ params?.lang }/>
         </div>
     );
 }
