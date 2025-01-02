@@ -1,19 +1,22 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
 export default function LanguageSwitch() {
-  const [isHovered, setIsHovered] = useState(false);
-  const router = useRouter();
+    const [ isHovered, setIsHovered ] = useState( false );
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-    const handleLanguageChange = ( locale: string ) =>
+    const handleLanguageChange = ( locale ) =>
     {
         const currentPath = window.location.pathname;
+        const queryString = searchParams.toString();
         const newPath = currentPath.replace( /^\/(en|bn)/, `/${ locale }` );
-        
-        router.push( newPath );
+        const fullPath = queryString ? `${ newPath }?${ queryString }` : newPath;
+
+        router.push( fullPath );
     };
 
     return (
@@ -33,9 +36,9 @@ export default function LanguageSwitch() {
                 exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3 }}
             >
-                <ul className='hover:z-50'>
+                <ul className="hover:z-50">
                     <li
-                        className={`px-3 py-2 text-sm  transition-all hover:bg-zinc-50 hover:text-green-600 hover:pl-4 cursor-pointer rounded-lg font-semibold`}
+                        className="px-3 py-2 text-sm transition-all hover:bg-zinc-50 hover:text-green-600 hover:pl-4 cursor-pointer rounded-lg font-semibold"
                         onClick={() => handleLanguageChange( 'bn' )}
                     >
                         বাংলা

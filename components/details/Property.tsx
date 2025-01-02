@@ -1,6 +1,8 @@
+import { auth } from "@/auth";
 import { getStockByHotelId } from "@/queries";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { ObjectId } from "mongodb";
+import { Session } from "next-auth";
 import Image from "next/image";
 import Amenities from './Ameniteis';
 import ReserveForm from "./ReserveForm";
@@ -28,7 +30,8 @@ export default async function Property ( { hotel, lang }: HotelProps )
 {
     const responseData = await fetchDictionary(lang);
     const stocks = await getStockByHotelId( new ObjectId( hotel._id ) );
-    // console.log( stocks );
+    const user: Session = await auth();
+        // console.log( "scscsc",user);
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
@@ -130,6 +133,7 @@ export default async function Property ( { hotel, lang }: HotelProps )
                         perNight={responseData?.details?.perNight}
                         langData={responseData?.details}
                         stocks={stocks}
+                        userId={user?.user?.id?.toString()}
                     />
                 </div>
             </div>

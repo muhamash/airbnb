@@ -1,29 +1,19 @@
-// 'use client';
-
+import { paymentForm } from "@/utils/serverActions";
 import TripInfo from "./TripInfo";
 
-// import { useState } from 'react';
+interface PaymentFormProps {
+  searchParams: URLSearchParams;
+}
 
-export default async function PaymentForm() {
-
-    // const handleSubmit = async (e: React.FormEvent) => {
-    //     e.preventDefault();
-    //     setIsSubmitting(true);
-
-    //     try {
-    //         // Gather form data
-    //         const formData = new FormData(e.target as HTMLFormElement);
-    //         const data = Object.fromEntries(formData.entries());
-
-    //         console.log(data);
-    //     } catch (error) {
-    //         console.log(error);
-    //     } 
-    // };
+export default async function PaymentForm ( { searchParams }: PaymentFormProps )
+{
 
     return (
-        <form>
+        <form action={paymentForm}>
             <TripInfo />
+          
+            <input type="hidden" name="hotelId" value={searchParams?.hotelId} />
+            <input type="hidden" name="userId" value={searchParams?.userId} />
 
             {/* Payment Section */}
             <section className="mb-8">
@@ -37,14 +27,9 @@ export default async function PaymentForm() {
                         name="cardNumber"
                         placeholder="Card number"
                         className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
-                        pattern="\d*" 
+                        pattern="\d*"
                         inputMode="numeric"
-                        // onInput={( e: React.ChangeEvent<HTMLInputElement> ) =>
-                        // {
-                        //     e.target.value = e.target.value.replace( /\D/g, '' );
-                        // }}
                     />
-
                     <div className="grid grid-cols-2 gap-4">
                         <input
                             required
@@ -56,11 +41,11 @@ export default async function PaymentForm() {
                         <input
                             required
                             type="tel"
-                            name="cvv number"
-                            pattern="\d*" 
+                            name="cvv"
+                            pattern="\d*"
                             inputMode="numeric"
                             placeholder="CVV"
-                           className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
+                            className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         />
                     </div>
                 </div>
@@ -111,11 +96,11 @@ export default async function PaymentForm() {
                     </div>
                 </div>
             </section>
+
             {/* Submit Button */}
             <button
                 type="submit"
-                // disabled={isSubmitting}
-                className={`w-full block text-center bg-teal-600 text-white py-3 rounded-lg mt-6 hover:brightness-90`}
+                className="w-full block text-center bg-teal-600 text-white py-3 rounded-lg mt-6 hover:brightness-90"
             >
                 Request to book
             </button>

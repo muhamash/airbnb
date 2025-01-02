@@ -2,13 +2,13 @@ import PaymentForm from "@/components/paymentDetails/PaymentForm";
 import PriceCard from "@/components/paymentDetails/PriceCard";
 import Link from "next/link";
 
+interface PaymentProps
+{
+    // params: Params;
+    searchParams: URLSearchParams;
+}
 
-// interface PaymentProps
-// {
-//   params: Params;
-// }
-
-export default async function Payment ( )
+export default async function Payment ( { searchParams}: PaymentProps )
 {
     // const session: Session | null = await auth();
     
@@ -16,8 +16,8 @@ export default async function Payment ( )
     // {
     //     redirect( "/login" );
     // }
-    
-    // console.log(params)
+    // console.log(params, searchParams)
+
     return (
         <div className="max-w-7xl mx-auto px-6 py-[100px]">
             <div className="mb-8">
@@ -27,7 +27,7 @@ export default async function Payment ( )
                 </Link>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <PaymentForm />
+                <PaymentForm searchParams={searchParams}/>
                 <PriceCard/>
             </div>
         </div>

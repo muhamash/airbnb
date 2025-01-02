@@ -3,6 +3,7 @@
 
 import { motion } from "framer-motion";
 import { mongo } from "mongoose";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -25,6 +26,7 @@ interface ReserveFormProps {
         bedMax: number;
         available: boolean;
     };
+    userId: string;
 }
 
 interface FormData {
@@ -34,7 +36,7 @@ interface FormData {
     selection: string; 
 }
 
-export default function ReserveForm({ rate, perNight, langData, stocks }: ReserveFormProps) {
+export default function ReserveForm({ userId, rate, perNight, langData, stocks }: ReserveFormProps) {
     const {
         register,
         handleSubmit,
@@ -43,6 +45,9 @@ export default function ReserveForm({ rate, perNight, langData, stocks }: Reserv
     } = useForm<FormData>();
 
     const [error, setError] = useState("");
+    const router = useRouter();
+    const params = useParams();
+    // console.log(userId)
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
         setError("");
@@ -75,7 +80,8 @@ export default function ReserveForm({ rate, perNight, langData, stocks }: Reserv
             return;
         }
 
-        console.log("Reservation Data:", data);
+        console.log( "Reservation Data:", data );
+        router.push( `http://localhost:3000/${params?.lang}/payment?hotelId=${params?.id}&userId=${userId}` );
     };
 
     const guestValue = watch("guest", 0);

@@ -14,7 +14,7 @@ export default async function PriceCard() {
                     </p>
                     <div className="flex items-center">
                         <i className="fas fa-star text-sm mr-1"></i>
-                        <span className="text-xs mt-1 text-zinc-500 font-kanit text-sky-600"
+                        <span className="text-xs mt-1 font-kanit text-sky-600"
                         >5.00 <span className="font-playfairDisplay text-teal-600">(3 Reviews)</span></span>
                     </div>
                 </div>

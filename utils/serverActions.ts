@@ -36,3 +36,7 @@ export async function handleAuth(formData: FormData) {
     }
 }
 
+export async function paymentForm( formData: FormData )
+{
+    console.log( formData );
+}
