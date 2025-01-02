@@ -131,13 +131,15 @@ export default function TripInfo() {
                                 <option value="Room">Room</option>
                             </select>
                             <input
-                                type="number"
+                                type="tel"
+                                pattern="\d*"
+                                inputMode="numeric"
                                 {...register('guestDetail', {
                                     required: 'Details are required.',
                                     min: { value: 1, message: 'Value must be greater than or equal to 1.' },
                                 })}
                                 placeholder="Enter details"
-                                className="w-full p-2 border rounded-lg"
+                                className="text-white text-sm p-2 bg-teal-600 rounded-md focus:border-1 border-violet-800"
                             />
                         </motion.div>
                     ) : (

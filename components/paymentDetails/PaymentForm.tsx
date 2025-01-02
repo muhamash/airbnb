@@ -36,7 +36,7 @@ export default async function PaymentForm() {
                         type="tel"
                         name="cardNumber"
                         placeholder="Card number"
-                        className="w-full p-3 border rounded-lg"
+                        className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         pattern="\d*" 
                         inputMode="numeric"
                         // onInput={( e: React.ChangeEvent<HTMLInputElement> ) =>
@@ -51,7 +51,7 @@ export default async function PaymentForm() {
                             type="date"
                             name="expiration"
                             placeholder="Expiration"
-                            className="p-3 border rounded-lg"
+                            className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         />
                         <input
                             required
@@ -60,7 +60,7 @@ export default async function PaymentForm() {
                             pattern="\d*" 
                             inputMode="numeric"
                             placeholder="CVV"
-                            className="p-3 border rounded-lg"
+                           className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         />
                     </div>
                 </div>
@@ -75,21 +75,23 @@ export default async function PaymentForm() {
                         type="text"
                         name="streetAddress"
                         placeholder="Street address"
-                        className="w-full p-3 border rounded-lg"
+                        className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                     />
                     <input
                         required
-                        type="text"
+                        type="tel"
+                        pattern="\d*"
                         name="aptSuite"
+                        inputMode="numeric"
                         placeholder="Apt or suite number"
-                        className="w-full p-3 border rounded-lg"
+                        className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                     />
                     <input
                         required
                         type="text"
                         name="city"
                         placeholder="City"
-                        className="w-full p-3 border rounded-lg"
+                        className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                     />
                     <div className="grid grid-cols-2 gap-4">
                         <input
@@ -97,14 +99,14 @@ export default async function PaymentForm() {
                             type="text"
                             name="state"
                             placeholder="State"
-                            className="p-3 border rounded-lg"
+                            className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         />
                         <input
                             required
                             type="text"
                             name="zipCode"
                             placeholder="ZIP code"
-                            className="p-3 border rounded-lg"
+                            className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         />
                     </div>
                 </div>
@@ -113,7 +115,7 @@ export default async function PaymentForm() {
             <button
                 type="submit"
                 // disabled={isSubmitting}
-                className={`w-full block text-center bg-teal-500 text-white py-3 rounded-lg mt-6 hover:brightness-90`}
+                className={`w-full block text-center bg-teal-600 text-white py-3 rounded-lg mt-6 hover:brightness-90`}
             >
                 Request to book
             </button>
