@@ -67,4 +67,6 @@ const hotelSchema: Schema<IHotel> = new Schema( {
     }
 } );
 
+hotelSchema.index({ name: 1 });
+
 export const hotelModel: Model<IHotel> = mongoose.models.hotels || mongoose.model<IHotel>( "hotels", hotelSchema );
