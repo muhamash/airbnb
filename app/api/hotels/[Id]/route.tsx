@@ -3,7 +3,7 @@ import { dbConnect } from "@/services/mongoDB";
 import { ObjectId } from "mongodb";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET(request: Request): Promise<Response> {
     try {
         const url = new URL(request.url);
         const id = url.pathname.split("/").pop();

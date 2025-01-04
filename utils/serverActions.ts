@@ -40,3 +40,14 @@ export async function paymentForm( formData: FormData )
 {
     console.log( formData );
 }
+
+export async function getInvoice ()
+{
+    const response = await fetch( "http://localhost:3000/api/download/invoice" );
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch the invoice.');
+    }
+
+    return response.blob();
+};
