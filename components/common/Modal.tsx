@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { ReactNode, useCallback, useEffect, useRef, useState, MouseEvent } from "react";
+import { MouseEvent, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 interface ModalProps {
     children: ReactNode;
@@ -16,7 +16,7 @@ const Modal = ({ children }: ModalProps) => {
 
     const onDismiss = useCallback(() => {
         setIsVisible(false);
-        router.push("/");
+        router.back();
     }, [router]);
 
     const onClick = useCallback(
@@ -42,7 +42,7 @@ const Modal = ({ children }: ModalProps) => {
 
     const handleClose = useCallback(() => {
         setIsVisible(false);
-        window.location.href = "/";
+        router.back();
     }, []);
 
     return (

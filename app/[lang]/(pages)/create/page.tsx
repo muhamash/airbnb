@@ -1,3 +1,4 @@
+import PreviewButton from "@/components/create/PreviewButton";
 
 export default async function Create ()
 {
@@ -10,12 +11,16 @@ export default async function Create ()
     
     return (
         <div className="max-w-7xl mx-auto px-6 my-[100px] relative">
-            <button
-                className="px-4 py-2 bg-green-700 text-white rounded-lg hover:brightness-90 absolute top-4 right-4"
-            >
+            <div className="flex gap-1 relative justify-end">
+                <button
+                className="px-4 py-2 bg-green-700 text-white rounded-lg hover:brightness-90  top-4 right-4"
+                >
                 <i className="fas fa-save mr-2"></i>
                 Publish
-            </button>
+                </button>
+                <PreviewButton/>
+            </div>
+            
             {/* <!-- Property Title and Rating --> */}
             <div className="mb-6">
                 <h1

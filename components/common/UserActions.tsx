@@ -4,8 +4,8 @@ import { Session } from "next-auth";
 import { signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
-
 interface UserActionsProps {
     session: Session | null;
 }
@@ -21,11 +21,14 @@ export default function UserActions({ session }: UserActionsProps) {
         }
     };
 
+    const params = useParams();
+    // console.log( params );
+
     return (
         <div
             className="relative font-ubuntu font-semibold"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            onMouseEnter={() => setIsHovered( true )}
+            onMouseLeave={() => setIsHovered( false )}
         >
             <button className="bg-white border border-zinc-300 text-zinc-800 px-4 py-2 rounded-full hover:shadow-md flex gap-3 items-center justify-center">
                 <motion.i
@@ -55,7 +58,7 @@ export default function UserActions({ session }: UserActionsProps) {
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="absolute right-0 top-full mt-[0.5px] max-w-48 w-48 bg-gradient-to-br from-teal-600 to-sky-500 bg-opacity-80 backdrop-blur-md shadow-lg border-green-500 border-[0.8px] rounded-md z-50"
+                    className="absolute right-0 top-full mt-[0.5px] max-w-48 w-48 bg-gradient-to-br from-teal-600 to-sky-500 bg-opacity-80 backdrop-blur-md shadow-lg border-green-500 border-[0.8px] rounded-md z-50 p-1"
                 >
                     {!session?.user ? (
                         <ul>
@@ -87,6 +90,11 @@ export default function UserActions({ session }: UserActionsProps) {
                                     {session.user.email}
                                 </li>
                             </p>
+                            <Link  href={`http://localhost:3000/${ params?.lang }/create`} className="w-full bg-gradient-to-t from-blue-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md">
+                                <li className="px-2 py-2 text-sm text-white transition-all duration-200 hover:bg-green-600 font-mono rounded-md text-[12px] text-center">
+                                    Start your business
+                                </li>
+                            </Link>
                         </ul>
                     )}
                 </motion.div>
