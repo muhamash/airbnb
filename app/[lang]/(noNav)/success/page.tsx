@@ -14,8 +14,8 @@ export default async function Success ()
         <div className='py-[20px] max-w-3xl mx-auto p-6'>
             {/* <!-- Success Message Section --> */}
             <div className="text-center my-12">
-                <div className="inline-block p-4 bg-green-100 rounded-full mb-6">
-                    <i className="fas fa-check-circle text-4xl text-primary"></i>
+                <div className="inline-block p-4 bg-green-700 rounded-full mb-6">
+                    <i className="fas fa-check-circle text-4xl text-slate-900"></i>
                 </div>
                 <h1 className="text-3xl font-bold mb-4">Payment Successful!</h1>
                 <p className="text-zinc-600 mb-8 font-ubuntu">
