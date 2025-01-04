@@ -21,7 +21,7 @@
         }
         .section {
             margin-bottom: 20px;
-             padding: 0 40px 0 40px;
+            padding: 0 40px 0 40px;
         }
         .header h1 {
             font-size: 25px;
@@ -36,8 +36,8 @@
             color: #297c7b;
         }
         .section p {
-            font-size: 19px;
-            color: #297c7b;
+            font-size: 16px;
+            
         }
         .payment p {
             font-size: 11px;
@@ -92,32 +92,77 @@
         </div>
         <div class="section">
             <h3 style="padding: 0px 0 10px 0; color:teal">Reservation Details</h3>
+            
+            <!-- reserve table -->
             <div style="background-color: #e3e3e3; padding:20px; border-radius:10px;">
-                <p style="font-size: 15px; color: #080808">Check-in: 04/01/2025</p>
-                <p style="font-size: 15px; color: #080808">Check-out: 05/01/2025</p>
-                <p style="font-size: 15px; color: #080808">Nights: 1</p>
-                <p style="font-size: 15px; color: #080808">Guests: 4</p>
+                <table style="border-radius: 10px; width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">Check-in:</td>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">04/01/2025</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">Check-out:</td>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">05/01/2025</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">Nights:</td>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">1</td>
+                </tr>
+                <tr>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">Guests:</td>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">4</td>
+                </tr>
+            </table>
+            </div>
+
+        </div>
+        <div class="section">
+            <h3 style="padding: 0px 0 10px 0; color:teal">Billing Address</h3>
+            <div style="background-color: #e3e3e3; padding:20px; border-radius:10px; display:flex; gap: 20px; flex-direction:column;">
+                <div style="display: flex; gap:30px;">
+                    <p >Street: Laboriosam tempora</p>
+                    <p >City: Commodo aliquid est</p>
+                </div>
+                <div style="display: flex; gap:30px;">
+                    <p >State: Earum aut commodo do</p>
+                    <p >ZIP Code: 68527</p>
+                </div>
             </div>
         </div>
+
         <div class="section">
-            <p>Billing Address</p>
-            <p class="details">Street: Laboriosam tempora</p>
-            <p class="details">City: Commodo aliquid est</p>
-            <p class="details">State: Earum aut commodo do</p>
-            <p class="details">ZIP Code: 68527</p>
-        </div>
-        <div class="section">
-            <h3>Payment Summary</h3>
-            <p class="payment">Room Rate (1 night × $120): $120</p>
-            <p class="payment">Cleaning Fee: $17.50</p>
-            <p class="payment">Service Fee: $51.31</p>
-            <p class="total">Total Amount: $188.81</p>
+            <h3 style="padding: 0px 0 10px 0; color:teal">Payment Summary</h3>
+            <!-- bill -->
+            <table style="background-color: #0f7797; padding: 20px; border-radius: 10px; width: 100%; border-collapse: separate; border-spacing: 10px;">
+    <tr>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">Room Rate (1 night × $120):</td>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">$120</td>
+    </tr>
+    <tr>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">Cleaning Fee:</td>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">$17.50</td>
+    </tr>
+    <tr>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">Service Fee:</td>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">$51.31</td>
+    </tr>
+    <tr>
+        <td style="font-size: 18px; color: #ffffff; font-weight: bold; padding: 10px;">Total Amount:</td>
+        <td style="font-size: 18px; color: #ffffff; font-weight: bold; padding: 10px;">$188.81</td>
+    </tr>
+            </table>
+
         </div>
         <div class="contact">
             <p>Hotel Sunshine</p>
             <p>Los Angeles, California, USA, 42028</p>
             <p>Tel: +1 234 567 8900 | Email: contact@hotel_sunshine.com</p>
         </div>
+        <footer style="padding: 50px;">
+    <p style="text-align: center; font-family: monospace; font-size: 14px; color: #333;">
+        © All rights reserved. <a href="https://github.com/muhamash" style="color: #0f7797; text-decoration: none;">github.com/muhamash</a>
+    </p>
+        </footer>
     </div>
 </body>
 </html>
