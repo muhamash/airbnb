@@ -6,7 +6,8 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request): Promise<Response> {
     try {
         const url = new URL(request.url);
-        const id = url.pathname.split("/").pop();
+        const id = url.pathname.split( "/" ).pop();
+        
         if (!id || !ObjectId.isValid(id)) {
             return NextResponse.json(
                 {

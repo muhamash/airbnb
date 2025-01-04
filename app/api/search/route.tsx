@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
+export async function GET(request: Request): Promise<Response> {
   try {
     const url = new URL(request.url);
     const value: string = url.searchParams.get("query") || "";

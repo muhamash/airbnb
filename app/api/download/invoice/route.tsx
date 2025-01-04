@@ -22,7 +22,6 @@ export async function GET(request: Request): Promise<Response> {
         const pdfBuffer = await page.pdf( { format: 'A4' } );
 
         await browser.close();
-
         return new Response( pdfBuffer, {
             headers: {
                 'Content-Type': 'application/pdf',
