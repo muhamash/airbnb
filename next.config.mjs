@@ -1,17 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-        domains: ["lh3.googleusercontent.com", "a0.muscache.com"], // Add the domain(s) you need here
+        domains: ["lh3.googleusercontent.com", "a0.muscache.com"],
     },
-    // Uncomment the following line if you want to ignore TypeScript errors during the build process
-    // typescript: {
-    //     ignoreBuildErrors: true,
-    // },
-    webpack: (config) => {
+    webpack: (config, { isServer }) => {
         config.module.rules.push({
             test: /\.map$/,
             use: 'ignore-loader',
         });
+
+        if (isServer) {
+            config.externals = [
+                ...config.externals,
+                'puppeteer-core',
+                'chrome-aws-lambda',
+            ];
+        }
+
         return config;
     },
 };
