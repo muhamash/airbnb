@@ -13,16 +13,15 @@
             position: relative;
             width: 892px;
             height: 1262px;
-            background: url('target001.png') no-repeat;
             margin: 0 auto;
-            padding: 20px;
         }
         h1, h2, h3, p {
             margin: 0;
             padding: 0;
         }
-        .header, .section {
+        .section {
             margin-bottom: 20px;
+             padding: 0 40px 0 40px;
         }
         .header h1 {
             font-size: 25px;
@@ -40,9 +39,6 @@
             font-size: 19px;
             color: #297c7b;
         }
-        .details p {
-            font-size: 11px;
-        }
         .payment p {
             font-size: 11px;
             color: #ffffff;
@@ -59,14 +55,14 @@
         .header{
             display: flex;
             background-color: #297c7b;
-            padding: 20px;
+            padding: 0 40px 0 40px;
             margin: 0;
             align-items: center;
             justify-content: space-between;
         }
     </style>
 </head>
-<body>
+<body style="background-color: #f3f3f3;">
     <div class="container">
         <div class="header">
             <svg style="padding: 0; margin:0; width:fit-content" width="100" height="200" viewBox="0 0 634 209" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -84,19 +80,24 @@
         </div>
         <hr style="height: 2px; background-color:yellow; margin:0;"/>
         <div class="section">
-            <h2>Hotel Sunshine</h2>
+            <h2 style="padding: 20px 0 10px 0;">Hotel Sunshine</h2>
+            <hr style="height: 1px; background-color:teal; margin:0;"/>
         </div>
         <div class="section">
-            <p>Guest Information</p>
-            <p class="details">Name: meherish</p>
-            <p class="details">Email: meherish@testme.com</p>
+            <h3 style="padding: 20px 0 10px 0; color:teal">Guest Information</h3>
+            <div style="background-color: #e3e3e3; padding:20px; border-radius:10px;">
+                <p style="font-size: 15px; color: #080808">Name: meherish</p>
+                <p style="font-size: 15px; color: #080808 ;padding:10px 0 0 0; ">Email: meherish@testme.com</p>
+            </div>
         </div>
         <div class="section">
-            <p>Reservation Details</p>
-            <p class="details">Check-in: 04/01/2025</p>
-            <p class="details">Check-out: 05/01/2025</p>
-            <p class="details">Nights: 1</p>
-            <p class="details">Guests: 4</p>
+            <h3 style="padding: 0px 0 10px 0; color:teal">Reservation Details</h3>
+            <div style="background-color: #e3e3e3; padding:20px; border-radius:10px;">
+                <p style="font-size: 15px; color: #080808">Check-in: 04/01/2025</p>
+                <p style="font-size: 15px; color: #080808">Check-out: 05/01/2025</p>
+                <p style="font-size: 15px; color: #080808">Nights: 1</p>
+                <p style="font-size: 15px; color: #080808">Guests: 4</p>
+            </div>
         </div>
         <div class="section">
             <p>Billing Address</p>
