@@ -28,7 +28,9 @@ export default async function Payment ( { searchParams}: PaymentProps )
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <PaymentForm searchParams={searchParams}/>
-                <PriceCard/>
+                <div>
+                    <PriceCard/>
+                </div>
             </div>
         </div>
     );
