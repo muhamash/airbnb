@@ -1,178 +1,182 @@
+'use client';
+
 import PreviewButton from "@/components/create/PreviewButton";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
 
-export default async function Create ()
-{
-    // const session: Session | null = await auth();
-    
-    // if ( !session?.user )
-    // {
-    //     redirect( "/login" );
-    // }
-    
+export default function Create() {
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm({
+        defaultValues: {
+            propertyName: "",
+            propertyLocation: "",
+            price: "",
+            rooms: "",
+            image0: "",
+            image1: "",
+            image2: "",
+            image3: "",
+            image4: "",
+        },
+    });
+
+    const [editFields, setEditFields] = useState({});
+    const formData = watch();
+
+    const toggleEdit = (field) => {
+        setEditFields((prev) => ({ ...prev, [field]: !prev[field] }));
+    };
+
+    const onSubmit = (data) => {
+        // Check for empty fields
+        const requiredFields = [
+            "propertyName",
+            "propertyLocation",
+            "price",
+            "rooms",
+            "image0",
+            "image1",
+            "image2",
+            "image3",
+            "image4",
+        ];
+
+        let hasError = false;
+
+        requiredFields.forEach((field) => {
+            if (!data[field] || data[field].toString().trim() === "") {
+                hasError = true;
+            }
+        });
+
+        if ( hasError )
+        {
+            toast.error("All fields required!")
+            return
+        };
+
+        console.log("Form Submitted:", data);
+    };
+
     return (
-        <div className="max-w-7xl mx-auto px-6 my-[100px] relative">
-            <div className="flex gap-1 relative justify-end">
-                <button
-                className="px-4 py-2 bg-green-700 text-white rounded-lg hover:brightness-90  top-4 right-4"
-                >
-                <i className="fas fa-save mr-2"></i>
-                Publish
-                </button>
-                <PreviewButton/>
-            </div>
-            
-            {/* <!-- Property Title and Rating --> */}
-            <div className="mb-6">
-                <h1
-                    className="text-3xl font-bold mb-2 text-zinc-400 edit"
-                    id="propertyName"
-                >
-                    Property Name
-                </h1>
-                <div className="flex items-center text-gray-600">
-                    <span className="edit text-gray-600">Property location</span>
+        <>
+            <Toaster position="top-center" reverseOrder={false} />
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="max-w-7xl mx-auto px-6 my-[100px] relative"
+            >
+                <div className="flex gap-1 relative justify-end">
+                    <button
+                        type="submit"
+                        className="px-4 py-2 bg-green-700 text-white rounded-lg hover:brightness-90 top-4 right-4"
+                    >
+                        <i className="fas fa-save mr-2"></i>
+                        Publish
+                    </button>
+                    <PreviewButton />
                 </div>
-            </div>
 
-            {/* <!-- Image Gallery --> */}
-            <div className="grid grid-cols-4 grid-rows-2 gap-4 mb-8 h-[500px]">
-                <div className="col-span-2 row-span-2 relative">
-                    <img
-                        src="https://placehold.co/600x400"
-                        alt="Main Room"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                    <input
-                        type="text"
-                        placeholder="https://placehold.co/600x400"
-                        className="w-11/12 p-2 border border-primary rounded-lg mt-2 absolute left-1/2 -translate-x-1/2 bottom-2 bg-white"
-                    />
-                </div>
-                <div className="relative">
-                    <img
-                        src="https://placehold.co/600x400"
-                        alt="Room 1"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                    <input
-                        type="text"
-                        placeholder="https://placehold.co/600x400"
-                        className="text-sm w-11/12 p-2 border border-primary rounded-lg mt-2 absolute left-1/2 -translate-x-1/2 bottom-2 bg-white"
-                    />
-                </div>
-                <div className="relative">
-                    <img
-                        src="https://placehold.co/600x400"
-                        alt="Room 2"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                    <input
-                        type="text"
-                        placeholder="https://placehold.co/600x400"
-                        className="text-sm w-11/12 p-2 border border-primary rounded-lg mt-2 absolute left-1/2 -translate-x-1/2 bottom-2 bg-white"
-                    />
-                </div>
-                <div className="relative">
-                    <img
-                        src="https://placehold.co/600x400"
-                        alt="Room 3"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                    <input
-                        type="text"
-                        placeholder="https://placehold.co/600x400"
-                        className="text-sm w-11/12 p-2 border border-primary rounded-lg mt-2 absolute left-1/2 -translate-x-1/2 bottom-2 bg-white"
-                    />
-                </div>
-                <div className="relative">
-                    <img
-                        src="https://placehold.co/600x400"
-                        alt="Room 4"
-                        className="w-full h-full object-cover rounded-lg"
-                    />
-                    <input
-                        type="text"
-                        placeholder="https://placehold.co/600x400"
-                        className="text-sm w-11/12 p-2 border border-primary rounded-lg mt-2 absolute left-1/2 -translate-x-1/2 bottom-2 bg-white"
-                    />
-                </div>
-            </div>
-
-            <div className="mb-4">
-                <span className="text-xl font-bold edit">Price in USD</span>
-                <span className="text-gray-600 ml-1">per night</span>
-            </div>
-
-            <div className="mb-4">
-                {/* <!-- Stock --> */}
-                <span className="edit">Available X rooms</span>
-            </div>
-
-            {/* <!-- Property Details --> */}
-            <div className="grid grid-cols-3 gap-8">
-                {/* <!-- Left Column: Property Description --> */}
-                <div className="col-span-2">
-                    <div className="border-b pb-6 mb-6">
-                        <div className="grid grid-cols-1 gap-4 text-gray-600">
-                            <div className="flex items-center gap-2">
-                                <i className="fas fa-person"></i>
-                                <span className="edit">How many Guest can Stay?</span>
+                {/* Property Title */}
+                <div className="mb-6">
+                    <div className="flex items-center gap-3">
+                        {editFields.propertyName ? (
+                            <div className="flex gap-2">
+                                <input
+                                    {...register("propertyName")}
+                                    defaultValue={formData.propertyName}
+                                    className="border px-2 py-1 rounded"
+                                    placeholder="Property Name"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => toggleEdit("propertyName")}
+                                    className="mt-2 text-blue-500"
+                                >
+                                    <i className="fas fa-save mr-2"></i>
+                                </button>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <i className="fas fa-door-open"></i>
-                                <span className="edit">How many Bedrooms ? </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <i className="fas fa-bed"></i>
-                                <span className="edit">How many beds available ?</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* <!-- Description --> */}
-                    <div className="mb-6">
-                        <h3 className="text-xl font-semibold mb-4">About this place</h3>
-                        <p className="text-gray-700 leading-relaxed edit">
-                            Write a short description about this place
-                        </p>
-                    </div>
-
-                    {/* <!-- Amenities --> */}
-                    <div>
-                        <h3 className="text-xl font-semibold mb-4">What this place offers</h3>
-                        <div className="grid grid-cols-2 gap-4" id="amenities">
-                            <div className="flex items-center gap-2 cursor-pointer">
-                                <i className="fa-solid fa-umbrella-beach"></i>
-                                <span>Beach access</span>
-                            </div>
-                            <div className="flex items-center gap-2 cursor-pointer">
-                                <i className="fa-solid fa-person-swimming"></i>
-                                <span>Private pool</span>
-                            </div>
-                            <div className="flex items-center gap-2 cursor-pointer">
-                                <i className="fa-solid fa-wifi"></i>
-                                <span>Free Wi-Fi</span>
-                            </div>
-                            <div className="flex items-center gap-2 cursor-pointer">
-                                <i className="fa-solid fa-sink"></i>
-                                <span>Kitchen</span>
-                            </div>
-
-                            <div className="flex items-center gap-2 cursor-pointer">
-                                <i className="fa-solid fa-square-parking"></i>
-                                <span>Free Parking</span>
-                            </div>
-
-                            <div className="flex items-center gap-2 cursor-pointer">
-                                <i className="fa-solid fa-dumbbell"></i>
-                                <span>Fitness Center</span>
-                            </div>
-                        </div>
+                        ) : (
+                            <>
+                                <h1 className="text-3xl font-bold mb-2 text-zinc-400">
+                                    {formData.propertyName || "Property Name"}
+                                </h1>
+                                <i
+                                    className="fas fa-edit text-violet-500 cursor-pointer"
+                                    onClick={() => toggleEdit("propertyName")}
+                                ></i>
+                            </>
+                        )}
                     </div>
                 </div>
 
-                {/* <!-- Right Column: Booking Card --> */}
-            </div>
-        </div>
+                {/* Property Location */}
+                <div className="mb-6">
+                    <div className="flex items-center gap-3">
+                        {editFields.propertyLocation ? (
+                            <div className="flex gap-3">
+                                <input
+                                    {...register("propertyLocation")}
+                                    defaultValue={formData.propertyLocation}
+                                    className="border px-2 py-1 rounded"
+                                    placeholder="Property Location"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => toggleEdit("propertyLocation")}
+                                    className="mt-2 text-blue-500"
+                                >
+                                    <i className="fas fa-save mr-2"></i>
+                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <p>{formData.propertyLocation || "Property location"}</p>
+                                <i
+                                    className="fas fa-edit text-violet-500 cursor-pointer"
+                                    onClick={() => toggleEdit("propertyLocation")}
+                                ></i>
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                {/* Image Gallery */}
+                <div className="grid grid-cols-4 grid-rows-2 gap-4 mb-8 h-[500px]">
+                    {Array(5)
+                        .fill(null)
+                        .map((_, idx) => (
+                            <div key={idx} className="relative">
+                                <img
+                                    src={formData[`image${idx}`] || "https://placehold.co/600x400"}
+                                    alt={`Room ${idx}`}
+                                    className="w-full h-full object-cover rounded-lg"
+                                />
+                                <input
+                                    {...register(`image${idx}`)}
+                                    placeholder={`https://placehold.co/600x400`}
+                                    defaultValue={formData[`image${idx}`]}
+                                    className="text-sm w-11/12 p-2 border border-primary rounded-lg mt-2 absolute left-1/2 -translate-x-1/2 bottom-2 bg-white"
+                                />
+                            </div>
+                        ))}
+                </div>
+
+                {/* Price */}
+                <div className="mb-4">
+                    <span className="text-xl font-bold">{formData.price || "Price in USD"}</span>
+                    <span className="text-gray-600 ml-1">per night</span>
+                </div>
+
+                {/* Stock */}
+                <div className="mb-4">
+                    <span>{formData.rooms || "Available X rooms"}</span>
+                </div>
+            </form>
+        </>
     );
 }
