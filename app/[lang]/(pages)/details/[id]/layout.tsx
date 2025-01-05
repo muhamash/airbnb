@@ -43,7 +43,6 @@ export async function generateMetadata({ params }: { params: Params }) {
     }
 }
 
-
 export default function layout({children}:React.ReactNode) {
   return (
     <>

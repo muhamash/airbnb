@@ -9,7 +9,7 @@ import ReserveForm from "./ReserveForm";
 interface HotelProps
 {
     hotel: {
-        _id: mongoose.Schema.Types.ObjectId,
+        _id: string;
         name?: string;
         address?: string;
         airportCode?: string;

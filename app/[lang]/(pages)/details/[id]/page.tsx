@@ -15,7 +15,7 @@ export default async function Details({ params }: { params: Params }) {
     const hotelId = params?.id;
 
     if (!hotelId) {
-        notFound();
+        return notFound();
     }
 
     try {
@@ -24,11 +24,13 @@ export default async function Details({ params }: { params: Params }) {
             getReviewsByHotelId( hotelId ),
         ] );
 
-        if (!hotelResponse.ok) {
-            notFound();
+        const hotel: { data: Hotel, status: number } = await hotelResponse.json();
+
+        console.log(hotel.status)
+        if (!hotel?.status === 200) {
+            return notFound();
         }
 
-        const hotel: { data: Hotel } = await hotelResponse.json();
         const plainHotel = {
             ...hotel.data,
             _id: hotel.data._id.toString(),
@@ -42,6 +44,6 @@ export default async function Details({ params }: { params: Params }) {
         );
     } catch (error) {
         console.error("Error fetching hotel details:", error);
-        notFound();
+        return notFound();
     }
 }

@@ -2,8 +2,13 @@ import BackButton from "@/components/paymentDetails/BackButton";
 import PaymentForm from "@/components/paymentDetails/PaymentForm";
 import PriceCard from "@/components/paymentDetails/PriceCard";
 import { fetchDictionary } from "@/utils/fetchFunction";
+import { Metadata } from "next";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
+export const metadata: Metadata = {
+  title: 'Airbnb || payment',
+  description: '...',
+}
 interface PaymentProps
 {
     params: Params;
