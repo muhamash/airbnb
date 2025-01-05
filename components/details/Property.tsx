@@ -81,7 +81,7 @@ export default async function Property ( { hotel, lang }: HotelProps )
                     <div className="border-b pb-6 mb-6">
                         {/* hotel owner */}
                         <h2 className="text-2xl font-semibold mb-4 font-kanit">
-                            Entire villa hosted by Sarah
+                            {  responseData?.details?.owner } : Entire villa hosted by Sarah
                         </h2>
                         {/* details */}
                         <div className="py-2 flex gap-3 items-center w-fit p-1">

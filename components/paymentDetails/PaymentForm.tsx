@@ -111,7 +111,6 @@ export default async function PaymentForm ( { searchParams, languageData }: Paym
                             required
                             type="text"
                             placeholder={languageData?.placeholders?.zip}
-                            placeholder="ZIP code"
                             className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         />
                     </div>

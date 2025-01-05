@@ -1,5 +1,5 @@
 import { hotelModel, IHotel } from "@/models/hotels";
-import { IStock, stockModel } from "@/models/stock";
+import { IStock, stockModel } from "@/models/stocks";
 import { dbConnect } from "@/services/mongoDB";
 import { replaceMongoIdInArray } from "@/utils/mongoData";
 import { ObjectId } from "mongodb";
@@ -41,10 +41,13 @@ export async function getReviewsByHotelId ( hotelId: string ): Promise<IReviews[
 
   try {
     const allreviews = await reviewsModel.find().lean();
-    const reviews = allreviews.find( review =>( review.hotelId = hotelId ) );
-
-    // console.log( "reviews:", reviews );
-    return reviews.reviews;
+    const reviews = allreviews.find( review =>
+    {
+      // console.log( hotelId === review?.hotelId );
+      return hotelId === review?.hotelId;
+    } );
+    // console.log( "reviews:", allreviews,reviews );
+    return reviews?.reviews;
   } catch ( error ) {
     console.error( "Error fetching reviews by hotelId:", error );
     throw error;

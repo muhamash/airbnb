@@ -18,6 +18,15 @@ interface ReserveFormProps {
         guest: string;
         reserve: string;
         text: string;
+        errors: {
+            notStock: string;
+            guest: string;
+            beds: string;
+            bedrooms: string;
+            checkOut: string;
+            required: string;
+            pastDate: string;
+        };
     };
     stocks: {
         hotelId: mongo.ObjectId;
@@ -33,7 +42,7 @@ interface FormData {
     checkIn: string;
     checkOut: string;
     guest: number;
-    selection: string; 
+    selection: string;
 }
 
 export default function ReserveForm({ userId, rate, perNight, langData, stocks }: ReserveFormProps) {
@@ -47,7 +56,7 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
     const [error, setError] = useState("");
     const router = useRouter();
     const params = useParams();
-    // console.log(userId)
+    const currentDate = new Date().toISOString().split("T")[0];
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
         setError("");
@@ -75,22 +84,35 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
         const checkInDate = new Date(data.checkIn);
         const checkOutDate = new Date(data.checkOut);
 
+        // Check if check-in or check-out date is in the past
+        if (checkInDate < new Date(currentDate)) {
+            setError(langData?.errors?.pastDate);
+            return;
+        }
+
+        if (checkOutDate < new Date(currentDate)) {
+            setError(langData?.errors?.pastDate);
+            return;
+        }
+
+        // Ensure check-in is before check-out
         if (checkInDate >= checkOutDate) {
             setError(langData?.errors?.checkOut);
             return;
         }
-
-        console.log( "Reservation Data:", data );
-        router.push( `http://localhost:3000/${params?.lang}/payment?hotelId=${params?.id}&userId=${userId}` );
+        
+        console.log("Reservation Data:", data);
+        router.push(
+            `http://localhost:3000/${params?.lang}/payment?hotelId=${params?.id}&userId=${userId}`
+        );
     };
 
     const guestValue = watch("guest", 0);
-    const selectionValue = watch( "selection", "guest" );
-    // console.log(langData);
+    const selectionValue = watch("selection", "bed");
 
     return (
         <form
-            onSubmit={handleSubmit( onSubmit )}
+            onSubmit={handleSubmit(onSubmit)}
             className="bg-white shadow-lg rounded-xl p-6 border relative overflow-hidden"
         >
             <motion.div
@@ -126,10 +148,16 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
                     </motion.label>
                     <motion.input
                         type="date"
-                        {...register( "checkIn", { required: langData?.errors?.required } )}
+                        {...register("checkIn", {
+                            required: langData?.errors?.required,
+                            validate: (value) => {
+                                // Validate if the check-in date is in the past
+                                return value >= currentDate || langData?.errors?.pastDate;
+                            },
+                        })}
                         className="w-full p-2 border rounded-lg text-teal-800 transition-all transform hover:scale-105 focus:ring-2 focus:ring-teal-500"
                     />
-    
+
                     <motion.label
                         className="block text-violet-800 font-semibold place-self-start self-center"
                         initial={{ opacity: 0 }}
@@ -140,7 +168,13 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
                     </motion.label>
                     <motion.input
                         type="date"
-                        {...register( "checkOut", { required: langData?.errors?.required } )}
+                        {...register("checkOut", {
+                            required: langData?.errors?.required,
+                            validate: (value) => {
+                                // Validate if the check-out date is in the past
+                                return value >= currentDate || langData?.errors?.pastDate;
+                            },
+                        })}
                         className="w-full p-2 border rounded-lg text-violet-800 transition-all transform hover:scale-105 focus:ring-2 focus:ring-violet-500"
                     />
                 </div>
@@ -152,21 +186,20 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
                     transition={{ duration: 0.8 }}
                 >
                     <select
-                        {...register( "selection" )}
+                        {...register("selection")}
                         className="w-full p-2 border rounded-lg font-bold font-kanit text-amber-600"
                     >
-                        <option value="guest">Guest</option>
                         <option value="bed">Bed</option>
                         <option value="room">Room</option>
                     </select>
                 </motion.div>
                 <motion.input
                     type="number"
-                    {...register( "guest", {
+                    {...register("guest", {
                         required: langData?.errors?.required,
-                        min: { value: 1, message: "At least 1 guest is required." },
-                    } )}
-                    placeholder={selectionValue === "guest" ? langData?.guest : selectionValue === "bed" ? langData?.beds : langData?.bedrooms}
+                        min: { value: 1, message: "At least 1 is required." },
+                    })}
+                    placeholder={selectionValue === "bed" ? `${stocks?.bedMax} ${langData?.beds}` : `${stocks?.roomMax} ${langData?.bedrooms}`}
                     className="w-full p-2 border rounded-lg transition-all transform hover:scale-105"
                 />
             </motion.div>
@@ -185,7 +218,7 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
             <motion.button
                 type="submit"
                 disabled={!stocks?.available}
-                className={`w-full block text-center py-3 rounded-lg transition-all ${ !stocks?.available
+                className={`w-full block text-center py-3 rounded-lg transition-all ${!stocks?.available
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-cyan-600 text-white hover:brightness-90"
                     }`}

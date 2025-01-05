@@ -81,7 +81,7 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
 
         const refreshedTokens: RefreshedTokens = await response.json();
 
-        // console.log( "response data: ", refreshedTokens );
+        console.log( "response data: ", refreshedTokens );
         
         if (!response.ok) {
             throw refreshedTokens;
@@ -172,10 +172,10 @@ export const {
 
             if ( isTokenValid( token ) )
             {
-                console.log( "old token", token );
+                // console.log( "old token", token );
                 return token;
             }
-            console.log( "going to refresh token:--->>>>", token );
+            // console.log( "going to refresh token:--->>>>", token );
             return refreshAccessToken( token );
         },
         async session ( { session, token }: { session: MySession; token: MyToken } ): Promise<MySession>

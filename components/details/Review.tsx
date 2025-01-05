@@ -15,6 +15,7 @@ export default async function Review ( {lang , reviewPromise}: ReviewProps )
   const reviews = await reviewPromise;
   const session: Session | null = await auth();
   const isUserHasReview = reviews?.some( review => review.userId.toString() === session?.user?.id );
+  // console.log( "reviews:", reviews );
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 border-t">
@@ -46,7 +47,7 @@ export default async function Review ( {lang , reviewPromise}: ReviewProps )
       <div className="grid grid-cols-2 gap-8">
         {/* <!-- Review Card 1 --> */}
         {
-          reviews.length > 0 ? (
+          reviews?.length > 0 ? (
             reviews.map( ( review ) => (
               <ReviewCard key={review?.userId} review={review} isUserHasReview={ review.userId.toString() === session?.user?.id } />
             ) )

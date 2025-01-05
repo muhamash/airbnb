@@ -1,14 +1,14 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
 export interface IReview extends Document {
-    userId: mongoose.Types.ObjectId;  // Change to ObjectId for MongoDB reference
+    userId: mongoose.Types.ObjectId; 
     image?: string;
     title: string;
     text: string;
 }
 
 export interface IReviews extends Document {
-    hotelId: mongoose.Types.ObjectId;  // Change to ObjectId for MongoDB reference
+    hotelId: mongoose.Types.ObjectId; 
     reviews: IReview[];
 }
 
@@ -34,9 +34,9 @@ const ReviewSchema: Schema = new mongoose.Schema(
 const ReviewsSchema: Schema = new mongoose.Schema(
     {
         hotelId: {
-            type: mongoose.Schema.Types.ObjectId,  // Use ObjectId type for references
+            type: mongoose.Schema.Types.ObjectId,  
             required: true,
-            ref: 'hotels',  // Optional: specify which model 'hotelId' is referring to (if you have a Hotel model)
+            ref: 'hotels', 
         },
         reviews: [ReviewSchema],
     },
