@@ -41,7 +41,7 @@ export default function Create () {
         register,
         handleSubmit,
         watch,
-        reset,
+        // reset,
         setValue,
         formState: { errors },
     } = useForm<FormData>({
