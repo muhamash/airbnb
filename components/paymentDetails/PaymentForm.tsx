@@ -1,16 +1,37 @@
 import { paymentForm } from "@/utils/serverActions";
 import TripInfo from "./TripInfo";
 
+interface Buttons {
+    [key: string]: string;
+}
+interface Placeholders
+{
+    [ key: string ]: string;
+}
 interface PaymentFormProps {
-  searchParams: URLSearchParams;
+    searchParams: URLSearchParams;
+    languageData: {
+        back: string;
+        trip: string;
+        dates: string;
+        rent: string;
+        paymentText: string;
+        billingText: string;
+        buttons: Buttons;
+        priceDetails: string;
+        cFee: string;
+        sFee: string;
+        total: string;
+        placeholders: Placeholders;
+    };
 }
 
-export default async function PaymentForm ( { searchParams }: PaymentFormProps )
+export default async function PaymentForm ( { searchParams, languageData }: PaymentFormProps )
 {
-
+    console.log( languageData );
     return (
         <form action={paymentForm}>
-            <TripInfo />
+            <TripInfo languageData={ languageData } />
           
             <input type="hidden" name="hotelId" value={searchParams?.hotelId} />
             <input type="hidden" name="userId" value={searchParams?.userId} />
@@ -18,14 +39,14 @@ export default async function PaymentForm ( { searchParams }: PaymentFormProps )
             {/* Payment Section */}
             <section className="mb-8">
                 <h2 className="text-xl font-semibold mb-4">
-                    Pay with American Express
+                    {languageData?.paymentText}
                 </h2>
                 <div className="space-y-4">
                     <input
                         required
                         type="tel"
                         name="cardNumber"
-                        placeholder="Card number"
+                        placeholder={languageData?.placeholders?.cardNumber}
                         className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         pattern="\d*"
                         inputMode="numeric"
@@ -44,7 +65,7 @@ export default async function PaymentForm ( { searchParams }: PaymentFormProps )
                             name="cvv"
                             pattern="\d*"
                             inputMode="numeric"
-                            placeholder="CVV"
+                            placeholder={languageData?.placeholders?.ccv}
                             className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         />
                     </div>
@@ -53,13 +74,13 @@ export default async function PaymentForm ( { searchParams }: PaymentFormProps )
 
             {/* Billing Address */}
             <section className="mb-8">
-                <h2 className="text-xl font-semibold mb-4">Billing address</h2>
+                <h2 className="text-xl font-semibold mb-4">{ languageData?.billingText }</h2>
                 <div className="space-y-4">
                     <input
                         required
                         type="text"
                         name="streetAddress"
-                        placeholder="Street address"
+                        placeholder={languageData?.placeholders?.street}
                         className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                     />
                     <input
@@ -68,14 +89,14 @@ export default async function PaymentForm ( { searchParams }: PaymentFormProps )
                         pattern="\d*"
                         name="aptSuite"
                         inputMode="numeric"
-                        placeholder="Apt or suite number"
+                        placeholder={languageData?.placeholders?.apt}
                         className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                     />
                     <input
                         required
                         type="text"
                         name="city"
-                        placeholder="City"
+                        placeholder={languageData?.placeholders?.city}
                         className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                     />
                     <div className="grid grid-cols-2 gap-4">
@@ -83,13 +104,13 @@ export default async function PaymentForm ( { searchParams }: PaymentFormProps )
                             required
                             type="text"
                             name="state"
-                            placeholder="State"
+                            placeholder={languageData?.placeholders?.state}
                             className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         />
                         <input
                             required
                             type="text"
-                            name="zipCode"
+                            placeholder={languageData?.placeholders?.zip}
                             placeholder="ZIP code"
                             className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                         />
@@ -102,7 +123,7 @@ export default async function PaymentForm ( { searchParams }: PaymentFormProps )
                 type="submit"
                 className="w-full block text-center bg-teal-600 text-white py-3 rounded-lg mt-6 hover:brightness-90"
             >
-                Request to book
+                {languageData?.buttons?.buttonText}
             </button>
         </form>
     );

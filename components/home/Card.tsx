@@ -1,9 +1,6 @@
-import { fetchDictionary } from '@/utils/fetchFunction';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import Link from 'next/link';
 
 interface CardProps {
-  params?: Params;
   hotel?: {
     id: string;
     name?: string;
@@ -19,15 +16,22 @@ interface CardProps {
     overview?: string;
     amenities?: string[];
   };
+    lang: string;
+    languageData: {
+        roomsLeft: string;
+        perNight: string;
+        location: string;
+        ratings: string;
+    };
 }
 
-export default async function Card ( { params, hotel }: CardProps )
+export default async function Card ( {  hotel, lang, languageData  }: CardProps )
 {
-    const responseData = await fetchDictionary( params?.lang );
-    console.log(hotel[0], params );
+    // const responseData = await fetchDictionary( params?.lang );
+    // console.log(languageData );
 
     return (
-        <Link href={`/${params.lang}/details/${hotel?.id}`} className="block group">
+        <Link href={`/${lang}/details/${hotel?.id}`} className="block group">
             <div className="relative">
                 <img
                     src={hotel?.thumbNailUrl}
@@ -61,7 +65,7 @@ export default async function Card ( { params, hotel }: CardProps )
                 <div className="mt-2 flex justify-between items-center font-kanit">
                     <div>
                         <span className="font-bold">$<span className='font-bold text-cyan-700'>{ hotel?.rate }</span></span>
-                        <span className="text-zinc-500 text-sm px-2 font-playfairDisplay">{responseData.home.perNight }</span>
+                        <span className="text-zinc-500 text-sm px-2 font-playfairDisplay">{languageData?.perNight }</span>
                     </div>
                 </div>
             </div>

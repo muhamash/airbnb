@@ -20,7 +20,7 @@ export async function GET(request: Request): Promise<Response> {
         }
 
         await dbConnect();
-        const hotel = await hotelModel.findOne({ _id: new ObjectId(id) });
+        const hotel = await hotelModel.findOne({ _id: new ObjectId(id) }).lean();
 
         if (!hotel) {
             return NextResponse.json(
@@ -32,6 +32,8 @@ export async function GET(request: Request): Promise<Response> {
                 { status: 404 }
             );
         }
+
+
 
         return NextResponse.json({
             status: 200,

@@ -36,5 +36,23 @@
             "checkOut": "Check-out date must be after check-in date"
         }
     },
+    "payment": {
+        "back": "Back to previous page",
+        "trip": "Your trip",
+        "dates": "Dates",
+        "rent": "Rented with",
+        "paymentText": "Pay with American Express",
+        "billingText": "Billing address",
+        "buttons":{
+            "edit":"Edit",
+            "cancel":"Cancel",
+            "save":"Save",
+            "buttonText": "Request to book"
+        },
+        "priceDetails": "Price details",
+        "cFee": "Cleaning fee",
+        "sFee": "Service fee",
+        "total": "Total"
+    },
     "footer": "© 2024, Learn with Sumit • Terms • Privacy • Your Choice Policy"
 }

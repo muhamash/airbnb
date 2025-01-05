@@ -52,7 +52,7 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
     const onSubmit: SubmitHandler<FormData> = (data) => {
         setError("");
 
-        if (!stocks.available) {
+        if (!stocks?.available) {
             setError(`${langData?.errors?.notStock}`);
             return;
         }
@@ -184,8 +184,8 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
 
             <motion.button
                 type="submit"
-                disabled={!stocks.available}
-                className={`w-full block text-center py-3 rounded-lg transition-all ${ !stocks.available
+                disabled={!stocks?.available}
+                className={`w-full block text-center py-3 rounded-lg transition-all ${ !stocks?.available
                         ? "bg-gray-400 cursor-not-allowed"
                         : "bg-cyan-600 text-white hover:brightness-90"
                     }`}

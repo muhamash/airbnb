@@ -1,30 +1,26 @@
 import BackButton from "@/components/paymentDetails/BackButton";
 import PaymentForm from "@/components/paymentDetails/PaymentForm";
 import PriceCard from "@/components/paymentDetails/PriceCard";
+import { fetchDictionary } from "@/utils/fetchFunction";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
 interface PaymentProps
 {
-    // params: Params;
+    params: Params;
     searchParams: URLSearchParams;
 }
 
-export default async function Payment ( { searchParams}: PaymentProps )
+export default async function Payment ( { searchParams, params}: PaymentProps )
 {
-    // const session: Session | null = await auth();
-    
-    // if ( !session?.user )
-    // {
-    //     redirect( "/login" );
-    // }
-    // console.log(params, searchParams)
+    const responseData = await fetchDictionary( params?.lang );
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-[100px]">
-            <BackButton/>
+            <BackButton language={params?.lang} text={ responseData?.payment?.back } />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <PaymentForm searchParams={searchParams}/>
+                <PaymentForm  searchParams={searchParams} languageData={responseData?.payment}/>
                 <div>
-                    <PriceCard/>
+                    <PriceCard languageData={ responseData?.payment } />
                 </div>
             </div>
         </div>

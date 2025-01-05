@@ -1,4 +1,31 @@
-export default async function PriceCard() {
+interface Buttons {
+    [key: string]: string;
+}
+interface Placeholders
+{
+    [ key: string ]: string;
+}
+interface PriceCardProps {
+    searchParams: URLSearchParams;
+    languageData: {
+        back: string;
+        trip: string;
+        dates: string;
+        rent: string;
+        paymentText: string;
+        billingText: string;
+        buttons: Buttons;
+        priceDetails: string;
+        cFee: string;
+        sFee: string;
+        total: string;
+        placeholders: Placeholders;
+    };
+}
+
+
+export default async function PriceCard ( { languageData }: PriceCardProps )
+{
     return (
         <div className="bg-white p-6 rounded-lg mb-8 sticky top-0 shadow-md shadow-sky-200 border-[0.4px] border-sky-200 hover:shadow-md transition-all duration-200">
             <div className="flex items-start gap-4 mb-6">
@@ -21,22 +48,22 @@ export default async function PriceCard() {
             </div>
 
             <div className="border-t pt-4 font-kanit">
-                <h3 className="font-semibold mb-4 font-ubuntu">Price details</h3>
+                <h3 className="font-semibold mb-4 font-ubuntu">{languageData?.priceDetails}</h3>
                 <div className="space-y-3">
                     <div className="flex justify-between">
-                        <span>$59.08 x 5 nights</span>
+                        <span>$59.08 x 5 {languageData?.nights}</span>
                         <span>$295.39</span>
                     </div>
                     <div className="flex justify-between">
-                        <span>Cleaning fee</span>
+                        <span>{languageData?.cFee}</span>
                         <span>$17.50</span>
                     </div>
                     <div className="flex justify-between">
-                        <span>Service fee</span>
+                        <span>{languageData?.sFee}</span>
                         <span>$51.31</span>
                     </div>
                     <div className="flex justify-between font-semibold pt-3 border-t font-ubuntu">
-                        <span>Total (USD)</span>
+                        <span>{languageData?.total} (USD)</span>
                         <span>$364.20</span>
                     </div>
                 </div>

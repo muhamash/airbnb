@@ -5,7 +5,31 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function TripInfo() {
+interface Buttons {
+    [key: string]: string;
+}
+interface Placeholders
+{
+    [ key: string ]: string;
+}
+interface TripProps {
+    languageData: {
+        back: string;
+        trip: string;
+        dates: string;
+        rent: string;
+        paymentText: string;
+        billingText: string;
+        buttons: Buttons;
+        priceDetails: string;
+        cFee: string;
+        sFee: string;
+        total: string;
+        placeholders: Placeholders;
+    };
+}
+
+export default function TripInfo({languageData}:TripProps) {
     interface FormData {
         dates: string;
         type: string;
@@ -57,12 +81,12 @@ export default function TripInfo() {
 
     return (
         <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Your trip</h2>
+            <h2 className="text-xl font-semibold mb-4">{languageData?.trip }</h2>
 
             {/* Dates */}
             <div className="flex justify-between items-center mb-4">
                 <div>
-                    <h3 className="font-medium">Dates</h3>
+                    <h3 className="font-medium">{languageData?.dates }</h3>
                     {editMode.dates ? (
                         <motion.input
                             type="date"
@@ -90,14 +114,14 @@ export default function TripInfo() {
                             onClick={() => saveField('dates')}
                             className="text-zinc-800 underline text-sm hover:bg-blue-600 hover:text-white px-2 py-1 rounded-md transition-all duration-200"
                         >
-                            Save
+                            {languageData?.buttons?.save}
                         </button>
                         <button
                             type="button"
                             onClick={() => cancelEdit('dates')}
                             className="text-zinc-800 underline text-sm hover:bg-red-600 hover:text-white px-2 py-1 rounded-md transition-all duration-200"
                         >
-                            Cancel
+                            {languageData?.buttons?.cancel}
                         </button>
                     </div>
                 ) : (
@@ -106,7 +130,7 @@ export default function TripInfo() {
                         onClick={() => toggleEditMode('dates')}
                         className="text-zinc-800 underline text-sm hover:bg-blue-600 hover:text-white px-2 py-1 rounded-md transition-all duration-200"
                     >
-                        Edit
+                        {languageData?.buttons?.edit}
                     </button>
                 )}
             </div>
@@ -114,7 +138,7 @@ export default function TripInfo() {
             {/* Type */}
             <div className="flex justify-between items-center">
                 <div>
-                    <h3 className="font-medium">Rented with</h3>
+                    <h3 className="font-medium"> {languageData?.rent }</h3>
                     {editMode.type ? (
                         <motion.div
                             className="flex space-x-4 mb-4"
@@ -163,14 +187,14 @@ export default function TripInfo() {
                             onClick={() => saveField('type')}
                             className="text-zinc-800 underline text-sm hover:bg-blue-600 hover:text-white px-2 py-1 rounded-md transition-all duration-200"
                         >
-                            Save
+                            {languageData?.buttons?.save}
                         </button>
                         <button
                             type="button"
                             onClick={() => cancelEdit('type')}
                             className="text-zinc-800 underline text-sm hover:bg-red-600 hover:text-white px-2 py-1 rounded-md transition-all duration-200"
                         >
-                            Cancel
+                            {languageData?.buttons?.cancel}
                         </button>
                     </div>
                 ) : (
@@ -179,7 +203,7 @@ export default function TripInfo() {
                         onClick={() => toggleEditMode('type')}
                         className="text-zinc-800 underline text-sm hover:bg-blue-600 hover:text-white px-2 py-1 rounded-md transition-all duration-200"
                     >
-                        Edit
+                        {languageData?.buttons?.edit}
                     </button>
                 )}
             </div>
