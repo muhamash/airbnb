@@ -5,24 +5,27 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function Create() {
+export default function Create () {
+    const defaultFormData = {
+        propertyName: "",
+        propertyLocation: "",
+        price: "",
+        rooms: "",
+        gallery: [],
+        amenities: [],
+        stocks: [
+            { roomsMax: "", guestsMax: "", bedMax: "" }
+        ]
+    };
+
     const {
         register,
         handleSubmit,
         watch,
+        reset,
         formState: { errors },
     } = useForm({
-        defaultValues: {
-            propertyName: "",
-            propertyLocation: "",
-            price: "",
-            rooms: "",
-            image0: "",
-            image1: "",
-            image2: "",
-            image3: "",
-            image4: "",
-        },
+        defaultValues: defaultFormData,
     });
 
     const [editFields, setEditFields] = useState({});
@@ -32,33 +35,34 @@ export default function Create() {
         setEditFields((prev) => ({ ...prev, [field]: !prev[field] }));
     };
 
+    const handleCancel = (field) => {
+        reset(defaultFormData);  // Reset the form values to initial state
+        setEditFields((prev) => ({ ...prev, [field]: false }));
+    };
+
     const onSubmit = (data) => {
-        // Check for empty fields
+        // Check if any required field is empty
         const requiredFields = [
             "propertyName",
             "propertyLocation",
             "price",
             "rooms",
-            "image0",
-            "image1",
-            "image2",
-            "image3",
-            "image4",
+            "gallery",
+            "amenities",
+            "stocks",
         ];
 
         let hasError = false;
-
         requiredFields.forEach((field) => {
-            if (!data[field] || data[field].toString().trim() === "") {
+            if (!data[field] || (Array.isArray(data[field]) && data[field].length === 0)) {
                 hasError = true;
             }
         });
 
-        if ( hasError )
-        {
-            toast.error("All fields required!")
-            return
-        };
+        if (hasError) {
+            toast.error("All fields are required!");
+            return;
+        }
 
         console.log("Form Submitted:", data);
     };
@@ -87,7 +91,7 @@ export default function Create() {
                         {editFields.propertyName ? (
                             <div className="flex gap-2">
                                 <input
-                                    {...register("propertyName")}
+                                    {...register("propertyName", { required: "Property name is required" })}
                                     defaultValue={formData.propertyName}
                                     className="border px-2 py-1 rounded"
                                     placeholder="Property Name"
@@ -98,6 +102,14 @@ export default function Create() {
                                     className="mt-2 text-blue-500"
                                 >
                                     <i className="fas fa-save mr-2"></i>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleCancel("propertyName")}
+                                    className="mt-2 text-red-500"
+                                >
+                                    <i className="fas fa-times mr-2"></i>
+                                    Cancel
                                 </button>
                             </div>
                         ) : (
@@ -112,6 +124,7 @@ export default function Create() {
                             </>
                         )}
                     </div>
+                    {errors.propertyName && <span className="text-red-500 text-sm">{errors.propertyName.message}</span>}
                 </div>
 
                 {/* Property Location */}
@@ -120,7 +133,7 @@ export default function Create() {
                         {editFields.propertyLocation ? (
                             <div className="flex gap-3">
                                 <input
-                                    {...register("propertyLocation")}
+                                    {...register("propertyLocation", { required: "Property location is required" })}
                                     defaultValue={formData.propertyLocation}
                                     className="border px-2 py-1 rounded"
                                     placeholder="Property Location"
@@ -131,6 +144,14 @@ export default function Create() {
                                     className="mt-2 text-blue-500"
                                 >
                                     <i className="fas fa-save mr-2"></i>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => handleCancel("propertyLocation")}
+                                    className="mt-2 text-red-500"
+                                >
+                                    <i className="fas fa-times mr-2"></i>
+                                    Cancel
                                 </button>
                             </div>
                         ) : (
@@ -143,6 +164,7 @@ export default function Create() {
                             </>
                         )}
                     </div>
+                    {errors.propertyLocation && <span className="text-red-500 text-sm">{errors.propertyLocation.message}</span>}
                 </div>
 
                 {/* Image Gallery */}
@@ -157,24 +179,36 @@ export default function Create() {
                                     className="w-full h-full object-cover rounded-lg"
                                 />
                                 <input
-                                    {...register(`image${idx}`)}
+                                    {...register(`image${idx}`, { required: "Image is required" })}
                                     placeholder={`https://placehold.co/600x400`}
                                     defaultValue={formData[`image${idx}`]}
                                     className="text-sm w-11/12 p-2 border border-primary rounded-lg mt-2 absolute left-1/2 -translate-x-1/2 bottom-2 bg-white"
                                 />
+                                {errors[`image${idx}`] && <span className="text-red-500 text-sm">{errors[`image${idx}`]?.message}</span>}
                             </div>
                         ))}
                 </div>
 
                 {/* Price */}
                 <div className="mb-4">
-                    <span className="text-xl font-bold">{formData.price || "Price in USD"}</span>
-                    <span className="text-gray-600 ml-1">per night</span>
+                    <input
+                        {...register("price", { required: "Price is required" })}
+                        type="number"
+                        defaultValue={formData.price}
+                        className="border px-2 py-1 rounded"
+                    />
+                    {errors.price && <span className="text-red-500 text-sm">{errors.price.message}</span>}
                 </div>
 
                 {/* Stock */}
                 <div className="mb-4">
-                    <span>{formData.rooms || "Available X rooms"}</span>
+                    <input
+                        {...register("rooms", { required: "Rooms is required" })}
+                        type="number"
+                        defaultValue={formData.rooms}
+                        className="border px-2 py-1 rounded"
+                    />
+                    {errors.rooms && <span className="text-red-500 text-sm">{errors.rooms.message}</span>}
                 </div>
             </form>
         </>
