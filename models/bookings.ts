@@ -5,8 +5,8 @@ export interface IBookings extends Document {
     checkIn: Date;
     checkOut: Date;
     userId: mongoose.Types.ObjectId;
-    personCount: number;
     roomCount: number;
+    bedCount: number
 };
 
 const BookingSchema: Schema = new mongoose.Schema(
@@ -27,13 +27,13 @@ const BookingSchema: Schema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             required: true,
         },
-        personCount: {
-            type: Number,
-            required: true,
-        },
         roomCount: {
             type: Number,
-            required: true,
+            required: false,
+        },
+        bedCount: {
+            type: Number,
+            required: false,
         },
     },
     { timestamps: true }
