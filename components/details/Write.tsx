@@ -34,6 +34,7 @@ export default function Write ( { closeModal, isEditing = false, reviewId }: Wri
     try
     {
       const session = await getSession();
+      // console.log( "dsfsfsdf", session );
       if ( session )
       {
         setUser( session.user );
@@ -63,10 +64,14 @@ export default function Write ( { closeModal, isEditing = false, reviewId }: Wri
     initializeData();
   }, [] );
   
-  if ( !user )
+  // console.log( user );
+  useEffect( () =>
+  {
+    if ( !loading && !user )
     {
       redirect( "/login" );
-  }
+    }
+  }, [ loading] );
   
   const onSubmit: SubmitHandler<IFormInput> = async ( data ) =>
   {
