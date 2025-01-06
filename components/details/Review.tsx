@@ -41,7 +41,7 @@ export default async function Review ( {lang , reviewPromise}: ReviewProps )
 
       {/* <!-- Reviews Grid --> */}
       <div className="grid grid-cols-2 gap-8">
-        {/* <!-- Review Card 1 --> */}
+        {/* <!-- Review Cards--> */}
         {
           reviews?.length > 0 ? (
             reviews.map( ( review ) => (
@@ -50,8 +50,6 @@ export default async function Review ( {lang , reviewPromise}: ReviewProps )
           ) : ( <p>no reviews</p> )
         }
       </div>
-
-      {/* <!-- Show More Button --> */}
     </div>
   );
 }
