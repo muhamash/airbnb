@@ -11,6 +11,7 @@ interface ReviewProps {
         image?: string;
         title: string;
         text: string;
+        ratings: number;
         createdAt: Date;
         updatedAt: Date;
     };

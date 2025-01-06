@@ -1,16 +1,19 @@
 'use client'
 
 import { useParams, useRouter } from "next/navigation";
-import { useTransition } from "react";
-
+import { useState, useTransition } from 'react';
+import Write from "./Write";
 interface ReviewClientProps {
     reviewId: string;
 }
 
-export default function ReviewClient({ reviewId }: ReviewClientProps) {
+export default function ReviewClient ( { reviewId }: ReviewClientProps )
+{
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const params = useParams();
     const router = useRouter();
+    const closeModal = () => setIsModalOpen(false);
 
     const handleDelete = async () => {
         startTransition(async () => {
@@ -38,20 +41,29 @@ export default function ReviewClient({ reviewId }: ReviewClientProps) {
     return (
         <div className="flex flex-col gap-2">
             <button
+                onClick={()=> setIsModalOpen(!isModalOpen)}
                 className="flex items-center justify-center px-2 py-1 bg-violet-500 text-white rounded-lg hover:bg-amber-600 transition-all"
-                onClick={() => router.push(`/edit-review/${reviewId}`)}
             >
                 <i className="fas fa-edit mr-2"></i>
                 Edit
             </button>
-            <button
-                onClick={handleDelete}
-                className="flex items-center justify-center px-2 py-1 bg-red-400 text-white rounded-lg hover:bg-rose-700 transition-all"
-                disabled={isPending}
-            >
-                <i className="fas fa-trash mr-2"></i>
-                {isPending ? 'Deleting...' : 'Delete'}
-            </button>
+            {
+                isPending ? (
+                    <span className="loaderPending"></span>
+                )
+                    :
+                    ( <button
+                        onClick={handleDelete}
+                        className="flex items-center justify-center px-2 py-1 bg-red-400 text-white rounded-lg hover:bg-rose-700 transition-all"
+                        disabled={isPending}
+                    >
+                        <i className="fas fa-trash mr-2"></i>
+                        Delete
+                    </button> )
+            }
+            {
+                isModalOpen && <Write reviewId={reviewId} closeModal={closeModal} isEditing={true} />
+            }
         </div>
     );
 }

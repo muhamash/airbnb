@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { Session } from "next-auth";
-import ReviewCard from "./ReviewCard";
 import ReviewButton from "./ReviewButton";
+import ReviewCard from "./ReviewCard";
 
 interface ReviewProps
 {
@@ -28,7 +28,7 @@ export default async function Review ( {lang , reviewPromise}: ReviewProps )
             <i className="fas fa-star text-yellow-500 mr-2"></i>
             <span className="text-xl font-semibold">4.9</span>
             <span className="mx-2">·</span>
-            <span className="text-gray-600 font-ubuntu">2 reviews</span>
+            <span className="text-gray-600 font-ubuntu">{reviews?.length} {responseData?.details?.reviews }</span>
           </div>
         </div>
 

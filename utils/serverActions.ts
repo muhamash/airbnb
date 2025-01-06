@@ -1,6 +1,7 @@
 'use server'
 
 import { signIn } from "@/auth";
+import { getReviewsByHotelId } from "@/queries";
 interface FormData
 {
     email: string;
@@ -20,4 +21,24 @@ export async function handleAuth(formData: FormData) {
 export async function paymentForm( formData: FormData )
 {
     console.log( formData );
+}
+
+export const getReviewById = async (hotelId: string) =>
+{
+    try
+    {
+        const reviews = await getReviewsByHotelId( hotelId );
+        const plainReviews = reviews.map( ( review ) => ( {
+            ...review,
+            userId: review.userId.toString(),
+            _id: review._id.toString(),
+        } ) );
+
+          console.log( plainReviews );
+        return plainReviews;
+    } catch ( error )
+    {
+        console.error( error );
+        return null;
+    }
 }

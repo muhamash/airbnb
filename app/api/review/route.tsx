@@ -1,7 +1,7 @@
 import { reviewsModel } from '@/models/reviews';
 import { dbConnect } from '@/services/mongoDB';
-import { NextResponse } from 'next/server';
 import { ObjectId } from 'mongodb';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     try {
@@ -41,10 +41,12 @@ export async function POST(request: Request) {
     }
 }
 
+
 export async function PATCH(request: Request) {
     try {
         const { reviewId, hotelId, rating, reviewText } = await request.json();
 
+        console.log(reviewId, hotelId, rating, reviewText);
         if (!reviewId || !hotelId) {
             return NextResponse.json({ message: 'Review ID and Hotel ID are required', status: 400 });
         }
@@ -54,8 +56,9 @@ export async function PATCH(request: Request) {
         const hotelReviews = await reviewsModel.findOne({ hotelId });
 
         if (hotelReviews) {
-            const review = hotelReviews.reviews.id(reviewId);
-
+            // Use the correct `id` method to find the review by its ID
+            const review = hotelReviews.reviews.id(new ObjectId(reviewId));
+            console.log(review);
             if (review) {
                 review.ratings = rating;
                 review.text = reviewText;
@@ -69,7 +72,7 @@ export async function PATCH(request: Request) {
                 });
             }
         }
-
+        console.log(hotelReviews);
         return NextResponse.json({ message: 'Review not found', status: 404 });
 
     } catch (error) {

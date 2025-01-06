@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Write from './Write';
-
 interface ReviewButtonProps {
     text: string;
 }
@@ -21,7 +20,7 @@ export default function ReviewButton({ text }: ReviewButtonProps) {
                 {text}
             </button>
 
-            {isModalOpen && <Write closeModal={closeModal} />}
+            {isModalOpen && <Write closeModal={closeModal} isEditing={ false } />}
         </>
     );
 }
