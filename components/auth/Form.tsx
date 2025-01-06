@@ -52,11 +52,12 @@ export default function Form({ isLogIn }: FormProps) {
                 body: JSON.stringify(Object.fromEntries(formData.entries())),
             });
 
-            if (res.status === 201) {
+            const result = await res.json();
+            // console.log( result );
+            if (result.success) {
                 router.push("/bookings");
             } else {
-                const result = await res.json();
-                setError(result.message || "login failed.");
+                setError(result.message);
             }
         } catch (err) {
             setError((err as Error).message || "An unknown error occurred.");

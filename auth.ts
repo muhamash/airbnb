@@ -5,6 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { authConfig } from "./auth.config";
 import { userModel } from "./models/users";
+import { dbConnect } from "./services/mongoDB";
 import mongoClientPromise from "./services/monoClientPromise";
 
 // Types for account and user
@@ -119,10 +120,10 @@ export const {
             },
             async authorize ( credentials )
             {
+                await dbConnect();
                 if ( !credentials ) return null;
 
                 console.log( "Authorize credentials:", credentials );
-
                 const user = await userModel.findOne( { email: credentials.email } );
 
                 if ( !user )
@@ -141,7 +142,7 @@ export const {
                         return user;
                     } else
                     {
-                        console.error( "Invalid credentials for user:", user.email );
+                        console.error( "Invalid credentials for user:", user.email, user.password, credentials.password );
                         throw new Error( "Invalid credentials" );
                     }
                 }
