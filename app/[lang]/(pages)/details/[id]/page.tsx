@@ -39,7 +39,7 @@ export default async function Details({ params }: { params: Params }) {
         return (
             <div className="py-[100px]">
                 <Property hotel={plainHotel} lang={params?.lang} />
-                <Review lang={params?.lang} reviewPromise={reviews} />
+                <Review params={params} lang={params?.lang} reviewPromise={reviews} />
             </div>
         );
     } catch (error) {

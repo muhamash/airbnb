@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { Session } from "next-auth";
 import ReviewCard from "./ReviewCard";
+import ReviewButton from "./ReviewButton";
 
 interface ReviewProps
 {
@@ -33,12 +34,7 @@ export default async function Review ( {lang , reviewPromise}: ReviewProps )
 
         {
           !isUserHasReview && (
-            <button
-              href="/reviewModal"
-              className="px-4 py-2 border border-gray-900 rounded-lg hover:bg-gray-100"
-            >
-              {responseData?.details?.writeReview}
-            </button>
+            <ReviewButton text={responseData?.details?.writeReview}/>
           )
         }
       </div>

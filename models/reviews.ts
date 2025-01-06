@@ -3,8 +3,9 @@ import mongoose, { Document, Model, Schema } from "mongoose";
 export interface IReview extends Document {
     userId: mongoose.Types.ObjectId; 
     image?: string;
-    title: string;
     text: string;
+    ratings: number;
+    name: string;
 }
 
 export interface IReviews extends Document {
@@ -27,6 +28,14 @@ const ReviewSchema: Schema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        ratings: {
+            type: Number,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        }
     },
     { timestamps: true }
 );

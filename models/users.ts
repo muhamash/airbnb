@@ -1,11 +1,12 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
 export interface IUser extends Document {
-  name: string;
-  email: string;
-  password: string;
-  image?: string;
-}
+    name: string;
+    email: string;
+    password: string;
+    image?: string;
+    // emailVerified: boolean;
+};
 
 const userSchema: Schema<IUser> = new Schema( {
     name: {
@@ -23,7 +24,11 @@ const userSchema: Schema<IUser> = new Schema( {
     image: {
         required: false,
         type: String
-    }
+    },
+    // emailVerified: {
+    //     required: true,
+    //     type: Boolean,
+    // }
 } );
 
 export const userModel: Model<IUser> =
