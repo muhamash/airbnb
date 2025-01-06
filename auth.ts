@@ -81,8 +81,7 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
 
         const refreshedTokens: RefreshedTokens = await response.json();
 
-        console.log( "response data: ", refreshedTokens );
-        
+        // console.log( "response data: ", refreshedTokens );
         if (!response.ok) {
             throw refreshedTokens;
         }
@@ -122,26 +121,32 @@ export const {
             {
                 if ( !credentials ) return null;
 
+                console.log( "Authorize credentials:", credentials );
+
                 const user = await userModel.findOne( { email: credentials.email } );
 
                 if ( !user )
                 {
+                    console.error( "User not found:", credentials.email );
                     throw new Error( "User not found" );
                 }
 
-                if ( typeof user.password === 'string' && typeof credentials.password === 'string' )
+                if ( typeof user.password === "string" && typeof credentials.password === "string" )
                 {
                     const isMatch = await bcrypt.compare( credentials.password, user.password );
 
                     if ( isMatch )
                     {
+                        console.log( "Password match successful for user:", user.email );
                         return user;
                     } else
                     {
+                        console.error( "Invalid credentials for user:", user.email );
                         throw new Error( "Invalid credentials" );
                     }
                 }
 
+                console.error( "Password or credentials are not strings" );
                 return null;
             },
         } ),

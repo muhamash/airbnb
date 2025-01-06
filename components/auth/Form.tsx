@@ -1,6 +1,5 @@
 "use client"
 
-import { login } from '@/utils/serverActions';
 import Link from 'next/link';
 import { useRouter } from "next/navigation";
 import { useState } from 'react';
@@ -45,11 +44,19 @@ export default function Form({ isLogIn }: FormProps) {
     // Login handling
     const handleLogin = async (formData: FormData) => {
         try {
-            const response = await login(formData);
-            if (response?.error) {
-                setError(response.error);
-            } else {
+            const res = await fetch("http://localhost:3000/api/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(Object.fromEntries(formData.entries())),
+            });
+
+            if (res.status === 201) {
                 router.push("/bookings");
+            } else {
+                const result = await res.json();
+                setError(result.message || "login failed.");
             }
         } catch (err) {
             setError((err as Error).message || "An unknown error occurred.");

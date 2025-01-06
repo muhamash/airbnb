@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { MouseEvent, ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 interface ModalProps {
     children: ReactNode;
@@ -19,14 +19,14 @@ const Modal = ({ children }: ModalProps) => {
         router.back();
     }, [router]);
 
-    const onClick = useCallback(
-        (e: MouseEvent<HTMLDivElement>) => {
-            if (e.target === overlay.current || e.target === wrapper.current) {
-                onDismiss();
-            }
-        },
-        [onDismiss, overlay, wrapper]
-    );
+    // const onClick = useCallback(
+    //     (e: MouseEvent<HTMLDivElement>) => {
+    //         if (e.target === overlay.current || e.target === wrapper.current) {
+    //             onDismiss();
+    //         }
+    //     },
+    //     [onDismiss, overlay, wrapper]
+    // );
 
     const onKeyDown = useCallback(
         (e: KeyboardEvent) => {
@@ -51,7 +51,6 @@ const Modal = ({ children }: ModalProps) => {
                 <motion.div
                     ref={overlay}
                     className="fixed z-10 left-0 right-0 top-0 bottom-0 mx-auto bg-black/50 p-2 md:p-5 backdrop-blur-sm w-screen flex items-center justify-center"
-                    onClick={onClick}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
