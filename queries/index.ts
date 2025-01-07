@@ -14,6 +14,20 @@ export async function getAllHotels(): Promise<IHotel[]> {
   return replaceMongoIdInArray( hotels ) as IHotel[];
 }
 
+export async function getAllStocks (): Promise<IStock[]>
+{
+  await dbConnect();
+  const stocks = await stockModel.find().lean();
+  return stocks;
+}
+
+export async function getAllReviews (): Promise<IReviews[]>
+{
+  await dbConnect();
+  const reviews = await reviewsModel.find().lean();
+  return reviews;
+}
+
 export async function getStockByHotelId(hotelId: string): Promise<IStock[]| null> {
   await dbConnect();
 
