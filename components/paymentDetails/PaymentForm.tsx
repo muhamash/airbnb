@@ -28,7 +28,7 @@ interface PaymentFormProps {
 
 export default async function PaymentForm ( { searchParams, languageData }: PaymentFormProps )
 {
-    console.log( languageData );
+    // console.log( languageData );
     return (
         <form action={paymentForm}>
             <TripInfo languageData={ languageData } />

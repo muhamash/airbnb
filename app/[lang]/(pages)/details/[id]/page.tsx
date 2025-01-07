@@ -1,6 +1,7 @@
 import Property from "@/components/details/Property";
 import Review from "@/components/details/Review";
-import { getReviewsByHotelId } from "@/queries";
+import { getReviewsByHotelId, getStockByHotelId } from "@/queries";
+import { ObjectId } from "mongodb";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { notFound } from "next/navigation";
 
@@ -8,7 +9,7 @@ interface Hotel {
     _id: string;
     name: string;
     overview: string;
-    [key: string]: any;
+    [key: string]: string;
 }
 
 export default async function Details({ params }: { params: Params }) {
@@ -19,9 +20,10 @@ export default async function Details({ params }: { params: Params }) {
     }
 
     try {
-        const [ hotelResponse, reviews ] = await Promise.all( [
+        const [ hotelResponse, reviews, stocks ] = await Promise.all( [
             fetch( `http://localhost:3000/api/hotels/${ hotelId }` ),
             getReviewsByHotelId( hotelId ),
+            getStockByHotelId( new ObjectId( hotelId ) )
         ] );
 
         const hotel: { data: Hotel, status: number } = await hotelResponse.json();
@@ -38,7 +40,7 @@ export default async function Details({ params }: { params: Params }) {
 
         return (
             <div className="py-[100px]">
-                <Property hotel={plainHotel} lang={params?.lang} />
+                <Property hotel={plainHotel} lang={params?.lang} stocksPromise={stocks}/>
                 <Review params={params} lang={params?.lang} reviewPromise={reviews} />
             </div>
         );

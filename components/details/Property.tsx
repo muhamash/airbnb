@@ -1,8 +1,5 @@
-import { auth } from "@/auth";
-import { getStockByHotelId } from "@/queries";
 import { fetchDictionary } from "@/utils/fetchFunction";
-import { ObjectId } from "mongodb";
-import { Session } from "next-auth";
+
 import Image from "next/image";
 import Amenities from './Ameniteis';
 import ReserveForm from "./ReserveForm";
@@ -24,13 +21,15 @@ interface HotelProps
         amenities?: string[];
     };
     lang: string;
+    stocksPromise: Promise;
 };
 
-export default async function Property ( { hotel, lang }: HotelProps )
+export default async function Property ( { hotel, lang, stocksPromise }: HotelProps )
 {
+    // use here progressive rebdering with promise.all
     const responseData = await fetchDictionary(lang);
-    const stocks = await getStockByHotelId( new ObjectId( hotel._id ) );
-    const user: Session = await auth();
+    const stocks = await stocksPromise;
+    // const user: Session = await auth();
         // console.log( "scscsc",user);
 
     return (
@@ -133,7 +132,7 @@ export default async function Property ( { hotel, lang }: HotelProps )
                         perNight={responseData?.details?.perNight}
                         langData={responseData?.details}
                         stocks={stocks}
-                        userId={user?.user?.id?.toString()}
+                        hotelId={hotel._id?.toString()}
                     />
                 </div>
             </div>

@@ -1,6 +1,6 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
-export interface IBookings extends Document {
+export interface IBooking extends Document {
     hotelId: mongoose.Types.ObjectId;
     checkIn: Date;
     checkOut: Date;
@@ -9,12 +9,14 @@ export interface IBookings extends Document {
     bedCount: number
 };
 
+export interface IBookings extends Document
+{
+    hotelId: mongoose.Schema.Types.ObjectId;
+    bookings: IBooking[]
+};
+
 const BookingSchema: Schema = new mongoose.Schema(
     {
-        hotelId: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-        },
         checkIn: {
             type: Date,
             required: true,
@@ -39,4 +41,16 @@ const BookingSchema: Schema = new mongoose.Schema(
     { timestamps: true }
 );
 
-export const bookingModel: Model<IBookings> = mongoose.models.bookings || mongoose.model<IBookings>( "bookings", BookingSchema );
+const BookingsSchema: Schema = new mongoose.Schema(
+    {
+        hotelId: {
+            type: mongoose.Schema.Types.ObjectId,  
+            required: true,
+            ref: 'hotels', 
+        },
+        bookings: [BookingSchema],
+    },
+    { timestamps: true }
+)
+
+export const bookingsModel: Model<IBookings> = mongoose.models.bookings || mongoose.model<IBookings>( "bookings", BookingSchema );

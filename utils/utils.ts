@@ -18,3 +18,12 @@ export async function formatDate(dateString: string): Promise<string> {
     const dayWithSuffix = day + getOrdinalSuffix(day);
     return `${dayWithSuffix} ${month} ${year}`;
 }
+
+export const calculateDaysBetween = async ( checkIn: string, checkOut: string ): number =>
+{
+    const checkInDate = new Date( checkIn );
+    const checkOutDate = new Date( checkOut );
+    const differenceInTime = checkOutDate.getTime() - checkInDate.getTime();
+    
+    return differenceInTime / ( 1000 * 60 * 60 * 24 );
+};

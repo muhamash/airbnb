@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
-import { motion } from "framer-motion";
-import { mongo } from "mongoose";
-import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { motion } from 'framer-motion';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface ReserveFormProps {
     rate: number;
@@ -29,7 +27,7 @@ interface ReserveFormProps {
         };
     };
     stocks: {
-        hotelId: mongo.ObjectId;
+        hotelId: string;
         personMax: number;
         roomMax: number;
         bedMax: number;
@@ -43,41 +41,40 @@ interface FormData {
     checkOut: string;
     guest: number;
     selection: string;
+    roomBedSelection: string;
+    bed?: number;
+    rooms?: number;
 }
 
-export default function ReserveForm({ userId, rate, perNight, langData, stocks }: ReserveFormProps) {
-    const {
-        register,
-        handleSubmit,
-        watch,
-        formState: { errors },
-    } = useForm<FormData>();
-
+export default function ReserveForm({ hotelId, rate, perNight, langData, stocks }: ReserveFormProps) {
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>();
     const [error, setError] = useState("");
+    const [roomBedOptions, setRoomBedOptions] = useState<{ rooms: number; beds: number }[]>([]);
     const router = useRouter();
     const params = useParams();
     const currentDate = new Date().toISOString().split("T")[0];
+
+    const calculateRoomBedOptions = () => {
+        const options: { rooms: number; beds: number }[] = [];
+        for (let rooms = 1; rooms <= stocks.roomMax; rooms++) {
+            for (let beds = 1; beds <= stocks.bedMax; beds++) {
+                if (rooms * beds <= stocks.personMax) {
+                    options.push({ rooms, beds });
+                }
+            }
+        }
+        setRoomBedOptions(options);
+    };
+
+    useEffect(() => {
+        calculateRoomBedOptions();
+    }, [stocks]);
 
     const onSubmit: SubmitHandler<FormData> = (data) => {
         setError("");
 
         if (!stocks?.available) {
-            setError(`${langData?.errors?.notStock}`);
-            return;
-        }
-
-        if (data.selection === "guest" && data.guest > stocks.personMax) {
-            setError(`${langData?.errors?.guest} : ${stocks.personMax}.`);
-            return;
-        }
-
-        if (data.selection === "bed" && data.guest > stocks.bedMax) {
-            setError(`${langData?.errors?.beds} : ${stocks.bedMax}.`);
-            return;
-        }
-
-        if (data.selection === "room" && data.guest > stocks.roomMax) {
-            setError(`${langData?.errors?.bedrooms} : ${stocks.roomMax}.`);
+            setError(langData?.errors?.notStock);
             return;
         }
 
@@ -100,14 +97,24 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
             setError(langData?.errors?.checkOut);
             return;
         }
+
+        let parsedData = { ...data };
+
+        if (data.selection === "room") {
+            const [rooms, beds] = data.roomBedSelection.match(/\d+/g).map(Number);
+            parsedData = { ...data, rooms, bed: beds };
+            delete parsedData.roomBedSelection;
+        }
+
+        const queryString = new URLSearchParams(parsedData).toString();
+        console.log( "Reservation Data:", parsedData, hotelId, params, queryString );
         
-        console.log("Reservation Data:", data);
         router.push(
-            `http://localhost:3000/${params?.lang}/payment?hotelId=${params?.id}&userId=${userId}`
+            `http://localhost:3000/${ params?.lang }/details/${ hotelId }/payment?${ queryString }`
         );
     };
 
-    const guestValue = watch("guest", 0);
+    // const guestValue = watch("guest", 0);
     const selectionValue = watch("selection", "bed");
 
     return (
@@ -179,6 +186,7 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
                     />
                 </div>
 
+                {/* selection */}
                 <motion.div
                     className="flex space-x-4 mb-4"
                     initial={{ opacity: 0 }}
@@ -193,15 +201,39 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
                         <option value="room">Room</option>
                     </select>
                 </motion.div>
-                <motion.input
-                    type="number"
-                    {...register("guest", {
-                        required: langData?.errors?.required,
-                        min: { value: 1, message: "At least 1 is required." },
-                    })}
-                    placeholder={selectionValue === "bed" ? `${stocks?.bedMax} ${langData?.beds}` : `${stocks?.roomMax} ${langData?.bedrooms}`}
-                    className="w-full p-2 border rounded-lg transition-all transform hover:scale-105"
-                />
+                {selectionValue === "bed" ? (
+                    <motion.input
+                        type="number"
+                        {...register("bed", {
+                            required: langData?.errors?.required,
+                            min: { value: 1, message: "At least 1 is required." },
+                            max: { value: stocks?.bedMax, message: "No enough bed!!" },
+                        })}
+                        placeholder={`${stocks?.bedMax} ${langData?.beds}`}
+                        className="w-full p-2 border rounded-lg transition-all transform hover:scale-105"
+                    />
+                ) : (
+                    <motion.div
+                        className="space-y-2 h-[130px] overflow-y-scroll"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.8 }}
+                        layout
+                    >
+                        {roomBedOptions.map((option, index) => (
+                            <motion.label key={index} className="flex items-center space-x-2" layout>
+                                <motion.input
+                                    type="radio"
+                                    value={`${option.rooms} rooms with ${option.beds} beds`}
+                                    {...register("roomBedSelection", { required: langData?.errors?.required })}
+                                    className="form-radio"
+                                    layout
+                                />
+                                <span>{`${option.rooms} rooms with ${option.beds} beds`}</span>
+                            </motion.label>
+                        ))}
+                    </motion.div>
+                )}
             </motion.div>
 
             {errors.checkIn && (
@@ -210,8 +242,8 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
             {errors.checkOut && (
                 <span className="text-red-500 text-sm mb-2">{errors.checkOut.message}</span>
             )}
-            {errors.guest && (
-                <span className="text-red-500 text-sm mb-2">{errors.guest.message}</span>
+            {errors.roomBedSelection && (
+                <span className="text-red-500 text-sm mb-2">{errors.roomBedSelection.message}</span>
             )}
             {error && <span className="text-red-500 text-sm mb-2">{error}</span>}
 
@@ -219,8 +251,8 @@ export default function ReserveForm({ userId, rate, perNight, langData, stocks }
                 type="submit"
                 disabled={!stocks?.available}
                 className={`w-full block text-center py-3 rounded-lg transition-all ${!stocks?.available
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-cyan-600 text-white hover:brightness-90"
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-cyan-600 text-white hover:brightness-90"
                     }`}
                 whileHover={{ scale: 1.05 }}
             >

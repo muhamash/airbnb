@@ -18,41 +18,54 @@
         "text": "You will not be charged",
         "reserve": "Reserve",
         "perNight": "Per night",
-        "checkIn": "Check in",
-        "guest": "Guest",
-        "checkOut": "Check out",
-        "bedrooms": "Bedrooms",
-        "beds": "Beds",
-        "footer": "Limited stock! Make sure you book it before it runs out! Book quickly to get exclusive offers.",
+        "owner": "Owner's name",
+        "checkIn": "Check-in",
+        "guest": "Maximum guest capacity",
+        "checkOut": "Check-out",
+        "bedrooms": "bedrooms available",
+        "beds": "beds available",
+        "footer": "Limited stock! Ensure you book before it’s gone! Book quickly to avail exclusive offers.",
         "review": "Review",
         "writeReview": "Write a review",
         "reviews": "Reviews",
         "errors": {
             "required": "This field is required",
             "notStock": "This item is out of stock",
-            "guest": "Maximum allowed guests are",
-            "bedrooms": "Maximum allowed bedrooms are",
-            "beds": "Maximum allowed beds are",
-            "checkOut": "Check-out date must be after check-in date"
+            "guest": "The maximum allowed number of guests is",
+            "bedrooms": "The maximum allowed number of bedrooms is",
+            "beds": "The maximum allowed number of beds is",
+            "checkOut": "The check-out date must be after the check-in date",
+            "pastDate": "You are trying to check in the past!"
         }
     },
     "payment": {
-        "back": "Back to previous page",
+        "back": "Go back to the previous page",
         "trip": "Your trip",
         "dates": "Dates",
-        "rent": "Rented with",
+        "rent": "Rented",
         "paymentText": "Pay with American Express",
         "billingText": "Billing address",
-        "buttons":{
-            "edit":"Edit",
-            "cancel":"Cancel",
-            "save":"Save",
+        "buttons": {
+            "edit": "Edit",
+            "cancel": "Cancel",
+            "save": "Save",
             "buttonText": "Request to book"
         },
         "priceDetails": "Price details",
         "cFee": "Cleaning fee",
         "sFee": "Service fee",
-        "total": "Total"
+        "taka": "Taka",
+        "total": "Total",
+        "nights": "Nights",
+        "placeholders": {
+            "cardNumber": "Card number",
+            "city": "City",
+            "street": "Street",
+            "apt": "Apartment",
+            "zip": "Zip code",
+            "state": "State",
+            "ccv": "CCV"
+        }
     },
-    "footer": "© 2024, Learn with Sumit • Terms • Privacy • Your Choice Policy"
+    "footer": "© 2024, Learn with Sumit • Terms • Privacy • Your preferred policy"
 }
