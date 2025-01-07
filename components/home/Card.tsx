@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface CardProps {
@@ -8,7 +9,10 @@ interface CardProps {
     airportCode?: string;
     city?: string;
     countryCode?: string;
-    rate?: number;
+      rate?: {
+          bed: number;
+          room: number;
+      };
     propertyCategory?: number;
     stateProvinceCode?: string;
     thumbNailUrl?: string;
@@ -23,7 +27,7 @@ interface CardProps {
         location: string;
         ratings: string;
     };
-}
+};
 
 export default async function Card ( {  hotel, lang, languageData  }: CardProps )
 {
@@ -31,11 +35,13 @@ export default async function Card ( {  hotel, lang, languageData  }: CardProps 
     // console.log(languageData );
 
     return (
-        <Link href={`/${lang}/details/${hotel?.id}`} className="block group">
+        <Link href={`/${lang}/details/${hotel?.id}`} className="block group bg-slate-200 p-2 rounded-xl hover:shadow-md hover:shadow-slate-400 transition-all duration-200">
             <div className="relative">
-                <img
+                <Image
                     src={hotel?.thumbNailUrl}
-                    alt="Maldives Paradise"
+                    alt="hotelImage?"
+                    width={200}
+                    height={200}
                     className="w-full h-64 object-cover rounded-xl group-hover:scale-105 transition-transform"
                 />
                 <div
@@ -63,9 +69,12 @@ export default async function Card ( {  hotel, lang, languageData  }: CardProps 
                 </div>
                 <p className="text-zinc-500 text-sm mt-1 font-kanit">{ hotel?.address }</p>
                 <div className="mt-2 flex justify-between items-center font-kanit">
-                    <div>
-                        <span className="font-bold">$<span className='font-bold text-cyan-700'>{ hotel?.rate }</span></span>
-                        <span className="text-zinc-500 text-sm px-2 font-playfairDisplay">{languageData?.perNight }</span>
+                    <div className='flex items-center justify-between w-full'>
+                        <div className='flex gap-5 text-sm'>
+                            <p className='text-orange-600'>{languageData?.room } : { hotel?.rate?.room }৳</p>
+                            <p className='text-amber-600'>{languageData?.bed } : { hotel?.rate?.bed }৳</p>
+                        </div>
+                        <p className="text-zinc-500 text-sm font-playfairDisplay">{languageData?.perNight }</p>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { paymentForm } from "@/utils/serverActions";
 import { Session } from "next-auth";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import TripInfo from "./TripInfo";
+import TripDetails from "./TripDetails";
 
 interface Buttons {
     [key: string]: string;
@@ -45,7 +45,8 @@ export default async function PaymentForm ( { searchParams, languageData, params
 
     return (
         <form action={paymentForm}>
-            <TripInfo stocks={plainObject} languageData={ languageData } />
+            {/* <TripInfo stocks={plainObject} languageData={ languageData } /> */}
+            <TripDetails/>
           
             <input type="hidden" name="hotelId" value={params?.id} />
             <input type="hidden" name="userId" value={session?.user?.id} />
