@@ -4,7 +4,7 @@ interface Hotel {
     _id: string;
     name: string;
     overview: string;
-    [key: string]: any;
+    [key: string]: string;
 }
 
 export async function generateMetadata({ params }: { params: Params }) {
