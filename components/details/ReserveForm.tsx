@@ -68,8 +68,8 @@ export default function ReserveForm({ hotelId, rate, perNight, langData, stocks 
 
     useEffect(() => {
         calculateRoomBedOptions();
-    }, [stocks]);
-
+    }, [ stocks ] );
+    
     const onSubmit: SubmitHandler<FormData> = (data) => {
         setError("");
 

@@ -1,4 +1,7 @@
+import { auth } from "@/auth";
 import { paymentForm } from "@/utils/serverActions";
+import { Session } from "next-auth";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import TripInfo from "./TripInfo";
 
 interface Buttons {
@@ -24,17 +27,28 @@ interface PaymentFormProps {
         total: string;
         placeholders: Placeholders;
     };
+    params: Params;
+    stocksPromise: Promise;
 }
 
-export default async function PaymentForm ( { searchParams, languageData }: PaymentFormProps )
+export default async function PaymentForm ( { searchParams, languageData, params, stocksPromise }: PaymentFormProps )
 {
-    // console.log( languageData );
+    const session: Session = await auth();
+    const stocks = await stocksPromise;
+    // console.log( stocks );
+    const plainObject = {
+        personMax: stocks?.personMax,
+        roomMax: stocks?.roomMax,
+        bedMax: stocks?.bedMax,
+        available: stocks?.available,
+    };
+
     return (
         <form action={paymentForm}>
-            <TripInfo languageData={ languageData } />
+            <TripInfo stocks={plainObject} languageData={ languageData } />
           
-            <input type="hidden" name="hotelId" value={searchParams?.hotelId} />
-            <input type="hidden" name="userId" value={searchParams?.userId} />
+            <input type="hidden" name="hotelId" value={params?.id} />
+            <input type="hidden" name="userId" value={session?.user?.id} />
 
             {/* Payment Section */}
             <section className="mb-8">

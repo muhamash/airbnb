@@ -43,7 +43,7 @@ export default async function PriceCard({ languageData, days, params }: PriceCar
         const cleaningFee = 17.50; 
         const serviceFee = 51.31;
         const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;
-        console.log(hotel, reviews);
+        // console.log(hotel, reviews);
 
         return (
             <div className="bg-white p-6 rounded-lg mb-8 sticky top-0 shadow-md shadow-sky-200 border-[0.4px] border-sky-200 hover:shadow-md transition-all duration-200">
