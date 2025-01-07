@@ -1,6 +1,5 @@
 import BackButton from "@/components/paymentDetails/BackButton";
 import PaymentForm from "@/components/paymentDetails/PaymentForm";
-import PriceCard from "@/components/paymentDetails/PriceCard";
 import { getStockByHotelId } from "@/queries";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween } from "@/utils/utils";
@@ -31,7 +30,8 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
         const days = await daysPromise;
         // console.log( stocksPromise );
         return (
-            <div className="max-w-7xl mx-auto px-6 py-[100px]">
+            <div
+                className="max-w-7xl mx-auto px-6 py-[100px]">
                 <BackButton language={params?.lang} text={responseData?.payment?.back} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     <PaymentForm
@@ -41,7 +41,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
                         languageData={responseData?.payment}
                     />
                     <div>
-                        <PriceCard languageData={responseData?.payment} days={days} params={ params } />
+                        {/* <PriceCard languageData={responseData?.payment} days={days} params={ params } /> */}
                     </div>
                 </div>
             </div>

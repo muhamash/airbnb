@@ -129,7 +129,7 @@ export default function ReserveForm({ hotelId, rate, perNight, langData, stocks 
                 className="flex justify-between items-center mb-4"
             >
                 <div>
-                    <span className="text-xl font-bold">{rate} Tk</span>
+                    {/* <span className="text-xl font-bold">{rate} Tk</span> */}
                     <span className="text-gray-600 ml-1 px-1 font-ubuntu">{perNight}</span>
                 </div>
                 <div className="flex items-center">

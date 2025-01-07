@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { Session } from "next-auth";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import Image from "next/image";
 import Link from "next/link";
 import LanguageSwitch from "./LanguageSwitch";
 import UserActions from "./UserActions";
@@ -18,8 +19,8 @@ export default async function Nav ( { params }: NavProps )
     return (
         <nav className="fixed top-0 left-0 right-0 z-30 grid grid-cols-2 gap-2 md:flex justify-between items-center py-3 bg-white backdrop-blur-md bg-opacity-60 border-b mb-6 md:gap-8 px-4 md:px-8 lg:px-20">
             <div className="flex items-center">
-                <Link href="/">
-                    <img src="./assets/logo.svg" alt="Hotel Logo" className="h-8 w-auto" />
+                <Link href={`http://localhost:3000/${params?.lang}`}>
+                    <Image src="/assets/logo.svg" alt="Hotel Logo" className="h-8 w-auto" width={50} height={50}/>
                 </Link>
             </div>
 
