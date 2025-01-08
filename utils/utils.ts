@@ -1,5 +1,3 @@
-import { AppRouterInstance } from 'next/router';
-
 export async function formatDate ( dateString: string ): Promise<string>
 {
     const date = new Date(dateString);

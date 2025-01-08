@@ -5,7 +5,7 @@ import { useState, useTransition } from 'react';
 import Write from "./Write";
 interface ReviewClientProps {
     reviewId: string;
-    rating: number;
+    ratings: number;
 }
 
 export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps )
@@ -76,7 +76,7 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
                     window.location.reload();
                 }, 1000 );
             }
-} );
+        } );
     };
 
     return (
@@ -103,7 +103,7 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
                     </button> )
             }
             {
-                isModalOpen && <Write reviewId={reviewId} closeModal={closeModal} isEditing={true} />
+                isModalOpen && <Write ratings={ratings} reviewId={reviewId} closeModal={closeModal} isEditing={true} />
             }
         </div>
     );

@@ -84,7 +84,7 @@ export default async function Property ( { hotel, lang, searchParams }: HotelPro
                         </h2>
                         {/* details */}
                         <div className="py-2 flex gap-3 items-center w-fit p-1">
-                            <div class="flex justify-center items-center h-[10px] w-[10px]">
+                            <div className="flex justify-center items-center h-[10px] w-[10px]">
                                 <i className="fas fa-bell text-xl p-2 bg-gradient-to-r from-yellow-500 via-blue-500 to-pink-500 text-transparent bg-clip-text animate-pulse"></i>
                             </div>
                             <p className="text-[11px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-green-700 via-purple-600 to-pink-500  animate-pulse">
