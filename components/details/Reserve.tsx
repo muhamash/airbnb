@@ -94,13 +94,13 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
                 form={form}
                 style={{ maxWidth: 600 }}
                 initialValues={{ selection: "beds" }}
-                className="bg-white shadow-md shadow-sky-600 rounded-xl p-6 border relative overflow-hidden"
+                className="bg-black/10 backdrop-blur-md shadow-md shadow-sky-600 rounded-xl p-5 border relative overflow-hidden"
             >
                 <motion.div
                     initial={{ scale: 0.9 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.3 }}
-                    className="flex md:flex-row flex-col flex-wrap gap-1 justify-between items-center mb-4"
+                    className="flex md:flex-row flex-col flex-wrap gap-2 justify-between items-center mb-4"
                 >
                     <div>
                         <div className='flex flex-row-reverse justify-between items-center mb-2'>
@@ -113,22 +113,22 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
                         <div className="grid grid-cols-2 gap-1 rounded-md">
                             {/* Cell 1 */}
                             <div className="rounded-md shadow-purple-500 m-[1px] border-[1px] border-gradient-to-r from-purple-500 to-pink-500 bg-gradient-to-r from-purple-50 to-pink-50 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
-                                <p className="text-md text-slate-100 font-bold text-center py-1 px-3">Beds</p>
+                                <p className="text-md text-slate-100 font-bold text-center py-1 px-3">{ langData?.bed }</p>
                             </div>
 
                             {/* Cell 2 */}
                             <div className="rounded-md m-[1px] border-[1px] border-gradient-to-r shadow-teal-500 from-teal-500 to-cyan-500 bg-gradient-to-r from-teal-50 to-cyan-50 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
-                                <p className="text-md text-slate-100 font-bold text-center p-1">Rooms</p>
+                                <p className="text-md text-slate-100 font-bold text-center p-1">{langData?.room }</p>
                             </div>
 
                             {/* Cell 3 */}
                             <div className="rounded-md m-[1px] border-[1px] border-gradient-to-r from-purple-500 to-pink-500 bg-gradient-to-r from-purple-50 to-pink-50 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
-                                <p className="text-md text-slate-100 font-bold text-center p-1">{rate?.bed } tk</p>
+                                <p className="text-md text-slate-100 font-bold text-center p-1">{rate?.bed } ৳</p>
                             </div>
 
                             {/* Cell 4 */}
                             <div className="rounded-md m-[1px] border-[1px] border-gradient-to-r from-teal-500 to-cyan-500 bg-gradient-to-r from-teal-50 to-cyan-50 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
-                                <p className="text-md text-slate-100 font-bold text-center p-1">{ rate?.room } tk</p>
+                                <p className="text-md text-slate-100 font-bold text-center p-1">{ rate?.room } ৳</p>
                             </div>
                         </div>
                     </div>
@@ -136,8 +136,8 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
                         <Image
                             alt='image?'
                             width={170}
-                            height={200}
-                            src={'/reg.jpeg'}
+                            height={170}
+                            src={'/ttt.png'}
                         />
                     </div>
                 </motion.div>
@@ -148,9 +148,9 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
                     className="rounded-lg mb-4 w-full"
                 >
                     <Form.Item
-                        label="Trip dates"
+                        label={langData?.dates}
                         name="RangePicker"
-                        rules={[ { required: true, message: 'Please select your trip dates!' } ]}
+                        rules={[ { required: true, message: langData?.errors?.required } ]}
                     >
                         <RangePicker
                             disabledDate={( current ) => current && current < dayjs().endOf( 'day' )}
@@ -158,22 +158,22 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
                     </Form.Item>
 
                     <Form.Item
-                        label="Selection"
+                        label={langData?.selection }
                         name="selection"
-                        rules={[ { required: true, message: 'Please select beds or rooms!' } ]}
+                        rules={[ { required: true, message: langData?.errors?.required } ]}
                     >
                         <Radio.Group onChange={handleSelectionChange}>
-                            <Radio value="beds">Beds</Radio>
-                            <Radio value="rooms">Rooms</Radio>
+                            <Radio value="beds">{langData?.bed }</Radio>
+                            <Radio value="rooms">{langData?.room }</Radio>
                         </Radio.Group>
                     </Form.Item>
 
                     {selection === 'beds' && (
                         <Form.Item
-                            label="Beds"
+                            label={langData?.bed }
                             name="beds"
                             rules={[
-                                { required: true, message: 'Please enter the number of beds!' },
+                                { required: true, message: langData?.errors?.required },
                             ]}
                         >
                             <InputNumber min={1} max={bedsAvailable} />
@@ -182,7 +182,7 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
 
                     {selection === 'rooms' && (
                         <Form.Item
-                            label="Rooms"
+                            label={langData?.room }
                             name="rooms"
                             rules={[
                                 { required: true, message: 'Please enter the number of rooms!' },

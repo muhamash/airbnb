@@ -73,7 +73,7 @@ export default async function Property ( { hotel, searchParams, languagePromise 
             </div>
 
             {/* <!-- Property Details --> */}
-            <div className="md:grid grid-cols-3 md:gap-8 flex flex-col-reverse gap-5">
+            <div className="md:grid grid-cols-3 md:gap-8 flex flex-col-reverse gap-5 relative">
                 {/* <!-- Left Column: Property Description --> */}
                 <div className="md:col-span-2">
                     <div className="border-b pb-6 mb-6">
@@ -124,13 +124,11 @@ export default async function Property ( { hotel, searchParams, languagePromise 
                     </div>
                 </div>
 
+                <div className="absolute h-[250px] w-[250px] bg-sky-800 rounded-full blur-3xl bg-opacity-90 z-0 right-5 -top-10">
+
+                </div>
                 {/* <!-- Right Column: Booking Card --> */}
                 <div>
-                    {/* <ReserveForm
-                        rate={hotel?.rate}
-                        perNight={responseData?.details?.perNight}
-                        langData={responseData?.details}
-                    /> */}
                     <Reserve
                         rate={hotel?.rate}
                         perNight={responseData?.details?.perNight}

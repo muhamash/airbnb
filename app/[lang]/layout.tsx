@@ -2,6 +2,7 @@ import { kanit, playfairDisplay, rubik, ubuntu } from "@/components/fonts/font";
 import { dbConnect } from "@/services/mongoDB";
 import type { Metadata } from "next";
 import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import Image from "next/image";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -34,10 +35,21 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${ kanit.className } ${ playfairDisplay.className } ${ rubik.className } ${ ubuntu.className } antialiased bg-gray-100`}
+        className={`${ kanit.className } ${ playfairDisplay.className } ${ rubik.className } ${ ubuntu.className } antialiased bg-gray-100 relative`}
       >
+        <div className="absolute inset-0 bg-cover bg-center">
+          <Image
+            alt="Login background"
+            src="/homeBg.jpg"
+            layout="fill"
+            objectFit="cover"
+            className="filter blur-[15px] brightness-90"
+          />
+        </div>
         {/* <Nav params={params} /> */}
-        {children}
+        <div className="relative z-10">
+          {children}
+        </div>
         {/* <Footer params={params} /> */}
       </body>
     </html>
