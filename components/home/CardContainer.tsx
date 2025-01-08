@@ -1,4 +1,3 @@
-import { stockModel } from "@/models/stocks";
 import { getAllHotels, getAllReviews, getAllStocks } from "@/queries";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Card from "./Card";
@@ -8,8 +7,6 @@ interface ContainerProps {
 }
 
 export default async function CardContainer({ params, languageData }: ContainerProps) {
-  const stocksPromise = await stockModel.find().lean();
-
   const [ hotelsPromise, stockPromise, reviewPromise ] = await Promise.all( [
     getAllHotels(),
     getAllStocks(),

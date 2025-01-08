@@ -39,10 +39,20 @@ export default async function Card ( {  hotel, lang, languageData, stockPromise,
     const ratings = await reviewPromise;
     const rating = ratings?.find( rating => hotel?.id === rating?.hotelId.toString() ).reviews;
     const avgRatings = rating?.reduce( ( sum, review ) => sum + review?.ratings, 0 ) / rating?.length;
-    console.log( rating );
+    // console.log( getStock );
+
+    const parseData = {
+        ratings : rating?.length > 0 ? avgRatings : 0,
+        ratingsLength: rating?.length,
+        personMax: getStock?.personMax,
+        roomMax: getStock?.roomMax,
+        bedMax: getStock?.bedMax,
+        available: getStock?.available
+    };
+    const queryString = new URLSearchParams(parseData).toString();
 
     return (
-        <Link href={`/${ lang }/details/${ hotel?.id }?ratings=${rating?.length > 0 ? avgRatings : 0}`} className="block group bg-slate-200 p-2 rounded-xl shadow shadow-violet-400 hover:shadow-md hover:shadow-slate-400 transition-all duration-200">
+        <Link href={`/${ lang }/details/${ hotel?.id }?${queryString}`} className="block group bg-slate-200 p-2 rounded-xl shadow shadow-violet-400 hover:shadow-md hover:shadow-slate-400 transition-all duration-200">
             <div className="relative">
                 <Image
                     src={hotel?.thumbNailUrl}
@@ -59,13 +69,13 @@ export default async function Card ( {  hotel, lang, languageData, stockPromise,
                     ) : (
                         <>
                             <div
-                                className="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold font-ubuntu bg-green-800 text-white bg-opacity-30 backdrop-blur-sm"
+                                className="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold font-ubuntu bg-green-800 text-slate-600 bg-opacity-30 backdrop-blur-sm"
                             >
                                 <i className="ph-bed inline-block mr-1"></i>
                                 {getStock?.roomMax} {languageData?.bedrooms}
                             </div>
                             <div
-                                className="absolute top-10 right-3 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold font-ubuntu bg-cyan-800 text-white bg-opacity-70 backdrop-blur-sm"
+                                className="absolute top-10 right-3 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold font-ubuntu bg-cyan-800 text-slate-600 bg-opacity-70 backdrop-blur-sm"
                             >
                                 <i className="ph-bed inline-block mr-1"></i>
                                 {getStock?.bedMax} {languageData?.beds}

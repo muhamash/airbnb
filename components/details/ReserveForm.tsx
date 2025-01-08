@@ -6,7 +6,10 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface ReserveFormProps {
-    rate: number;
+    rate: {
+        bed: number;
+        room: number;
+    }
     perNight: string;
     langData: {
         checkIn: string;

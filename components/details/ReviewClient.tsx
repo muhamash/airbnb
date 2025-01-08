@@ -1,20 +1,40 @@
-'use client'
+'use client';
 
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import Write from "./Write";
+import Write from './Write';
+
 interface ReviewClientProps {
     reviewId: string;
+    ratings: number;
 }
 
-export default function ReviewClient ( { reviewId }: ReviewClientProps )
-{
+export default function ReviewClient({ reviewId, ratings }: ReviewClientProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const params = useParams();
     const router = useRouter();
-    const closeModal = () => setIsModalOpen(false);
+    const searchParams = useSearchParams();
 
+    const closeModal = () => setIsModalOpen( false );
+    
+    const updateSearchParams = async ( updates: Record<string, string | null> ) =>
+    {
+        const currentParams = new URLSearchParams( searchParams.toString() );
+        for ( const key in updates )
+        {
+            if ( updates[ key ] !== null )
+            {
+                currentParams.set( key, updates[ key ]! );
+            } else
+            {
+                currentParams.delete( key );
+            }
+        }
+        router.replace( `?${ currentParams.toString() }` );
+    };
+
+    // console.log(searchParams.get('ratings'), router);
     const handleDelete = async () => {
         startTransition(async () => {
             try {
@@ -27,7 +47,19 @@ export default function ReviewClient ( { reviewId }: ReviewClientProps )
                 });
 
                 if (response.ok) {
-                    window.location.reload();
+                    const currentRatings = Number(searchParams.get('ratings') || '0');
+                    const currentRatingsLength = Number(searchParams.get('ratingsLength') || '0');
+
+                    const newRatingsLength = Math.max( currentRatingsLength - 1, 0 );
+
+                    const newRatings = newRatingsLength > 0 ? (currentRatings * currentRatingsLength - ratings) / newRatingsLength : 0;
+                    console.log( newRatings );
+
+                    await updateSearchParams( {
+                        ratings: newRatings.toString(),
+                        ratingsLength: newRatingsLength.toString(),
+                    } );
+
                     console.log('Review deleted successfully');
                 } else {
                     console.error('Failed to delete review');
@@ -41,29 +73,27 @@ export default function ReviewClient ( { reviewId }: ReviewClientProps )
     return (
         <div className="flex flex-col gap-2">
             <button
-                onClick={()=> setIsModalOpen(!isModalOpen)}
+                onClick={() => setIsModalOpen(!isModalOpen)}
                 className="flex items-center justify-center px-2 py-1 bg-violet-500 text-white rounded-lg hover:bg-amber-600 transition-all"
             >
                 <i className="fas fa-edit mr-2"></i>
                 Edit
             </button>
-            {
-                isPending ? (
+            {isPending ? (
+                <div className='rounded-lg'>
                     <span className="loaderPending"></span>
-                )
-                    :
-                    ( <button
-                        onClick={handleDelete}
-                        className="flex items-center justify-center px-2 py-1 bg-red-400 text-white rounded-lg hover:bg-rose-700 transition-all"
-                        disabled={isPending}
-                    >
-                        <i className="fas fa-trash mr-2"></i>
-                        Delete
-                    </button> )
-            }
-            {
-                isModalOpen && <Write reviewId={reviewId} closeModal={closeModal} isEditing={true} />
-            }
+                </div>
+            ) : (
+                <button
+                    onClick={handleDelete}
+                    className="flex items-center justify-center px-2 py-1 bg-red-400 text-white rounded-lg hover:bg-rose-700 transition-all"
+                    disabled={isPending}
+                >
+                    <i className="fas fa-trash mr-2"></i>
+                    Delete
+                </button>
+            )}
+            {isModalOpen && <Write reviewId={reviewId} closeModal={closeModal} isEditing={true} />}
         </div>
     );
 }

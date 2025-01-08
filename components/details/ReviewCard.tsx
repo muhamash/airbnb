@@ -1,6 +1,4 @@
-import { userModel } from "@/models/users";
 import { formatDate } from "@/utils/utils";
-import { ObjectId } from 'mongodb';
 import Image from "next/image";
 import Ratings from "./Ratings";
 import ReviewClient from "./ReviewClient";
@@ -45,7 +43,7 @@ export default async function ReviewCard({ review, isUserHasReview }: ReviewProp
             </div>
 
             {isUserHasReview && (
-                <ReviewClient reviewId={review?._id.toString()} />
+                <ReviewClient ratings={review?.ratings} reviewId={review?._id.toString()} />
             )}
         </div>
     );

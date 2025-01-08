@@ -56,7 +56,6 @@ export async function PATCH(request: Request) {
         const hotelReviews = await reviewsModel.findOne({ hotelId });
 
         if (hotelReviews) {
-            // Use the correct `id` method to find the review by its ID
             const review = hotelReviews.reviews.id(new ObjectId(reviewId));
             console.log(review);
             if (review) {

@@ -1,4 +1,7 @@
-export async function formatDate(dateString: string): Promise<string> {
+import { AppRouterInstance } from 'next/router';
+
+export async function formatDate ( dateString: string ): Promise<string>
+{
     const date = new Date(dateString);
 
     const day = date.getUTCDate();
@@ -26,4 +29,21 @@ export const calculateDaysBetween = async ( checkIn: string, checkOut: string ):
     const differenceInTime = checkOutDate.getTime() - checkInDate.getTime();
     
     return differenceInTime / ( 1000 * 60 * 60 * 24 );
+};
+
+export const manipulateSearchParams = async( key: string, value: string | null, searchParams: URLSearchParams, router: AppRouterInstance ) =>
+{
+    const currentParams = new URLSearchParams( searchParams.toString() );
+
+    if ( value )
+    {
+        currentParams.set( key, value );
+    } else
+    {
+        currentParams.delete( key );
+    }
+
+    const newUrl = `?${currentParams.toString()}`;
+    console.log(`Updating URL: ${newUrl}`);
+    router.replace(newUrl);
 };

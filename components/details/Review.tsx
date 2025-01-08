@@ -7,10 +7,11 @@ import ReviewCard from "./ReviewCard";
 interface ReviewProps
 {
   lang: string;
-  reviewPromise: Promise<[string, string]>;
+  reviewPromise: Promise<[ string, string ]>;
+  searchParams: URLSearchParams;
 }
 
-export default async function Review ( {lang , reviewPromise}: ReviewProps )
+export default async function Review ( {lang , reviewPromise, searchParams}: ReviewProps )
 {
   const responseData = await fetchDictionary( lang );
   const reviews = await reviewPromise;
@@ -26,9 +27,9 @@ export default async function Review ( {lang , reviewPromise}: ReviewProps )
           <h2 className="text-2xl font-semibold">{responseData?.details?.reviews}</h2>
           <div className="flex items-center">
             <i className="fas fa-star text-yellow-500 mr-2"></i>
-            <span className="text-xl font-semibold">4.9</span>
+            <span className="text-xl font-semibold">{searchParams?.ratings}</span>
             <span className="mx-2">·</span>
-            <span className="text-gray-600 font-ubuntu">{reviews?.length} {responseData?.details?.reviews }</span>
+            <span className="text-gray-600 font-ubuntu">{searchParams?.ratingsLength} {responseData?.details?.reviews }</span>
           </div>
         </div>
 

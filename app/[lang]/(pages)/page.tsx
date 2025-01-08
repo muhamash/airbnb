@@ -10,10 +10,9 @@ interface HomeProps
 export default async function Home ( { params } : HomeProps )
 {
   const responseData = await fetchDictionary( params?.lang );
-  console.log( responseData?.home );
-
+  // console.log( params );
   return (
-    <div className="py-[100px]">
+    <div className="md:py-[100px] py-[130px]">
       <div className="px-6">
         <CardContainer params={params} lang={params?.lang} languageData={ responseData?.home } />
       </div>

@@ -3,76 +3,73 @@
 import { getReviewById } from '@/utils/serverActions';
 import { motion } from 'framer-motion';
 import { getSession } from 'next-auth/react';
-import { redirect, useParams } from 'next/navigation';
+import { redirect, useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState, useTransition } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 
 interface WriteProps {
-    closeModal: () => void;
-    isEditing?: boolean;
-    reviewId?: string;
+  closeModal: () => void;
+  isEditing?: boolean;
+  reviewId?: string;
 }
 
 interface IFormInput {
-    rating: number;
-    reviewText: string;
+  rating: number;
+  reviewText: string;
 }
 
-export default function Write ( { closeModal, isEditing = false, reviewId }: WriteProps )
-{
-    const { register, handleSubmit, setValue, formState: { errors } } = useForm<IFormInput>();
-    const [isPending, startTransition] = useTransition();
-    const [rating, setRating] = useState<number>(0);
-    const [user, setUser] = useState<any>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const params = useParams();
+export default function Write({ closeModal, isEditing = false, reviewId }: WriteProps) {
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<IFormInput>();
+  const [isPending, startTransition] = useTransition();
+  const [rating, setRating] = useState<number>(0);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const params = useParams();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-    // Async function to initialize data
-  const initializeData = async () =>
-  {
-    try
-    {
+  // Function to initialize user and review data
+  const initializeData = async () => {
+    try {
       const session = await getSession();
-      // console.log( "dsfsfsdf", session );
-      if ( session )
-      {
-        setUser( session.user );
+      if (session) {
+        setUser(session.user);
+      } else {
+        redirect('/login');
       }
 
-      if ( isEditing && reviewId )
-      {
-        const reviews = await getReviewById( params?.id );
-        const review = reviews?.find( ( rev: any ) => rev._id === reviewId );
-        if ( review )
-        {
-          setRating( review.ratings );
-          setValue( 'reviewText', review.text );
+      if (isEditing && reviewId) {
+        const reviews = await getReviewById(params?.id);
+        const review = reviews?.find((rev: any) => rev._id === reviewId);
+        if (review) {
+          setRating(review.ratings);
+          setValue('reviewText', review.text);
         }
       }
-    } catch ( error )
-    {
-      console.error( 'Error initializing data:', error );
-    } finally
-    {
-      setLoading( false );
+    } catch (error) {
+      console.error('Error initializing data:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect( () =>
-  {
+  useEffect(() => {
     initializeData();
-  }, [] );
-  
-  // console.log( user );
-  useEffect( () =>
-  {
-    if ( !loading && !user )
-    {
-      redirect( "/login" );
+  }, []);
+
+  const updateSearchParams = async (updates: Record<string, string | null>) => {
+    const currentParams = new URLSearchParams(searchParams.toString());
+    for (const key in updates) {
+      if (updates[key] !== null) {
+        currentParams.set(key, updates[key]!);
+      } else {
+        currentParams.delete(key);
+      }
     }
-  }, [ loading] );
-  
+    router.replace(`?${currentParams.toString()}`);
+  };
+
   const onSubmit: SubmitHandler<IFormInput> = async ( data ) =>
   {
     data.rating = rating;
@@ -83,8 +80,10 @@ export default function Write ( { closeModal, isEditing = false, reviewId }: Wri
       userId: user?.id,
       hotelId: params.id,
       reviewId: reviewId,
-      image: user?.image || "undefined",
+      image: user?.image || 'undefined',
     };
+
+    console.log( 'Submitting review data:', reviewData, isEditing );
 
     startTransition( async () =>
     {
@@ -92,16 +91,36 @@ export default function Write ( { closeModal, isEditing = false, reviewId }: Wri
       {
         const response = await fetch( 'http://localhost:3000/api/review', {
           method: isEditing ? 'PATCH' : 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify( reviewData ),
         } );
 
         const result = await response.json();
+        console.log( 'API response:', result );
+
         if ( result.status === 200 )
         {
-          toast.success( 'Review submitted successfully!' );
+          const currentRatings = Number( searchParams.get( 'ratings' ) );
+          const currentRatingsLength = Number( searchParams.get( 'ratingsLength' ) );
+          console.log( 'Current ratings and length:', currentRatings, currentRatingsLength );
+
+          if ( isEditing )
+          {
+            const newRatingValue = ( currentRatings - rating + data.rating ) / currentRatingsLength;
+            console.log( 'New rating value after edit:', newRatingValue );
+            await updateSearchParams( { ratings: newRatingValue.toString() } );
+          } else
+          {
+            const newRatingsLength = currentRatingsLength + 1;
+            const newRatingValue = ( currentRatings + data.rating ) / newRatingsLength;
+            console.log( 'New rating value and length after new submission:', newRatingValue, newRatingsLength );
+            await updateSearchParams( {
+              ratings: newRatingValue.toString(),
+              ratingsLength: newRatingsLength.toString(),
+            } );
+          }
+
+          toast.success( isEditing ? 'Review updated successfully!' : 'Review submitted successfully!' );
           window.location.reload();
           closeModal();
         } else
@@ -120,22 +139,18 @@ export default function Write ( { closeModal, isEditing = false, reviewId }: Wri
   return (
     <>
       <Toaster position="top-right" reverseOrder={false} />
-
       <motion.div
         className="fixed inset-0 bg-black bg-opacity-50 z-50 backdrop-blur-sm flex items-center justify-center"
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 100 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
         <div className="bg-white rounded-2xl w-full max-w-xl mx-4 overflow-hidden">
           <div className="border-b p-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-xl font-semibold">{isEditing ? "Edit Review" : "Write a Review"}</h3>
-              <button
-                onClick={closeModal}
-                className="text-gray-400 hover:text-gray-600"
-              >
+              <h3 className="text-xl font-semibold">{isEditing ? 'Edit Review' : 'Write a Review'}</h3>
+              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
                 <i className="fas fa-times text-xl"></i>
               </button>
             </div>
@@ -148,10 +163,7 @@ export default function Write ( { closeModal, isEditing = false, reviewId }: Wri
                   <div className="h-5 bg-gray-200 rounded-md w-1/3 mb-2 animate-pulse"></div>
                   <div className="flex gap-2">
                     {[ 1, 2, 3, 4, 5 ].map( ( star ) => (
-                      <div
-                        key={star}
-                        className="h-8 w-8 bg-gray-200 rounded-full animate-pulse"
-                      ></div>
+                      <div key={star} className="h-8 w-8 bg-gray-200 rounded-full animate-pulse"></div>
                     ) )}
                   </div>
                 </div>
@@ -201,12 +213,18 @@ export default function Write ( { closeModal, isEditing = false, reviewId }: Wri
                   >
                     Cancel
                   </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:brightness-90"
-                  >
-                    {isEditing ? "Update Review" : "Submit Review"}
-                  </button>
+                  {isPending ? (
+                    <div className="rounded-lg">
+                      <div className="loaderPending"></div>
+                    </div>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:brightness-90"
+                    >
+                      {isEditing ? 'Update Review' : 'Submit Review'}
+                    </button>
+                  )}
                 </div>
               </form>
             )}

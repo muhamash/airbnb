@@ -2,7 +2,7 @@ import { fetchDictionary } from "@/utils/fetchFunction";
 
 import Image from "next/image";
 import Amenities from './Ameniteis';
-import ReserveForm from "./ReserveForm";
+import Reserve from "./Reserve";
 interface HotelProps
 {
     hotel: {
@@ -12,7 +12,9 @@ interface HotelProps
         airportCode?: string;
         city?: string;
         countryCode?: string;
-        rate?: number;
+        rate?: {
+            [ key: string ]: number;
+        };
         propertyCategory?: number;
         stateProvinceCode?: string;
         thumbNailUrl?: string;
@@ -21,16 +23,14 @@ interface HotelProps
         amenities?: string[];
     };
     lang: string;
-    stocksPromise: Promise;
+    searchParams: URLSearchParams;
 };
 
-export default async function Property ( { hotel, lang, stocksPromise }: HotelProps )
+export default async function Property ( { hotel, lang, searchParams }: HotelProps )
 {
-    // use here progressive rebdering with promise.all
     const responseData = await fetchDictionary(lang);
-    const stocks = await stocksPromise;
     // const user: Session = await auth();
-        // console.log( "scscsc",user);
+    //   console.log( searchParams );
 
     return (
         <div className="max-w-7xl mx-auto px-6 py-8">
@@ -39,8 +39,8 @@ export default async function Property ( { hotel, lang, stocksPromise }: HotelPr
                 <h1 className="text-3xl font-bold mb-2">{hotel?.name}</h1>
                 <div className="flex items-center text-gray-600">
                     <i className="fas fa-star text-yellow-500 mr-1"></i>
-                    <span className="font-ubuntu">5 · </span>
-                    <span className="ml-2 font-ubuntu">2 reviews</span>
+                    <span className="font-ubuntu">{searchParams?.ratings} </span>
+                    <span className="ml-2 font-ubuntu">{searchParams?.ratingsLength}</span>
                     <span className="mx-2">·</span>
                     <span className="font-ubuntu">{hotel?.address}</span>
                 </div>
@@ -95,15 +95,15 @@ export default async function Property ( { hotel, lang, stocksPromise }: HotelPr
                         <div className="grid grid-cols-3 gap-4 text-gray-600">
                             <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
                                 <i className="fas fa-person"></i>
-                                <span>{stocks?.personMax} {responseData?.details?.guest}</span>
+                                <span>{searchParams?.personMax} {responseData?.details?.guest}</span>
                             </div>
                             <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
                                 <i className="fas fa-door-open"></i>
-                                <span>{stocks?.roomMax} {responseData?.details?.bedrooms}</span>
+                                <span>{searchParams?.roomMax} {responseData?.details?.bedrooms}</span>
                             </div>
                             <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
                                 <i className="fas fa-bed"></i>
-                                <span>{stocks?.bedMax} {responseData?.details?.beds}</span>
+                                <span>{searchParams?.bedMax} {responseData?.details?.beds}</span>
                             </div>
                         </div>
                     </div>
@@ -127,12 +127,15 @@ export default async function Property ( { hotel, lang, stocksPromise }: HotelPr
 
                 {/* <!-- Right Column: Booking Card --> */}
                 <div>
-                    <ReserveForm
+                    {/* <ReserveForm
                         rate={hotel?.rate}
                         perNight={responseData?.details?.perNight}
                         langData={responseData?.details}
-                        stocks={stocks}
-                        hotelId={hotel._id?.toString()}
+                    /> */}
+                    <Reserve
+                        rate={hotel?.rate}
+                        perNight={responseData?.details?.perNight}
+                        langData={responseData?.details}
                     />
                 </div>
             </div>
