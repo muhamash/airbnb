@@ -80,7 +80,7 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
     };
 
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex md:flex-col flex-row gap-2">
             <button
                 onClick={()=> setIsModalOpen(!isModalOpen)}
                 className="flex items-center justify-center px-2 py-1 bg-violet-500 text-white rounded-lg hover:bg-amber-600 transition-all"

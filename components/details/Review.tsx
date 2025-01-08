@@ -28,27 +28,29 @@ export default async function Review ( {languagePromise, reviewPromise, searchPa
             <i className="fas fa-star text-yellow-500 mr-2"></i>
             <span className="text-xl font-semibold">{searchParams?.ratings}</span>
             <span className="mx-2">·</span>
-            <span className="text-gray-600 font-ubuntu">{searchParams?.ratingsLength} {responseData?.details?.reviews }</span>
+            <span className="text-gray-600 font-ubuntu">{searchParams?.ratingsLength} {responseData?.details?.reviews}</span>
           </div>
         </div>
 
         {
           !isUserHasReview && (
-            <ReviewButton text={responseData?.details?.writeReview}/>
+            <ReviewButton text={responseData?.details?.writeReview} />
           )
         }
       </div>
 
       {/* <!-- Reviews Grid --> */}
-      <div className="grid grid-cols-2 gap-8">
-        {/* <!-- Review Cards--> */}
-        {
-          reviews?.length > 0 ? (
-            reviews.map( ( review ) => (
-              <ReviewCard key={review?.userId} review={review} isUserHasReview={ review.userId.toString() === session?.user?.id } />
-            ) )
-          ) : ( <p>no reviews</p> )
-        }
+      <div>
+        <div className="flex flex-nowrap space-x-4 overflow-x-auto p-1">
+          {/* <!-- Review Cards--> */}
+          {
+            reviews?.length > 0 ? (
+              reviews.map( ( review ) => (
+                <ReviewCard key={review?.userId} review={review} isUserHasReview={review.userId.toString() === session?.user?.id} />
+              ) )
+            ) : ( <p>no reviews</p> )
+          }
+        </div>
       </div>
     </div>
   );

@@ -94,7 +94,7 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
                 form={form}
                 style={{ maxWidth: 600 }}
                 initialValues={{ selection: "beds" }}
-                className="bg-white shadow-lg rounded-xl p-6 border relative overflow-hidden"
+                className="bg-white shadow-md shadow-sky-600 rounded-xl p-6 border relative overflow-hidden"
             >
                 <motion.div
                     initial={{ scale: 0.9 }}
