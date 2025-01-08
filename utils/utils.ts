@@ -30,20 +30,3 @@ export const calculateDaysBetween = async ( checkIn: string, checkOut: string ):
     
     return differenceInTime / ( 1000 * 60 * 60 * 24 );
 };
-
-export const manipulateSearchParams = async( key: string, value: string | null, searchParams: URLSearchParams, router: AppRouterInstance ) =>
-{
-    const currentParams = new URLSearchParams( searchParams.toString() );
-
-    if ( value )
-    {
-        currentParams.set( key, value );
-    } else
-    {
-        currentParams.delete( key );
-    }
-
-    const newUrl = `?${currentParams.toString()}`;
-    console.log(`Updating URL: ${newUrl}`);
-    router.replace(newUrl);
-};

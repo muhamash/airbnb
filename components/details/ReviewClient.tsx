@@ -1,23 +1,22 @@
-'use client';
+'use client'
 
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import Write from './Write';
-
+import Write from "./Write";
 interface ReviewClientProps {
     reviewId: string;
-    ratings: number;
+    rating: number;
 }
 
-export default function ReviewClient({ reviewId, ratings }: ReviewClientProps) {
+export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps )
+{
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const params = useParams();
     const router = useRouter();
     const searchParams = useSearchParams();
-
     const closeModal = () => setIsModalOpen( false );
-    
+
     const updateSearchParams = async ( updates: Record<string, string | null> ) =>
     {
         const currentParams = new URLSearchParams( searchParams.toString() );
@@ -31,69 +30,81 @@ export default function ReviewClient({ reviewId, ratings }: ReviewClientProps) {
                 currentParams.delete( key );
             }
         }
-        router.replace( `?${ currentParams.toString() }` );
+        await router.replace( `?${ currentParams.toString() }` );
     };
 
-    // console.log(searchParams.get('ratings'), router);
-    const handleDelete = async () => {
-        startTransition(async () => {
-            try {
-                const response = await fetch('http://localhost:3000/api/review', {
+    const handleDelete = async () =>
+    {
+        startTransition( async () =>
+        {
+            try
+            {
+                const response = await fetch( 'http://localhost:3000/api/review', {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ reviewId, hotelId: params.id }),
-                });
+                    body: JSON.stringify( { reviewId, hotelId: params.id } ),
+                } );
 
-                if (response.ok) {
-                    const currentRatings = Number(searchParams.get('ratings') || '0');
-                    const currentRatingsLength = Number(searchParams.get('ratingsLength') || '0');
-
+                if ( response.ok )
+                {
+                    const currentRatings = Number( searchParams.get( 'ratings' ) || '0' );
+                    const currentRatingsLength = Number( searchParams.get( 'ratingsLength' ) || '0' );
                     const newRatingsLength = Math.max( currentRatingsLength - 1, 0 );
-
-                    const newRatings = newRatingsLength > 0 ? (currentRatings * currentRatingsLength - ratings) / newRatingsLength : 0;
-                    console.log( newRatings );
+                    const newRatings = newRatingsLength > 0
+                        ? ( currentRatings * currentRatingsLength - ratings ) / newRatingsLength
+                        : 0;
 
                     await updateSearchParams( {
                         ratings: newRatings.toString(),
                         ratingsLength: newRatingsLength.toString(),
                     } );
-
-                    console.log('Review deleted successfully');
-                } else {
-                    console.error('Failed to delete review');
                 }
-            } catch (error) {
-                console.error('Error deleting review:', error);
+                else
+                {
+                    console.error( 'Failed to delete review' );
+                }
+            } catch ( error )
+            {
+                console.error( 'Error deleting review:', error );
             }
-        });
+            finally
+            {
+                setTimeout( () =>
+                {
+                    window.location.reload();
+                }, 1000 );
+            }
+} );
     };
 
     return (
         <div className="flex flex-col gap-2">
             <button
-                onClick={() => setIsModalOpen(!isModalOpen)}
+                onClick={()=> setIsModalOpen(!isModalOpen)}
                 className="flex items-center justify-center px-2 py-1 bg-violet-500 text-white rounded-lg hover:bg-amber-600 transition-all"
             >
                 <i className="fas fa-edit mr-2"></i>
                 Edit
             </button>
-            {isPending ? (
-                <div className='rounded-lg'>
+            {
+                isPending ? (
                     <span className="loaderPending"></span>
-                </div>
-            ) : (
-                <button
-                    onClick={handleDelete}
-                    className="flex items-center justify-center px-2 py-1 bg-red-400 text-white rounded-lg hover:bg-rose-700 transition-all"
-                    disabled={isPending}
-                >
-                    <i className="fas fa-trash mr-2"></i>
-                    Delete
-                </button>
-            )}
-            {isModalOpen && <Write reviewId={reviewId} closeModal={closeModal} isEditing={true} />}
+                )
+                    :
+                    ( <button
+                        onClick={handleDelete}
+                        className="flex items-center justify-center px-2 py-1 bg-red-400 text-white rounded-lg hover:bg-rose-700 transition-all"
+                        disabled={isPending}
+                    >
+                        <i className="fas fa-trash mr-2"></i>
+                        Delete
+                    </button> )
+            }
+            {
+                isModalOpen && <Write reviewId={reviewId} closeModal={closeModal} isEditing={true} />
+            }
         </div>
     );
 }
