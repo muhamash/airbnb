@@ -1,6 +1,7 @@
 import Property from "@/components/details/Property";
 import Review from "@/components/details/Review";
 import { getReviewsByHotelId } from "@/queries";
+import { fetchDictionary } from "@/utils/fetchFunction";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { notFound } from "next/navigation";
 
@@ -25,9 +26,10 @@ export default async function Details({ params, searchParams }: DetailsProps) {
     }
 
     try {
-        const [ hotelResponse, reviews, stocks ] = await Promise.all( [
+        const [ hotelResponse, reviews, languagePromise ] = await Promise.all( [
             fetch( `http://localhost:3000/api/hotels/${ hotelId }` ),
             getReviewsByHotelId( hotelId ),
+            fetchDictionary(params?.lang),
         ] );
 
         const hotel: { data: Hotel, status: number } = await hotelResponse.json();
@@ -43,12 +45,14 @@ export default async function Details({ params, searchParams }: DetailsProps) {
         };
         
         return (
-            <div className="py-[100px]">
-                <Property searchParams={searchParams} hotel={plainHotel} lang={params?.lang} stocksPromise={stocks}/>
-                <Review searchParams={searchParams} params={params} lang={params?.lang} reviewPromise={reviews} />
+            <div className="md:py-[80px] py-[110px]">
+                <Property languagePromise={languagePromise} searchParams={searchParams} hotel={plainHotel} lang={params?.lang} />
+                <Review languagePromise={languagePromise} searchParams={searchParams} params={params} lang={params?.lang} reviewPromise={reviews} />
             </div>
         );
-    } catch (error) {
+    }
+    catch ( error )
+    {
         console.error("Error fetching hotel details:", error);
         return notFound();
     }

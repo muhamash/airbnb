@@ -63,19 +63,19 @@ export default async function Card ( {  hotel, lang, languageData, stockPromise,
                 />
                 {
                     !getStock?.available ? (
-                        <div className="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold font-mono bg-rose-800 text-white bg-opacity-30 backdrop-blur-sm">
+                        <div className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold font-mono bg-rose-800 text-white bg-opacity-30 backdrop-blur-sm">
                             <p>Stock out 🏨 ❌!</p>
                         </div>
                     ) : (
                         <>
                             <div
-                                className="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold font-ubuntu bg-green-800 text-slate-600 bg-opacity-30 backdrop-blur-sm"
+                                className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold font-ubuntu bg-green-800 text-slate-100 bg-opacity-90 backdrop-blur-sm"
                             >
                                 <i className="ph-bed inline-block mr-1"></i>
                                 {getStock?.roomMax} {languageData?.bedrooms}
                             </div>
                             <div
-                                className="absolute top-10 right-3 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold font-ubuntu bg-cyan-800 text-slate-600 bg-opacity-70 backdrop-blur-sm"
+                                className="absolute top-10 right-3 px-3 py-1 rounded-full text-xs font-semibold font-ubuntu bg-cyan-800 text-slate-100 bg-opacity-70 backdrop-blur-sm"
                             >
                                 <i className="ph-bed inline-block mr-1"></i>
                                 {getStock?.bedMax} {languageData?.beds}

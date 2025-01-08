@@ -1,4 +1,3 @@
-import { fetchDictionary } from "@/utils/fetchFunction";
 
 import Image from "next/image";
 import Amenities from './Ameniteis';
@@ -22,13 +21,13 @@ interface HotelProps
         overview?: string;
         amenities?: string[];
     };
-    lang: string;
     searchParams: URLSearchParams;
+    languagePromise: Promise;
 };
 
-export default async function Property ( { hotel, lang, searchParams }: HotelProps )
+export default async function Property ( { hotel, searchParams, languagePromise }: HotelProps )
 {
-    const responseData = await fetchDictionary(lang);
+    const responseData = await languagePromise;
     // const user: Session = await auth();
     //   console.log( searchParams );
 
@@ -36,12 +35,12 @@ export default async function Property ( { hotel, lang, searchParams }: HotelPro
         <div className="max-w-7xl mx-auto px-6 py-8">
             {/* !-- Property Title and Rating --> */}
             <div className="mb-6">
-                <h1 className="text-3xl font-bold mb-2">{hotel?.name}</h1>
+                <h1 className="text-3xl font-bold mb-2 text-violet-800">{hotel?.name}</h1>
                 <div className="flex items-center text-gray-600">
                     <i className="fas fa-star text-yellow-500 mr-1"></i>
-                    <span className="font-ubuntu">{searchParams?.ratings} </span>
-                    <span className="ml-2 font-ubuntu">{searchParams?.ratingsLength}</span>
-                    <span className="mx-2">·</span>
+                    <span className="font-ubuntu">{searchParams?.ratings}<span className="mx-2 font-mono">|</span></span>
+                    {/* <span className="ml-2 font-ubuntu">{searchParams?.ratingsLength}</span> */}
+                    {/* <span className="mx-2">·</span> */}
                     <span className="font-ubuntu">{hotel?.address}</span>
                 </div>
             </div>

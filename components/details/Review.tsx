@@ -1,19 +1,18 @@
 import { auth } from "@/auth";
-import { fetchDictionary } from "@/utils/fetchFunction";
 import { Session } from "next-auth";
 import ReviewButton from "./ReviewButton";
 import ReviewCard from "./ReviewCard";
 
 interface ReviewProps
 {
-  lang: string;
   reviewPromise: Promise<[ string, string ]>;
   searchParams: URLSearchParams;
+  languagePromise: Promise;
 }
 
-export default async function Review ( {lang , reviewPromise, searchParams}: ReviewProps )
+export default async function Review ( {languagePromise, reviewPromise, searchParams}: ReviewProps )
 {
-  const responseData = await fetchDictionary( lang );
+  const responseData = await languagePromise;
   const reviews = await reviewPromise;
   const session: Session | null = await auth();
   const isUserHasReview = reviews?.some( review => review.userId.toString() === session?.user?.id );

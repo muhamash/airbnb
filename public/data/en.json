@@ -2,14 +2,18 @@
     "taka": "Taka",
     "nav": {
         "login": "Login",
-        "placeholder": "Looking for something?",
+        "placeholder": "Searching for something?",
         "search": "Search"
     },
     "home": {
         "roomsLeft": "3 rooms left",
         "perNight": "Per night",
-        "location": "Himmafushi, Maldives",
-        "ratings": "4.9"
+        "location": "Himafushi, Maldives",
+        "ratings": "4.9",
+        "bed": "Bed",
+        "room": "Bedroom",
+        "beds": "Beds available",
+        "bedrooms": "Bedrooms available"
     },
     "details": {
         "title": "About this place",
@@ -22,9 +26,10 @@
         "checkIn": "Check-in",
         "guest": "Maximum guest capacity",
         "checkOut": "Check-out",
-        "bedrooms": "bedrooms available",
-        "beds": "beds available",
-        "footer": "Limited stock! Ensure you book before it’s gone! Book quickly to avail exclusive offers.",
+        "bed": "Bed",
+        "bedrooms": "Bedrooms available",
+        "beds": "Beds available",
+        "footer": "Limited stock! Make sure you book before it runs out! Book fast to get exclusive offers.",
         "review": "Review",
         "writeReview": "Write a review",
         "reviews": "Reviews",
@@ -34,11 +39,14 @@
             "guest": "The maximum allowed number of guests is",
             "bedrooms": "The maximum allowed number of bedrooms is",
             "beds": "The maximum allowed number of beds is",
-            "checkOut": "The check-out date must be after the check-in date",
+            "checkOut": "Check-out date must be after check-in date",
             "pastDate": "You are trying to check in the past!"
         }
     },
     "payment": {
+        "bed": "Bed",
+        "checkIn": "Check-in",
+        "checkOut": "Check-out",
         "back": "Go back to the previous page",
         "trip": "Your trip",
         "dates": "Dates",
@@ -67,5 +75,5 @@
             "ccv": "CCV"
         }
     },
-    "footer": "© 2024, Learn with Sumit • Terms • Privacy • Your preferred policy"
+    "footer": "© 2024, Learn with Sumit • Terms • Privacy • Your Preferences Policy"
 }
