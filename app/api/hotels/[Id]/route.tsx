@@ -1,4 +1,4 @@
-import { bookingModel } from "@/models/bookings";
+import { bookingsModel } from "@/models/bookings";
 import { hotelModel } from "@/models/hotels";
 import { dbConnect } from "@/services/mongoDB";
 import { ObjectId } from "mongodb";
