@@ -59,7 +59,7 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
                 setTimeout( () =>
                 {
                     window.location.reload();
-                }, 1000 );
+                }, 500 );
             }
         } );
     };

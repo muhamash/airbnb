@@ -131,7 +131,7 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
         setTimeout( () =>
         {
           window.location.reload();
-        }, 1000 );
+        }, 500 );
       }
     } );
   };

@@ -68,7 +68,7 @@ export default function TripDetails({ languageData }: TripProps) {
       selection?: string;
       beds?: number;
       rooms?: number;
-    } = {} 
+    } = {}
   ) =>
   {
     setEditMode( { dates: false, type: false } );
@@ -101,7 +101,12 @@ export default function TripDetails({ languageData }: TripProps) {
         searchParams,
         router
       );
-    } 
+    }
+
+    setTimeout( () =>
+    {
+      window.location.reload();
+    }, 500 );
   };
 
   return (
