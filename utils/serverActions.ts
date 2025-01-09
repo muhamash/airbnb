@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { getReviewsByHotelId } from "@/queries";
+import { redirect } from "next/navigation";
 interface FormData
 {
     email: string;
@@ -21,6 +22,11 @@ export async function handleAuth(formData: FormData) {
 export async function paymentForm( formData: FormData )
 {
     console.log( formData );
+    if ( formData )
+    {
+        console.log( formData.userId );
+        redirect( `http://localhost:3000/success` );
+    }
 }
 
 export const getReviewById = async (hotelId: string) =>

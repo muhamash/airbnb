@@ -102,11 +102,10 @@ export default function TripDetails({ languageData }: TripProps) {
         router
       );
     }
-
-    setTimeout( () =>
-    {
-      window.location.reload();
-    }, 500 );
+    // setTimeout( () =>
+    // {
+    //   window.location.reload();
+    // }, 500 );
   };
 
   return (

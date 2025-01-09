@@ -31,11 +31,18 @@ interface PaymentFormProps {
     stocksPromise: Promise;
 }
 
+interface FormData
+{
+    email: string;
+    password: string;
+    action: string;
+}
+
 export default async function PaymentForm ( { searchParams, languageData, params }: PaymentFormProps )
 {
     const session: Session = await auth();
     const rate = JSON.parse( searchParams?.rate )
-    console.log( searchParams, params, session?.user, rate[searchParams?.selection] );
+    // console.log( searchParams, params, session?.user, rate[ searchParams?.selection ] );
 
     return (
         <div>
