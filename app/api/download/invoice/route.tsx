@@ -117,7 +117,7 @@ export async function GET(request: Request): Promise<Response> {
             <h3 style="padding: 0px 0 10px 0; color:teal">Reservation Details</h3>
             
             <!-- reserve table -->
-            <div style="background-color: gray; padding:20px; border-radius:10px;">
+            <div style="background-color: #c9e2e9; padding:20px; border-radius:10px;">
                 <table style="border-radius: 10px; width: 100%; border-collapse: collapse;">
                 <tr>
                     <td style="font-size: 15px; color: #080808; padding: 5px;">Check-in:</td>
@@ -192,7 +192,7 @@ export async function GET(request: Request): Promise<Response> {
         
         const page = await browser.newPage();
         await page.setContent(content);
-        const pdfBuffer = await page.pdf({ format: 'A4' });
+        const pdfBuffer = await page.pdf( { format: 'A4', printBackground: true, path: "invoice.pdf" } );
 
         await browser.close();
         return new Response( pdfBuffer, {

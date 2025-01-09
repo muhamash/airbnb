@@ -31,12 +31,12 @@ interface PaymentFormProps {
     stocksPromise: Promise;
 }
 
-interface FormData
-{
-    email: string;
-    password: string;
-    action: string;
-}
+// interface FormData
+// {
+//     email: string;
+//     password: string;
+//     action: string;
+// }
 
 export default async function PaymentForm ( { searchParams, languageData, params }: PaymentFormProps )
 {
