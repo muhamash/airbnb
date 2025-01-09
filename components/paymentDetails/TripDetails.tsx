@@ -46,17 +46,14 @@ interface TripProps {
 export default function TripDetails({ languageData }: TripProps) {
   const params = useParams();
   const searchParams = useSearchParams();
-
+  const [ form ] = Form.useForm();
   const initialDates =
     searchParams.get("checkIn") && searchParams.get("checkOut")
       ? [dayjs(searchParams.get("checkIn")), dayjs(searchParams.get("checkOut"))]
       : null;
-
   const roomsAvailable = Number(searchParams.get("roomMax"));
   const bedsAvailable = Number(searchParams.get("bedMax"));
-
   const [editMode, setEditMode] = useState({ dates: false, type: false });
-  const [form] = Form.useForm();
 
   const handleCancel = (field: "dates" | "type") => {
     setEditMode((prev) => ({ ...prev, [field]: false }));
@@ -75,7 +72,7 @@ export default function TripDetails({ languageData }: TripProps) {
       onFinish={handleSubmit}
       form={form}
       {...formItemLayout}
-      className="bg-cyan-500"
+      className="bg-cyan-600 text-white shadow-md"
       layout="vertical"
       style={{ maxWidth: 600, margin: "0 auto", padding: "20px", borderRadius: "8px" }}
       initialValues={{
@@ -219,8 +216,8 @@ export default function TripDetails({ languageData }: TripProps) {
           <div className="flex justify-between items-center w-full">
             <span>
               {form.getFieldValue("selection") === "beds"
-                ? `${searchParams.get("beds")} Beds Selected`
-                : `${searchParams.get("rooms")} Rooms Selected`}
+                ? `${form.getFieldValue("beds") || searchParams.get("beds")} Beds Selected`
+                : `${form.getFieldValue("rooms") || searchParams.get("rooms")} Rooms Selected`}
             </span>
             <motion.button
               className="px-2 py-1 bg-orange-500 text-white font-semibold rounded-md"
