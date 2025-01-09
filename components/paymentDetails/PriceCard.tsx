@@ -60,7 +60,7 @@ export default async function PriceCard({ languageData,days, calculateRentedPric
                             {hotel?.data?.name}
                         </p>
                         <div className="flex items-center">
-                            <i className="fas fa-star text-sm mr-1"></i>
+                            <i className="fas text-orange-500 fa-star text-sm mr-1"></i>
                             <span className="text-xs mt-1 font-kanit text-sky-600">
                                 {searchParams?.ratings} <span className="font-playfairDisplay text-teal-600">({searchParams?.ratingsLength} {languageData?.reviews})</span>
                             </span>

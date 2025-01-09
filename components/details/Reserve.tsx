@@ -87,8 +87,8 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
             ]);
             return;
         }
+        // console.log("Reservation Data:", reservationData);
         
-        console.log("Reservation Data:", reservationData);
         const parseSearchParams = {
             checkIn: reservationData?.checkIn || null,
             checkOut: reservationData?.checkOut || null,

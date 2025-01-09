@@ -1,9 +1,10 @@
 'use client';
 
-import { DatePicker, Form, InputNumber, Radio, message } from "antd";
+import { updateSearchParams } from "@/utils/utils";
+import { DatePicker, Form, InputNumber, Radio } from "antd";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
-import { useParams, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const { RangePicker } = DatePicker;
@@ -44,7 +45,8 @@ interface TripProps {
 }
 
 export default function TripDetails({ languageData }: TripProps) {
-  const params = useParams();
+  // const params = useParams();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [ form ] = Form.useForm();
   const initialDates =
@@ -60,11 +62,46 @@ export default function TripDetails({ languageData }: TripProps) {
     form.resetFields();
   };
 
-  const handleSubmit = (values: { RangePicker: [dayjs.Dayjs, dayjs.Dayjs]; selection: string; beds: number; rooms: number }) => {
-    message.success("Changes saved successfully!");
+  const handleSubmit = async (
+    values: {
+      RangePicker?: [ dayjs.Dayjs, dayjs.Dayjs ];
+      selection?: string;
+      beds?: number;
+      rooms?: number;
+    } = {} 
+  ) =>
+  {
     setEditMode( { dates: false, type: false } );
-    
-    console.log(values)
+    // console.log( values, params, searchParams.toString(), reservationData );
+
+    if ( editMode?.type )
+    {
+      const { selection, beds, rooms } = values;
+      const typeData: Record<string, string | number> = { selection };
+      if ( selection === 'beds' && beds ) typeData.beds = beds;
+      if ( selection === 'rooms' && rooms ) typeData.rooms = rooms;
+
+      console.log( typeData );
+      await updateSearchParams( typeData, searchParams, router );
+    }
+
+    if ( editMode?.dates )
+    {
+      const { RangePicker: [ checkIn, checkOut ] } = values;
+      const reservationData = {
+        checkIn: checkIn.format( 'YYYY-MM-DD' ),
+        checkOut: checkOut.format( 'YYYY-MM-DD' ),
+      };
+
+      await updateSearchParams(
+        {
+          checkIn: reservationData.checkIn,
+          checkOut: reservationData.checkOut,
+        },
+        searchParams,
+        router
+      );
+    } 
   };
 
   return (
@@ -96,9 +133,12 @@ export default function TripDetails({ languageData }: TripProps) {
         {editMode.dates ? (
           <>
             <Form.Item
+              style={{
+                color: "wheat"
+              }}
               label={languageData.dates}
               name="RangePicker"
-              rules={[ { required: true, message: "Please select dates!" } ]}
+              rules={[ { required: true, message: languageData?.errors?.required } ]}
             >
               <RangePicker
                 disabledDate={( current ) => current && current < dayjs().endOf( "day" )}
@@ -106,13 +146,13 @@ export default function TripDetails({ languageData }: TripProps) {
             </Form.Item>
             <div className="flex gap-2">
               <button type="submit" className="px-2 py-1 bg-green-600 text-white font-semibold rounded-md">
-                Save
+                {languageData?.buttons?.save}
               </button>
               <button
                 className="bg-slate-400 text-black px-2 py-1 rounded-md"
                 onClick={() => handleCancel( "dates" )}
               >
-                Cancel
+                {languageData?.buttons?.cancel}
               </button>
             </div>
           </>
@@ -120,15 +160,15 @@ export default function TripDetails({ languageData }: TripProps) {
           <div className="flex justify-between items-center w-full">
             <span>
               {initialDates
-                ? `${ initialDates[ 0 ]?.format( "YYYY-MM-DD" ) } to ${ initialDates[ 1 ]?.format( "YYYY-MM-DD" ) }`
-                : "No Dates Selected"}
+                ? `${languageData?.date} : ${ initialDates[ 0 ]?.format( "YYYY-MM-DD" ) } ${languageData?.from} ${ initialDates[ 1 ]?.format( "YYYY-MM-DD" ) } ${languageData?.to}`
+                : languageData?.noDate}
             </span>
             <motion.button
               className="px-2 py-1 bg-orange-500 text-white font-semibold rounded-md"
               onClick={() => setEditMode( ( prev ) => ( { ...prev, dates: true } ) )}
               whileTap={{ scale: 0.95 }}
             >
-              Edit
+             {languageData?.buttons?.edit}
             </motion.button>
           </div>
         )}
@@ -151,8 +191,8 @@ export default function TripDetails({ languageData }: TripProps) {
               rules={[ { required: true, message: "Please select an option!" } ]}
             >
               <Radio.Group>
-                <Radio value="beds">{languageData?.buttons?.beds || "Beds"}</Radio>
-                <Radio value="rooms">{languageData?.buttons?.rooms || "Rooms"}</Radio>
+                <Radio value="beds">{languageData?.beds}</Radio>
+                <Radio value="rooms">{languageData?.rooms}</Radio>
               </Radio.Group>
             </Form.Item>
             <Form.Item
@@ -167,10 +207,10 @@ export default function TripDetails({ languageData }: TripProps) {
                   return (
                     <Form.Item
                       name="beds"
-                      label={languageData?.buttons?.beds || "Beds"}
+                      label={languageData?.beds}
                       rules={[
-                        { required: true, message: "Please enter the number of beds!" },
-                        { type: "number", min: 1, message: "Must be at least 1 bed!" },
+                        { required: true, message: languageData?.errors?.required },
+                        { type: "number", min: 1, message: languageData?.errors?.noStock },
                         {
                           validator: ( _, value ) =>
                             value <= bedsAvailable ? Promise.resolve() : Promise.reject( "Not enough stock available" ),
@@ -186,10 +226,10 @@ export default function TripDetails({ languageData }: TripProps) {
                   return (
                     <Form.Item
                       name="rooms"
-                      label={languageData?.buttons?.rooms || "Rooms"}
+                      label={languageData?.rooms}
                       rules={[
-                        { required: true, message: "Please enter the number of rooms!" },
-                        { type: "number", min: 1, message: "Must be at least 1 room!" },
+                        { required: true, message: languageData?.errors?.required },
+                        { type: "number", min: 1, message: languageData?.errors?.noStock },
                         {
                           validator: ( _, value ) =>
                             value <= roomsAvailable ? Promise.resolve() : Promise.reject( "Not enough stock available" ),
@@ -205,13 +245,13 @@ export default function TripDetails({ languageData }: TripProps) {
             </Form.Item>
             <div className="flex gap-2">
               <button type="submit" className="px-2 py-1 bg-green-600 text-white font-semibold rounded-md">
-                Save
+                {languageData?.buttons?.save}
               </button>
               <button
                 className="bg-slate-400 text-black px-2 py-1 rounded-md"
                 onClick={() => handleCancel( "type" )}
               >
-                Cancel
+                {languageData?.buttons?.cancel}
               </button>
             </div>
           </>
@@ -220,8 +260,8 @@ export default function TripDetails({ languageData }: TripProps) {
             <span>
               {form.getFieldValue( "selection" ) === "beds" ||
                 ( !form.getFieldValue( "selection" ) && searchParams.get( "selection" ) === "beds" )
-                ? `${ form.getFieldValue( "beds" ) || searchParams.get( "beds" ) } Beds Selected`
-                : `${ form.getFieldValue( "rooms" ) || searchParams.get( "rooms" ) } Rooms Selected`}
+                ? `${languageData?.rent} : ${ form.getFieldValue( "beds" ) || searchParams.get( "beds" ) } ${languageData?.bedsSelected}`
+                : `${languageData?.rent} : ${ form.getFieldValue( "rooms" ) || searchParams.get( "rooms" ) } ${languageData?.roomsSelected}`}
             </span>
 
             <motion.button
@@ -229,7 +269,7 @@ export default function TripDetails({ languageData }: TripProps) {
               onClick={() => setEditMode( ( prev ) => ( { ...prev, type: true } ) )}
               whileTap={{ scale: 0.95 }}
             >
-              Edit
+              {languageData?.buttons?.edit}
             </motion.button>
           </div>
         )}
