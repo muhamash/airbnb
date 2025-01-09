@@ -76,7 +76,7 @@ export default async function Property ( { hotel, searchParams, languagePromise 
             <div className="md:grid grid-cols-3 md:gap-8 flex flex-col-reverse gap-5 relative">
                 {/* <!-- Left Column: Property Description --> */}
                 <div className="md:col-span-2">
-                    <div className="border-b pb-6 mb-6">
+                    <div className="border-b border-orange-500 pb-6 mb-6">
                         {/* hotel owner */}
                         <h2 className="text-2xl font-semibold mb-4 font-kanit">
                             {  responseData?.details?.owner } : Entire villa hosted by Sarah

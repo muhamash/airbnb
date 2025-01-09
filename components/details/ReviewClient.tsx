@@ -1,5 +1,6 @@
 'use client'
 
+import { updateSearchParams } from '@/utils/utils';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import Write from "./Write";
@@ -16,22 +17,6 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
     const router = useRouter();
     const searchParams = useSearchParams();
     const closeModal = () => setIsModalOpen( false );
-
-    const updateSearchParams = async ( updates: Record<string, string | null> ) =>
-    {
-        const currentParams = new URLSearchParams( searchParams.toString() );
-        for ( const key in updates )
-        {
-            if ( updates[ key ] !== null )
-            {
-                currentParams.set( key, updates[ key ]! );
-            } else
-            {
-                currentParams.delete( key );
-            }
-        }
-        await router.replace( `?${ currentParams.toString() }` );
-    };
 
     const handleDelete = async () =>
     {
@@ -59,7 +44,7 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
                     await updateSearchParams( {
                         ratings: newRatings.toString(),
                         ratingsLength: newRatingsLength.toString(),
-                    } );
+                    }, searchParams, router );
                 }
                 else
                 {

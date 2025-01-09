@@ -1,3 +1,5 @@
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+
 export async function formatDate ( dateString: string ): Promise<string>
 {
     const date = new Date(dateString);
@@ -27,4 +29,20 @@ export const calculateDaysBetween = async ( checkIn: string, checkOut: string ):
     const differenceInTime = checkOutDate.getTime() - checkInDate.getTime();
     
     return differenceInTime / ( 1000 * 60 * 60 * 24 );
+};
+
+export const updateSearchParams = async ( updates: Record<string, string | null>, searchParams:URLSearchParams, router: AppRouterInstance ) =>
+  {
+    const currentParams = new URLSearchParams( searchParams.toString() );
+    for ( const key in updates )
+    {
+      if ( updates[ key ] !== null )
+      {
+        currentParams.set( key, updates[ key ]! );
+      } else
+      {
+        currentParams.delete( key );
+      }
+    }
+    router.replace( `?${ currentParams.toString() }` );
 };

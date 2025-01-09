@@ -19,7 +19,7 @@ export default async function Review ( {languagePromise, reviewPromise, searchPa
   // console.log( "reviews:", reviews );
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12 border-t">
+    <div className="max-w-7xl mx-auto px-6 py-12 border-t border-orange-500">
       {/* <!-- Reviews Header with Average Rating --> */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">

@@ -1,6 +1,7 @@
 'use client';
 
 import { getReviewById } from '@/utils/serverActions';
+import { updateSearchParams } from '@/utils/utils';
 import { motion } from 'framer-motion';
 import { getSession } from 'next-auth/react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
@@ -24,7 +25,13 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<IFormInput>();
   const [isPending, startTransition] = useTransition();
   const [rating, setRating] = useState<number>(0);
-  const [user, setUser] = useState<any>(null);
+  interface User {
+    name: string;
+    id: string;
+    image?: string;
+  }
+
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const params = useParams();
   const router = useRouter();
@@ -42,7 +49,7 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
 
       if (isEditing && reviewId) {
         const reviews = await getReviewById(params?.id);
-        const review = reviews?.find((rev: any) => rev._id === reviewId);
+        const review = reviews?.find((rev: { _id: string; text: string; ratings: number }) => rev._id === reviewId);
         if (review) {
           setRating(review.ratings);
           setValue('reviewText', review.text);
@@ -59,22 +66,6 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
   {
     initializeData();
   }, [] );
-
-  const updateSearchParams = async ( updates: Record<string, string | null> ) =>
-  {
-    const currentParams = new URLSearchParams( searchParams.toString() );
-    for ( const key in updates )
-    {
-      if ( updates[ key ] !== null )
-      {
-        currentParams.set( key, updates[ key ]! );
-      } else
-      {
-        currentParams.delete( key );
-      }
-    }
-    router.replace( `?${ currentParams.toString() }` );
-  };
 
   const onSubmit: SubmitHandler<IFormInput> = async ( data ) =>
   {
@@ -111,7 +102,7 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
           {
             const newRatingValue = ( ( currentRatings * currentRatingsLength - ratings ) + data?.rating ) / currentRatingsLength;
             // console.log( 'New rating value after edit:', newRatingValue );
-            await updateSearchParams( { ratings: newRatingValue.toString() } );
+            await updateSearchParams( { ratings: newRatingValue.toString() }, searchParams, router );
           } else
           {
             const newRatingsLength = currentRatingsLength + 1;
@@ -120,7 +111,7 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
             await updateSearchParams( {
               ratings: newRatingValue.toString(),
               ratingsLength: newRatingsLength.toString(),
-            } );
+            }, searchParams, router );
           }
 
           toast.success( isEditing ? 'Review updated successfully!' : 'Review submitted successfully!' );
