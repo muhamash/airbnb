@@ -1,4 +1,3 @@
-import { getReviewsByHotelId } from "@/queries";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Image from "next/image";
 
@@ -25,24 +24,25 @@ interface PriceCardProps {
         total: string;
         placeholders: Placeholders;
     };
+    calculateRentedPrice: number;
+    ratings: number;
     days: number;
     params: Params;
 }
 
 
-export default async function PriceCard({ languageData, days, params }: PriceCardProps) {
+export default async function PriceCard({ languageData,days, calculateRentedPrice, params, searchParams }: PriceCardProps) {
     try {
         // Create promises
         const hotelPromise = fetch(`http://localhost:3000/api/hotels/${params?.id}`);
-        const reviewPromise = getReviewsByHotelId(params?.id);
 
         // Resolve both promises concurrently
-        const [ hotelResponse, reviews ] = await Promise.all( [ hotelPromise, reviewPromise ] );
+        const [ hotelResponse ] = await Promise.all( [ hotelPromise ] );
         const hotel = await hotelResponse.json();
-        const calculateRentedPrice = hotel?.data?.rate * days;
         const cleaningFee = 17.50; 
         const serviceFee = 51.31;
         const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;
+        const rate = JSON.parse( searchParams.rate );
         // console.log(hotel, reviews);
 
         return (
@@ -62,7 +62,7 @@ export default async function PriceCard({ languageData, days, params }: PriceCar
                         <div className="flex items-center">
                             <i className="fas fa-star text-sm mr-1"></i>
                             <span className="text-xs mt-1 font-kanit text-sky-600">
-                                5.00 <span className="font-playfairDisplay text-teal-600">(3 Reviews)</span>
+                                {searchParams?.ratings} <span className="font-playfairDisplay text-teal-600">({searchParams?.ratingsLength} {languageData?.reviews})</span>
                             </span>
                         </div>
                     </div>
@@ -72,16 +72,16 @@ export default async function PriceCard({ languageData, days, params }: PriceCar
                     <h3 className="font-semibold mb-4 font-ubuntu">{languageData?.priceDetails}</h3>
                     <div className="space-y-3">
                         <div className="flex justify-between">
-                            <span>{hotel?.data?.rate} {languageData?.taka} x {days} {languageData?.nights}</span>
+                            <span>{rate[searchParams?.selection]} {languageData?.taka} x {days} {languageData?.nights}</span>
                             <span>{ calculateRentedPrice } {languageData?.taka}</span>
                         </div>
                         <div className="flex justify-between">
                             <span>{languageData?.cFee}</span>
-                            <span>$17.50 {languageData?.taka}</span>
+                            <span>17.50 {languageData?.taka}</span>
                         </div>
                         <div className="flex justify-between">
                             <span>{languageData?.sFee}</span>
-                            <span>$51.31 {languageData?.taka}</span>
+                            <span>51.31 {languageData?.taka}</span>
                         </div>
                         <div className="flex justify-between font-semibold pt-3 border-t font-ubuntu">
                             <span>{languageData?.total} (TAKA)</span>

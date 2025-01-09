@@ -68,29 +68,34 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
         form.resetFields(['beds', 'rooms']);
     };
 
-    const handleSubmit = (values: { RangePicker: [dayjs.Dayjs, dayjs.Dayjs], beds?: number, rooms?: number }) => {
-        const { RangePicker: [checkIn, checkOut] } = values;
+    const handleSubmit = ( values: { RangePicker: [ dayjs.Dayjs, dayjs.Dayjs ], beds?: number, rooms?: number } ) =>
+    {
+        const { RangePicker: [ checkIn, checkOut ] } = values;
 
         const reservationData = {
-            checkIn: checkIn.format('YYYY-MM-DD'),
-            checkOut: checkOut.format('YYYY-MM-DD'),
+            checkIn: checkIn.format( 'YYYY-MM-DD' ),
+            checkOut: checkOut.format( 'YYYY-MM-DD' ),
             selection,
-            ...(selection === 'beds' ? { beds: values.beds } : { rooms: values.rooms }),
+            ...( selection === 'beds' ? { beds: values.beds } : { rooms: values.rooms } ),
         };
         console.log( "Reservation Data:", reservationData );
         const parseSearchParams = {
-            checkIn : reservationData?.checkIn || null,
-            checkOut : reservationData?.checkOut || null,
+            checkIn: reservationData?.checkIn || null,
+            checkOut: reservationData?.checkOut || null,
             selection,
             ...( reservationData?.selection === 'beds' ? { beds: values.beds } : { rooms: values.rooms } ),
-            rate,
+            rate: JSON.stringify( {
+                beds: rate?.bed,
+                rooms: rate?.room
+            } ),
             roomMax: searchParams.get( "roomMax" ),
             bedMax: searchParams.get( "bedMax" ),
-            ratings: searchParams.get("ratings"),
+            ratings: searchParams.get( "ratings" ),
+            ratingsLength: searchParams.get("ratingsLength"),
         }
 
         // console.log( parseSearchParams );
-        const queryString = new URLSearchParams(parseSearchParams).toString();
+        const queryString = new URLSearchParams( parseSearchParams ).toString();
         router.push( `http://localhost:3000/${ params?.lang }/details/${ params?.id }/payment?${ queryString }` );
     };
     // console.log( params, searchParams );

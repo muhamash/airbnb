@@ -1,9 +1,8 @@
 import BackButton from "@/components/paymentDetails/BackButton";
 import PaymentForm from "@/components/paymentDetails/PaymentForm";
-import { getStockByHotelId } from "@/queries";
+import PriceCard from "@/components/paymentDetails/PriceCard";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween } from "@/utils/utils";
-import { ObjectId } from "mongodb";
 import { Metadata } from "next";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
@@ -23,12 +22,14 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
         const [ dictionaryResponse, daysPromise, stocksPromise ] = await Promise.all( [
             fetchDictionary( params?.lang ),
             calculateDaysBetween( searchParams?.checkIn, searchParams?.checkOut ),
-            getStockByHotelId(new ObjectId(params?.id)),
         ] );
 
         const responseData = await dictionaryResponse;
         const days = await daysPromise;
-        // console.log( stocksPromise );
+        const rate = JSON.parse( searchParams?.rate );
+        const calculateRentedPrice = rate[searchParams?.selection] * days;
+        console.log(  rate[searchParams.selection] );
+
         return (
             <div
                 className="max-w-7xl mx-auto px-6 py-[100px]">
@@ -41,7 +42,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
                         languageData={responseData?.payment}
                     />
                     <div>
-                        {/* <PriceCard languageData={responseData?.payment} days={days} params={ params } /> */}
+                        <PriceCard languageData={responseData?.payment} calculateRentedPrice={calculateRentedPrice}  params={params} days={ days } searchParams={searchParams} />
                     </div>
                 </div>
             </div>

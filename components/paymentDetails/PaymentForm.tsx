@@ -31,17 +31,10 @@ interface PaymentFormProps {
     stocksPromise: Promise;
 }
 
-export default async function PaymentForm ( { searchParams, languageData, params, stocksPromise }: PaymentFormProps )
+export default async function PaymentForm ( { searchParams, languageData, params }: PaymentFormProps )
 {
     const session: Session = await auth();
-    const stocks = await stocksPromise;
     // console.log( stocks );
-    const plainObject = {
-        personMax: stocks?.personMax,
-        roomMax: stocks?.roomMax,
-        bedMax: stocks?.bedMax,
-        available: stocks?.available,
-    };
 
     return (
         <form action={paymentForm}>
