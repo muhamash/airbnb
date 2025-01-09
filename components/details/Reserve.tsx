@@ -1,8 +1,8 @@
-'use client';
+'use client'
 
 import { DatePicker, Form, InputNumber, Radio } from 'antd';
 import dayjs from 'dayjs';
-import { motion } from "framer-motion"; // Import Framer Motion
+import { motion } from "framer-motion";
 import Image from 'next/image';
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useState } from 'react';
@@ -42,7 +42,6 @@ interface ReserveFormProps {
 }
 
 const { RangePicker } = DatePicker;
-
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -58,9 +57,9 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
     const searchParams = useSearchParams();
     const params = useParams();
     const [form] = Form.useForm();
-    const roomsAvailable = Number(searchParams.get("roomMax")) || 0;
-    const bedsAvailable = Number(searchParams.get("bedMax")) || 0;
-    const [ selection, setSelection ] = useState<string>( 'beds' );
+    const roomsAvailable = Number(searchParams.get("roomMax"));
+    const bedsAvailable = Number(searchParams.get("bedMax"));
+    const [selection, setSelection] = useState<string>('beds');
     const router = useRouter();
 
     const handleSelectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,37 +67,48 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
         form.resetFields(['beds', 'rooms']);
     };
 
-    const handleSubmit = ( values: { RangePicker: [ dayjs.Dayjs, dayjs.Dayjs ], beds?: number, rooms?: number } ) =>
-    {
-        const { RangePicker: [ checkIn, checkOut ] } = values;
+    const handleSubmit = async (values: { RangePicker: [dayjs.Dayjs, dayjs.Dayjs], beds?: number, rooms?: number}) => {
+        const { RangePicker: [checkIn, checkOut] } = values;
 
         const reservationData = {
-            checkIn: checkIn.format( 'YYYY-MM-DD' ),
-            checkOut: checkOut.format( 'YYYY-MM-DD' ),
+            checkIn: checkIn.format('YYYY-MM-DD'),
+            checkOut: checkOut.format('YYYY-MM-DD'),
             selection,
-            ...( selection === 'beds' ? { beds: values.beds } : { rooms: values.rooms } ),
+            ...(selection === 'beds' ? { beds: values.beds } : { rooms: values.rooms }),
         };
-        console.log( "Reservation Data:", reservationData );
+
+        if (
+            (reservationData?.rooms && (reservationData?.rooms <= 0 || reservationData?.rooms > roomsAvailable)) ||
+            (reservationData?.beds && (reservationData?.beds <= 0 || reservationData?.beds > bedsAvailable))
+        ) {
+            form.setFields([
+                { name: 'beds', errors: [langData.errors.notStock] },
+                { name: 'rooms', errors: [langData.errors.notStock] }
+            ]);
+            return;
+        }
+
+        console.log("Reservation Data:", reservationData);
+
         const parseSearchParams = {
             checkIn: reservationData?.checkIn || null,
             checkOut: reservationData?.checkOut || null,
             selection,
-            ...( reservationData?.selection === 'beds' ? { beds: values.beds } : { rooms: values.rooms } ),
-            rate: JSON.stringify( {
+            ...(reservationData?.selection === 'beds' ? { beds: values.beds } : { rooms: values.rooms }),
+            rate: JSON.stringify({
                 beds: rate?.bed,
                 rooms: rate?.room
-            } ),
-            roomMax: searchParams.get( "roomMax" ),
-            bedMax: searchParams.get( "bedMax" ),
-            ratings: searchParams.get( "ratings" ),
+            }),
+            roomMax: searchParams.get("roomMax"),
+            bedMax: searchParams.get("bedMax"),
+            ratings: searchParams.get("ratings"),
             ratingsLength: searchParams.get("ratingsLength"),
-        }
+        };
 
-        // console.log( parseSearchParams );
-        const queryString = new URLSearchParams( parseSearchParams ).toString();
-        router.push( `http://localhost:3000/${ params?.lang }/details/${ params?.id }/payment?${ queryString }` );
+        const queryString = new URLSearchParams(parseSearchParams).toString();
+
+        router.push(`http://localhost:3000/${params?.lang}/details/${params?.id}/payment?${queryString}`);
     };
-    // console.log( params, searchParams );
 
     return (
         <motion.div
@@ -124,29 +134,22 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
                         <div className='flex flex-row-reverse justify-between items-center mb-2'>
                             <div className="flex items-center">
                                 <i className="fas fa-star text-yellow-500 mr-1"></i>
-                                <span>{searchParams.get( "ratings" )}</span>
+                                <span>{searchParams.get("ratings")}</span>
                             </div>
                             <span className="text-gray-600 ml-1">{perNight}</span>
                         </div>
                         <div className="grid grid-cols-2 gap-1 rounded-md">
-                            {/* Cell 1 */}
                             <div className="rounded-md shadow-purple-500 m-[1px] border-[1px] border-gradient-to-r from-purple-500 to-pink-500 bg-gradient-to-r from-purple-50 to-pink-50 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
-                                <p className="text-md text-slate-100 font-bold text-center py-1 px-3">{ langData?.bed }</p>
+                                <p className="text-md text-slate-100 font-bold text-center py-1 px-3">{langData?.bed}</p>
                             </div>
-
-                            {/* Cell 2 */}
                             <div className="rounded-md m-[1px] border-[1px] border-gradient-to-r shadow-teal-500 from-teal-500 to-cyan-500 bg-gradient-to-r from-teal-50 to-cyan-50 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
-                                <p className="text-md text-slate-100 font-bold text-center p-1">{langData?.room }</p>
+                                <p className="text-md text-slate-100 font-bold text-center p-1">{langData?.room}</p>
                             </div>
-
-                            {/* Cell 3 */}
                             <div className="rounded-md m-[1px] border-[1px] border-gradient-to-r from-purple-500 to-pink-500 bg-gradient-to-r from-purple-50 to-pink-50 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
-                                <p className="text-md text-slate-100 font-bold text-center p-1">{rate?.bed } ৳</p>
+                                <p className="text-md text-slate-100 font-bold text-center p-1">{rate?.bed} ৳</p>
                             </div>
-
-                            {/* Cell 4 */}
                             <div className="rounded-md m-[1px] border-[1px] border-gradient-to-r from-teal-500 to-cyan-500 bg-gradient-to-r from-teal-50 to-cyan-50 shadow-md hover:shadow-lg transform hover:scale-105 transition-all">
-                                <p className="text-md text-slate-100 font-bold text-center p-1">{ rate?.room } ৳</p>
+                                <p className="text-md text-slate-100 font-bold text-center p-1">{rate?.room} ৳</p>
                             </div>
                         </div>
                     </div>
@@ -170,45 +173,61 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
                     <Form.Item
                         label={langData?.dates}
                         name="RangePicker"
-                        rules={[ { required: true, message: langData?.errors?.required } ]}
+                        rules={[{ required: true, message: langData?.errors?.required }]}
                     >
                         <RangePicker
-                            disabledDate={( current ) => current && current < dayjs().endOf( 'day' )}
+                            disabledDate={(current) => current && current < dayjs().endOf('day')}
                         />
                     </Form.Item>
 
                     <Form.Item
-                        label={langData?.selection }
+                        label={langData?.selection}
                         name="selection"
-                        rules={[ { required: true, message: langData?.errors?.required } ]}
+                        rules={[{ required: true, message: langData?.errors?.required }]}
                     >
                         <Radio.Group onChange={handleSelectionChange}>
-                            <Radio value="beds">{langData?.bed }</Radio>
-                            <Radio value="rooms">{langData?.room }</Radio>
+                            <Radio value="beds">{langData?.bed}</Radio>
+                            <Radio value="rooms">{langData?.room}</Radio>
                         </Radio.Group>
                     </Form.Item>
 
                     {selection === 'beds' && (
                         <Form.Item
-                            label={langData?.bed }
+                            label={langData?.bed}
                             name="beds"
                             rules={[
                                 { required: true, message: langData?.errors?.required },
+                                {
+                                    validator: (_, value) => {
+                                        if (value === 0 || (value && value > bedsAvailable)) {
+                                            return Promise.reject(langData?.errors?.notStock);
+                                        }
+                                        return Promise.resolve();
+                                    }
+                                }
                             ]}
                         >
-                            <InputNumber min={1} max={bedsAvailable} />
+                            <InputNumber />
                         </Form.Item>
                     )}
 
                     {selection === 'rooms' && (
                         <Form.Item
-                            label={langData?.room }
+                            label={langData?.room}
                             name="rooms"
                             rules={[
-                                { required: true, message: 'Please enter the number of rooms!' },
+                                { required: true, message: langData?.errors?.required },
+                                {
+                                    validator: (_, value) => {
+                                        if (value === 0 || (value && value > roomsAvailable)) {
+                                            return Promise.reject(langData?.errors?.notStock);
+                                        }
+                                        return Promise.resolve();
+                                    }
+                                }
                             ]}
                         >
-                            <InputNumber min={1} max={roomsAvailable} />
+                            <InputNumber />
                         </Form.Item>
                     )}
                 </motion.div>

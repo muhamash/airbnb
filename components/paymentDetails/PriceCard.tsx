@@ -46,7 +46,7 @@ export default async function PriceCard({ languageData,days, calculateRentedPric
         // console.log(hotel, reviews);
 
         return (
-            <div className="bg-white p-6 rounded-lg mb-8 sticky top-0 shadow-md shadow-sky-200 border-[0.4px] border-sky-200 hover:shadow-md transition-all duration-200">
+            <div className="bg-white p-6 rounded-lg mb-8 sticky top-0 shadow-sm shadow-orange-300 border-[0.4px] border-orange-300 hover:shadow-md transition-all duration-200">
                 <div className="flex items-start gap-4 mb-6">
                     <Image
                         src={hotel?.data?.thumbNailUrl}
