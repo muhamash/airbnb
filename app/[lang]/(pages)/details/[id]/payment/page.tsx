@@ -27,8 +27,8 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
         const responseData = await dictionaryResponse;
         const days = await daysPromise;
         const rate = JSON.parse( searchParams?.rate );
-        const calculateRentedPrice = rate[searchParams?.selection] * days;
-        console.log(  rate[searchParams.selection] );
+        const calculateRentedPrice = rate[ searchParams?.selection ] * days * searchParams?.[ searchParams?.selection ];
+        // console.log(  searchParams?.[ searchParams?.selection ] );
 
         return (
             <div

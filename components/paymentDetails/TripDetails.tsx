@@ -70,16 +70,16 @@ export default function TripDetails({ languageData }: TripProps) {
   return (
     <Form
       onFinish={handleSubmit}
-      form={form}
       {...formItemLayout}
+      form={form}
       className="bg-cyan-600 text-white shadow-md"
       layout="vertical"
       style={{ maxWidth: 600, margin: "0 auto", padding: "20px", borderRadius: "8px" }}
       initialValues={{
         RangePicker: initialDates,
-        selection: searchParams.get("selection"),
-        beds: Number(searchParams.get("beds")),
-        rooms: Number(searchParams.get("rooms")),
+        selection: searchParams.get( "selection" ),
+        beds: Number( searchParams.get( "beds" ) ),
+        rooms: Number( searchParams.get( "rooms" ) ),
       }}
     >
       <h2 className="text-xl font-semibold mb-4">{languageData.trip}</h2>
@@ -91,17 +91,17 @@ export default function TripDetails({ languageData }: TripProps) {
         exit="exit"
         variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -20 } }}
         transition={{ duration: 0.4 }}
-        className="flex justify-between items-center mb-4"
+        className="flex justify-between items-center mb-4 text-white"
       >
         {editMode.dates ? (
           <>
             <Form.Item
               label={languageData.dates}
               name="RangePicker"
-              rules={[{ required: true, message: "Please select dates!" }]}
+              rules={[ { required: true, message: "Please select dates!" } ]}
             >
               <RangePicker
-                disabledDate={(current) => current && current < dayjs().endOf("day")}
+                disabledDate={( current ) => current && current < dayjs().endOf( "day" )}
               />
             </Form.Item>
             <div className="flex gap-2">
@@ -110,7 +110,7 @@ export default function TripDetails({ languageData }: TripProps) {
               </button>
               <button
                 className="bg-slate-400 text-black px-2 py-1 rounded-md"
-                onClick={() => handleCancel("dates")}
+                onClick={() => handleCancel( "dates" )}
               >
                 Cancel
               </button>
@@ -120,12 +120,12 @@ export default function TripDetails({ languageData }: TripProps) {
           <div className="flex justify-between items-center w-full">
             <span>
               {initialDates
-                ? `${initialDates[0]?.format("YYYY-MM-DD")} to ${initialDates[1]?.format("YYYY-MM-DD")}`
+                ? `${ initialDates[ 0 ]?.format( "YYYY-MM-DD" ) } to ${ initialDates[ 1 ]?.format( "YYYY-MM-DD" ) }`
                 : "No Dates Selected"}
             </span>
             <motion.button
               className="px-2 py-1 bg-orange-500 text-white font-semibold rounded-md"
-              onClick={() => setEditMode((prev) => ({ ...prev, dates: true }))}
+              onClick={() => setEditMode( ( prev ) => ( { ...prev, dates: true } ) )}
               whileTap={{ scale: 0.95 }}
             >
               Edit
@@ -148,7 +148,7 @@ export default function TripDetails({ languageData }: TripProps) {
             <Form.Item
               label={languageData.rent}
               name="selection"
-              rules={[{ required: true, message: "Please select an option!" }]}
+              rules={[ { required: true, message: "Please select an option!" } ]}
             >
               <Radio.Group>
                 <Radio value="beds">{languageData?.buttons?.beds || "Beds"}</Radio>
@@ -157,11 +157,13 @@ export default function TripDetails({ languageData }: TripProps) {
             </Form.Item>
             <Form.Item
               noStyle
-              shouldUpdate={(prev, curr) => prev.selection !== curr.selection}
+              shouldUpdate={( prev, curr ) => prev.selection !== curr.selection}
             >
-              {({ getFieldValue }) => {
-                const selection = getFieldValue("selection");
-                if (selection === "beds") {
+              {( { getFieldValue } ) =>
+              {
+                const selection = getFieldValue( "selection" );
+                if ( selection === "beds" )
+                {
                   return (
                     <Form.Item
                       name="beds"
@@ -170,8 +172,8 @@ export default function TripDetails({ languageData }: TripProps) {
                         { required: true, message: "Please enter the number of beds!" },
                         { type: "number", min: 1, message: "Must be at least 1 bed!" },
                         {
-                          validator: (_, value) =>
-                            value <= bedsAvailable ? Promise.resolve() : Promise.reject("Not enough stock available"),
+                          validator: ( _, value ) =>
+                            value <= bedsAvailable ? Promise.resolve() : Promise.reject( "Not enough stock available" ),
                         },
                       ]}
                     >
@@ -179,7 +181,8 @@ export default function TripDetails({ languageData }: TripProps) {
                     </Form.Item>
                   );
                 }
-                if (selection === "rooms") {
+                if ( selection === "rooms" )
+                {
                   return (
                     <Form.Item
                       name="rooms"
@@ -188,8 +191,8 @@ export default function TripDetails({ languageData }: TripProps) {
                         { required: true, message: "Please enter the number of rooms!" },
                         { type: "number", min: 1, message: "Must be at least 1 room!" },
                         {
-                          validator: (_, value) =>
-                            value <= roomsAvailable ? Promise.resolve() : Promise.reject("Not enough stock available"),
+                          validator: ( _, value ) =>
+                            value <= roomsAvailable ? Promise.resolve() : Promise.reject( "Not enough stock available" ),
                         },
                       ]}
                     >
@@ -206,7 +209,7 @@ export default function TripDetails({ languageData }: TripProps) {
               </button>
               <button
                 className="bg-slate-400 text-black px-2 py-1 rounded-md"
-                onClick={() => handleCancel("type")}
+                onClick={() => handleCancel( "type" )}
               >
                 Cancel
               </button>
@@ -215,13 +218,15 @@ export default function TripDetails({ languageData }: TripProps) {
         ) : (
           <div className="flex justify-between items-center w-full">
             <span>
-              {form.getFieldValue("selection") === "beds"
-                ? `${form.getFieldValue("beds") || searchParams.get("beds")} Beds Selected`
-                : `${form.getFieldValue("rooms") || searchParams.get("rooms")} Rooms Selected`}
+              {form.getFieldValue( "selection" ) === "beds" ||
+                ( !form.getFieldValue( "selection" ) && searchParams.get( "selection" ) === "beds" )
+                ? `${ form.getFieldValue( "beds" ) || searchParams.get( "beds" ) } Beds Selected`
+                : `${ form.getFieldValue( "rooms" ) || searchParams.get( "rooms" ) } Rooms Selected`}
             </span>
+
             <motion.button
               className="px-2 py-1 bg-orange-500 text-white font-semibold rounded-md"
-              onClick={() => setEditMode((prev) => ({ ...prev, type: true }))}
+              onClick={() => setEditMode( ( prev ) => ( { ...prev, type: true } ) )}
               whileTap={{ scale: 0.95 }}
             >
               Edit

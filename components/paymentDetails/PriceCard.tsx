@@ -43,7 +43,7 @@ export default async function PriceCard({ languageData,days, calculateRentedPric
         const serviceFee = 51.31;
         const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;
         const rate = JSON.parse( searchParams.rate );
-        // console.log(hotel, reviews);
+        // console.log(languageData);
 
         return (
             <div className="bg-white p-6 rounded-lg mb-8 sticky top-0 shadow-sm shadow-orange-300 border-[0.4px] border-orange-300 hover:shadow-md transition-all duration-200">
@@ -72,7 +72,7 @@ export default async function PriceCard({ languageData,days, calculateRentedPric
                     <h3 className="font-semibold mb-4 font-ubuntu">{languageData?.priceDetails}</h3>
                     <div className="space-y-3">
                         <div className="flex justify-between">
-                            <span>{rate[searchParams?.selection]} {languageData?.taka} x {days} {languageData?.nights}</span>
+                            <span>{ searchParams[searchParams?.selection]} {languageData[searchParams?.selection]} x {rate[searchParams?.selection]} {languageData?.taka} x {days} {languageData?.nights}</span>
                             <span>{ calculateRentedPrice } {languageData?.taka}</span>
                         </div>
                         <div className="flex justify-between">
