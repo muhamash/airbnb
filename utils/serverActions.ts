@@ -31,7 +31,6 @@ export async function paymentForm(formData) {
         console.log(formObject);
 
         try {
-            
             const response = await fetch( "http://localhost:3000/api/email", {
                 method: "POST",
                 headers: {
@@ -58,7 +57,9 @@ export async function paymentForm(formData) {
         }
         finally
         {
-            redirect( `http://localhost:3000/bn/redirection?target=${ encodeURIComponent( 'http://localhost:3000/bn/success' ) }&user=${ formObject?.name }&hotelName=${formObject?.hotelName}&hotelAddress=${formObject?.hotelAddress}` );
+            const queryString = new URLSearchParams( formObject ).toString();
+            
+            redirect( `http://localhost:3000/bn/redirection?target=${ encodeURIComponent( `http://localhost:3000/bn/success?${ queryString }` ) }&user=${ formObject?.name }&hotelName=${ formObject?.hotelName }&hotelAddress=${ formObject?.hotelAddress }` );
         }
     }
 }

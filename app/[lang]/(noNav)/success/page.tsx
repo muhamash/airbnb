@@ -1,7 +1,14 @@
 import ActionButton from "@/components/success/ActionButton";
 import BookingCrad from "@/components/success/BookingCrad";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
-export default async function Success ()
+interface SuccessProps
+{
+    searchParams: URLSearchParams;
+    params: Params;
+}
+
+export default async function Success ({searchParams, params}: SuccessProps)
 {
     // const session: Session | null = await auth();
     
@@ -9,6 +16,7 @@ export default async function Success ()
     // {
     //     redirect( "/login" );
     // }
+    console.log( searchParams, params );
 
     return (
         <div className='py-[20px] max-w-3xl mx-auto p-6'>
