@@ -1,11 +1,11 @@
 'use client'
 
-import { DatePicker, Form, InputNumber, Radio } from 'antd';
+import { DatePicker, Form, InputNumber, Radio, Skeleton } from 'antd';
 import dayjs from 'dayjs';
 import { motion } from "framer-motion";
 import Image from 'next/image';
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ReserveFormProps {
     rate: {
@@ -56,6 +56,17 @@ export default function Reserve({ rate, perNight, langData, hotelAddress, hotelN
     const bedsAvailable = Number(searchParams.get("bedMax"));
     const [selection, setSelection] = useState<string>('beds');
     const router = useRouter();
+    const [ loading, setLoading ] = useState<boolean>( true );
+
+    useEffect( () =>
+    {
+        const timer = setTimeout( () =>
+        {
+            setLoading( false );
+        }, 2000 );
+
+        return () => clearTimeout( timer );
+    }, [] );
 
     const handleSelectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelection(e.target.value);
@@ -104,6 +115,14 @@ export default function Reserve({ rate, perNight, langData, hotelAddress, hotelN
         const queryString = new URLSearchParams(parseSearchParams).toString();
         router.push(`http://localhost:3000/${params?.lang}/details/${params?.id}/payment?${queryString}`);
     };
+
+    if (loading) {
+        return (
+            <div className='flex w-full items-center justify-center p-3 h-full'>
+                <Skeleton active paragraph={{ rows: 8 }} />
+            </div>
+        );
+    }
 
     return (
         <motion.div

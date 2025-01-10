@@ -16,7 +16,7 @@ export default async function Success ({searchParams, params}: SuccessProps)
     // {
     //     redirect( "/login" );
     // }
-    // console.log( searchParams, params );
+    console.log( searchParams, params );
 
     return (
         <div className='py-[20px] max-w-3xl mx-auto p-6'>
