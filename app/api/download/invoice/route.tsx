@@ -1,11 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import chromium from 'chrome-aws-lambda';
 import puppeteer from 'puppeteer';
+import QRCode from 'qrcode';
 
 const isServerless = process.env.IS_AWS_LAMBDA || false; 
 
 export async function GET(request: Request): Promise<Response> {
-    try {
+    try
+    {
+        const qrCodeData = await QRCode.toDataURL( `http://localhost:3000/bn/details/67729c78f72778397a3e5627?ratings=3&ratingsLength=2&personMax=10&roomMax=2&bedMax=5&available=true` );
+        console.log( qrCodeData );
+
         const executablePath = isServerless
             ? await chromium.executablePath
             : await puppeteer.executablePath(); 
@@ -75,6 +80,19 @@ export async function GET(request: Request): Promise<Response> {
             font-size: 10px;
         }
 
+        .gradient-qr {
+            border-radius: 8px;
+            width: 100px;
+            height: 100px;
+            padding: 5px;
+            margin: 3px;
+            background: linear-gradient(45deg, cyan, skyblue, green, pink);
+            -webkit-mask-image: url('data:image/png;base64,[Base64-QR-Code]');
+            -webkit-mask-size: cover;
+            mask-image: url('data:image/png;base64,[Base64-QR-Code]');
+            mask-size: cover;
+        }
+
         .header{
             display: flex;
             background-color: teal;
@@ -97,6 +115,7 @@ export async function GET(request: Request): Promise<Response> {
             </svg>
             <h1>Booking Confirmation</h1>
             <div>
+                <img src=${qrCodeData} class="gradient-qr" style="height: 100px; width: 100px; padding:5px; margin:3px;" alt="qrCode"/>
                 <p>Booking ID: #6778F3E3FCF79726CB0FA834</p>
                 <p>Date: 04/01/2025</p>
             </div>

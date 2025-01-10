@@ -23,7 +23,6 @@ export async function paymentForm(formData) {
     const formObject = {};
     if ( formData )
     {
-        
         formData.forEach( ( value, key ) =>
         {
             formObject[ key ] = value;
@@ -32,18 +31,18 @@ export async function paymentForm(formData) {
 
         try {
             
-            const response = await fetch("http://localhost:3000/api/email", {
+            const response = await fetch( "http://localhost:3000/api/email", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({
-                    email: formObject?.email, 
-                    subject: "Email Confirmation",
+                body: JSON.stringify( {
+                    email: formObject?.email,
+                    subject: "Booking Confirmation",
                     confirmationMessage: "Booking confirmation oka!!!!!",
                     name: formObject?.name,
-                }),
-            });
+                } ),
+            } );
 
             const result = await response.json();
             // console.log(result);
