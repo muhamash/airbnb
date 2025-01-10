@@ -31,14 +31,9 @@ interface ReserveFormProps {
             pastDate: string;
         };
     };
-    stocks: {
-        hotelId: string;
-        personMax: number;
-        roomMax: number;
-        bedMax: number;
-        available: boolean;
-    };
     userId: string;
+    hotelName: string;
+    hotelAddress: string;
 }
 
 const { RangePicker } = DatePicker;
@@ -53,7 +48,7 @@ const formItemLayout = {
     },
 };
 
-export default function Reserve({ rate, perNight, langData }: ReserveFormProps) {
+export default function Reserve({ rate, perNight, langData, hotelAddress, hotelName }: ReserveFormProps) {
     const searchParams = useSearchParams();
     const params = useParams();
     const [form] = Form.useForm();
@@ -101,7 +96,9 @@ export default function Reserve({ rate, perNight, langData }: ReserveFormProps) 
             roomMax: searchParams.get("roomMax"),
             bedMax: searchParams.get("bedMax"),
             ratings: searchParams.get("ratings"),
-            ratingsLength: searchParams.get("ratingsLength"),
+            ratingsLength: searchParams.get( "ratingsLength" ),
+            hotelAddress: hotelAddress,
+            hotelName: hotelName,
         };
 
         const queryString = new URLSearchParams(parseSearchParams).toString();

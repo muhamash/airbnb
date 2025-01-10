@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { getReviewsByHotelId } from "@/queries";
+import { redirect } from "next/navigation";
 interface FormData
 {
     email: string;
@@ -38,7 +39,7 @@ export async function paymentForm(formData) {
                 },
                 body: JSON.stringify( {
                     email: formObject?.email,
-                    subject: "Booking Confirmation",
+                    subject: "Booking Confirmation from Airbnb",
                     confirmationMessage: "Booking confirmation oka!!!!!",
                     name: formObject?.name,
                 } ),
@@ -55,9 +56,10 @@ export async function paymentForm(formData) {
         } catch (error) {
             console.error("Error sending email:", error);
         }
-
-        // Uncomment if redirect logic is needed
-        // window.location.href = "http://localhost:3000/success";
+        finally
+        {
+            redirect( `http://localhost:3000/bn/redirection?target=${ encodeURIComponent( 'http://localhost:3000/bn/success' ) }&user=${ formObject?.name }&hotelName=${formObject?.hotelName}&hotelAddress=${formObject?.hotelAddress}` );
+        }
     }
 }
 

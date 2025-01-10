@@ -130,6 +130,8 @@ export default async function Property ( { hotel, searchParams, languagePromise 
                 {/* <!-- Right Column: Booking Card --> */}
                 <div>
                     <Reserve
+                        hotelName={hotel?.name}
+                        hotelAddress={hotel?.address}
                         rate={hotel?.rate}
                         perNight={responseData?.details?.perNight}
                         langData={responseData?.details}

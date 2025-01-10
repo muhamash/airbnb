@@ -48,14 +48,17 @@ export default async function PaymentForm ( { searchParams, languageData, params
         <div>
             <TripDetails languageData={languageData} />
             <form className="mt-3" action={paymentForm}>
-                <input type="hidden" name="rate" value={rate[searchParams?.selection]}/>
-                <input type="hidden" name="name" value={session?.user?.name}/>
-                <input type="hidden" name="email" value={session?.user?.email}/>
-                <input type="hidden" name="checkOut" value={searchParams?.checkOut}/>
-                <input type="hidden" name="checkIn" value={searchParams?.checkIn}/>
-                <input type="hidden" name={searchParams?.selection} value={searchParams[searchParams?.selection]}/>
+                <input type="hidden" name="rate" value={rate[ searchParams?.selection ]} />
+                <input type="hidden" name="name" value={session?.user?.name} />
+                <input type="hidden" name="email" value={session?.user?.email} />
+                <input type="hidden" name="checkOut" value={searchParams?.checkOut} />
+                <input type="hidden" name="checkIn" value={searchParams?.checkIn} />
+                <input type="hidden" name={searchParams?.selection} value={searchParams[ searchParams?.selection ]} />
                 <input type="hidden" name="hotelId" value={params?.id} />
+                <input type="hidden" name="lang" value={params?.lang} />
                 <input type="hidden" name="userId" value={session?.user?.id} />
+                <input type="hidden" name="hotelName" value={searchParams?.hotelName} />
+                <input type="hidden" name="hotelAddress" value={searchParams?.hotelAddress} />
 
                 {/* Payment Section */}
                 <section className="mb-8">
@@ -138,13 +141,13 @@ export default async function PaymentForm ( { searchParams, languageData, params
                     </div>
                 </section>
 
-                {/* Submit Button */}
                 <button
                     type="submit"
                     className="w-full block text-center bg-teal-600 text-white py-3 rounded-lg mt-6 hover:brightness-90"
                 >
                     {languageData?.buttons?.buttonText}
                 </button>
+                
             </form>
         </div>
     );
