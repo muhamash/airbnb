@@ -36,12 +36,12 @@ interface PaymentFormProps {
     name: string;
 }
 
-interface FormData
-{
-    email: string;
-    password: string;
-    action: string;
-}
+// interface FormData
+// {
+//     email: string;
+//     password: string;
+//     action: string;
+// }
 
 export default  function PaymentForm ( { searchParams, languageData, params, calculateRentedPrice, userId, email, name }: PaymentFormProps )
 {
@@ -53,7 +53,7 @@ export default  function PaymentForm ( { searchParams, languageData, params, cal
     {
         e.preventDefault();
         const formData = new FormData( e.target );
-        console.log( formData );
+        // console.log( formData );
         if ( formData )
         {
             startTransition( async () =>
