@@ -1,35 +1,40 @@
+import { fetchDictionary } from '@/utils/fetchFunction';
 import nodemailer from 'nodemailer';
 
 export const dynamic = "force-dynamic";
 
 export async function POST(request: Request): Promise<Response> {
     try {
-        const body = await request.json(); 
-        const { email, subject, confirmationMessage } = body;
+      const body = await request.json();
+      const { email, subject, confirmationMessage,
+        name, checkIn, checkOut, hotelName, hotelAddress, unitPrice, lang, count, rentType, total
+      } = body;
 
-        if (!email || !subject || !confirmationMessage) {
-            return new Response(
-                JSON.stringify({
-                    success: false,
-                    message: `${email}, ${subject}, ${confirmationMessage} are required`,
-                }),
-                { status: 400, headers: { 'Content-Type': 'application/json' } }
-            );
-        }
+      if (!email || !subject || !confirmationMessage) {
+        return new Response(
+          JSON.stringify( {
+            success: false,
+            message: `${ email }, ${ subject }, ${ confirmationMessage } are required`,
+          } ),
+          { status: 400, headers: { 'Content-Type': 'application/json' } }
+        );
+      };
 
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.GMAIL_ADDRESS_HOST,
-                pass: process.env.GMAIL_APP_PASS,
-            },
-        });
+      const transporter = nodemailer.createTransport( {
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_ADDRESS_HOST,
+          pass: process.env.GMAIL_APP_PASS,
+        },
+      } );
+
+      const langData = await fetchDictionary( lang );
 
         const emailTemplate = `<html>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airbnb</title>
+    <title>Airbnb booking email</title>
   </head>
   <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
     <table
@@ -48,21 +53,21 @@ export async function POST(request: Request): Promise<Response> {
       <tr>
         <td style="padding: 20px;">
           <p style="font-size: 16px; line-height: 1.5; margin: 0;">
-            Hi <strong>John Doe</strong>,
+           ${langData?.email?.salam} <strong>${name}</strong>,
           </p>
           <p style="font-size: 16px; line-height: 1.5; margin: 15px 0;">
-            Thank you for booking with us! Please confirm your email by clicking the button below.
+            ${langData?.email?.emailText}, ${hotelName} ;  ${langData?.email?.place} : ${hotelAddress}
           </p>
           <p style="text-align: center; margin: 30px 0;">
             <a
               href="https://github.com/muhamash"
               style="background-color: #058648; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;"
             >
-              Me on github!!
+              ${langData?.email?.me}
             </a>
           </p>
           
-          <h2 style="text-align: center; font-size: 18px; margin-top: 30px;">Booking Details</h2>
+          <h2 style="text-align: center; font-size: 18px; margin-top: 30px;">${langData?.email?.bookingDetails}</h2>
           <table
             align="center"
             border="1"
@@ -73,35 +78,35 @@ export async function POST(request: Request): Promise<Response> {
           >
             <thead style="background-color: #6d2497; color: #ffffff;">
               <tr>
-                <th style="text-align: center;">Check-in</th>
-                <th style="text-align: center;">Check-out</th>
-                <th style="text-align: center;">Rent Type</th>
-                <th style="text-align: center;">Count</th>
-                <th style="text-align: center;">Per Unit Price</th>
-                <th style="text-align: center;">Total Price</th>
+                <th style="text-align: center;">${langData?.email?.checkIn}</th>
+                <th style="text-align: center;">${langData?.email?.checkOut}</th>
+                <th style="text-align: center;">${langData?.email?.rentType}</th>
+                <th style="text-align: center;">${langData?.email?.count}</th>
+                <th style="text-align: center;">${langData?.email?.unitPrice}</th>
+                <th style="text-align: center;">${langData?.email?.total}</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="text-align: center;">2025-01-15</td>
-                <td style="text-align: center;">2025-01-20</td>
-                <td style="text-align: center;">Apartment</td>
-                <td style="text-align: center;">1</td>
-                <td style="text-align: center;">$100</td>
-                <td style="text-align: center;">$500</td>
+                <td style="text-align: center;">2${checkIn}</td>
+                <td style="text-align: center;">${checkOut}</td>
+                <td style="text-align: center;">${langData?.email[rentType]}</td>
+                <td style="text-align: center;">${count}</td>
+                <td style="text-align: center;">${unitPrice}</td>
+                <td style="text-align: center;">${total}</td>
               </tr>
             </tbody>
           </table>
 
-          <p style="font-size: 14px; line-height: 1.5; color: #555;">
-            If you didn't request this email, please ignore it.
+          <p style="font-size: 14px; line-height: 1.5; color: #c2640c;">
+            ${langData?.email?.text}
           </p>
         </td>
       </tr>
       <tr>
         <td align="center" style="background-color: #f4f4f4; color: #777; padding: 10px; border-radius: 0 0 10px 10px;">
           <p style="margin: 0; font-size: 12px;">
-            &copy; 2025 My Company. All rights reserved github.com/muhamash.
+            &copy; ${langData?.email?.myCompany} ; ${langData?.email?.coppyRight} : github.com/muhamash.
           </p>
         </td>
       </tr>

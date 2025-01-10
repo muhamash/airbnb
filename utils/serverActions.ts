@@ -41,6 +41,15 @@ export async function paymentForm(formData) {
                     subject: "Booking Confirmation from Airbnb",
                     confirmationMessage: "Booking confirmation oka!!!!!",
                     name: formObject?.name,
+                    checkIn: formObject?.checkIn,
+                    checkOut: formObject?.checkOut,
+                    hotelName: formObject?.hotelName,
+                    hotelAddress: formObject?.hotelAddress,
+                    unitPrice: formObject?.rate,
+                    renType: formObject?.type,
+                    count: formObject[formObject?.type],
+                    lang: formObject?.lang,
+                    total: formObject?.total,
                 } ),
             } );
 

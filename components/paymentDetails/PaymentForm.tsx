@@ -29,6 +29,7 @@ interface PaymentFormProps {
     };
     params: Params;
     stocksPromise: Promise;
+    calculateRentedPrice: number;
 }
 
 // interface FormData
@@ -38,7 +39,7 @@ interface PaymentFormProps {
 //     action: string;
 // }
 
-export default async function PaymentForm ( { searchParams, languageData, params }: PaymentFormProps )
+export default async function PaymentForm ( { searchParams, languageData, params, calculateRentedPrice }: PaymentFormProps )
 {
     const session: Session = await auth();
     const rate = JSON.parse( searchParams?.rate )
@@ -49,10 +50,12 @@ export default async function PaymentForm ( { searchParams, languageData, params
             <TripDetails languageData={languageData} />
             <form className="mt-3" action={paymentForm}>
                 <input type="hidden" name="rate" value={rate[ searchParams?.selection ]} />
+                <input type="hidden" name="total" value={calculateRentedPrice} />
                 <input type="hidden" name="name" value={session?.user?.name} />
                 <input type="hidden" name="email" value={session?.user?.email} />
                 <input type="hidden" name="checkOut" value={searchParams?.checkOut} />
                 <input type="hidden" name="checkIn" value={searchParams?.checkIn} />
+                <input type="hidden" name="type" value={searchParams?.selection} />
                 <input type="hidden" name={searchParams?.selection} value={searchParams[ searchParams?.selection ]} />
                 <input type="hidden" name="hotelId" value={params?.id} />
                 <input type="hidden" name="lang" value={params?.lang} />

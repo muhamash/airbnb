@@ -16,7 +16,7 @@ export default async function Success ({searchParams, params}: SuccessProps)
     // {
     //     redirect( "/login" );
     // }
-    console.log( searchParams, params );
+    // console.log( searchParams, params );
 
     return (
         <div className='py-[20px] max-w-3xl mx-auto p-6'>
@@ -32,7 +32,7 @@ export default async function Success ({searchParams, params}: SuccessProps)
             </div>
 
             {/* <!-- Booking Details Card --> */}
-            <BookingCrad/>
+            <BookingCrad />
 
             {/* <!-- Next Steps --> */}
             <div className="bg-white rounded-lg shadow-sm p-6 mb-8 font-ubuntu">

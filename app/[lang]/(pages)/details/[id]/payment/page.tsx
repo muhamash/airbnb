@@ -36,7 +36,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
                 <BackButton language={params?.lang} text={responseData?.payment?.back} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     <PaymentForm
-                        stocksPromise={stocksPromise}
+                        calculateRentedPrice={calculateRentedPrice}
                         params={params}
                         searchParams={searchParams}
                         languageData={responseData?.payment}
