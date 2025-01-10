@@ -211,7 +211,7 @@ export async function GET(request: Request): Promise<Response> {
         
         const page = await browser.newPage();
         await page.setContent(content);
-        const pdfBuffer = await page.pdf( { format: 'A4', printBackground: true, path: "invoice.pdf" } );
+        const pdfBuffer = await page.pdf( { format: 'A4', printBackground: true } );
 
         await browser.close();
         return new Response( pdfBuffer, {
