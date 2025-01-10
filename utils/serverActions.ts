@@ -2,7 +2,6 @@
 
 import { signIn } from "@/auth";
 import { getReviewsByHotelId } from "@/queries";
-import { redirect } from "next/navigation";
 interface FormData
 {
     email: string;
@@ -19,13 +18,40 @@ export async function handleAuth(formData: FormData) {
     }
 }
 
-export async function paymentForm( formData: FormData )
-{
-    console.log( formData );
-    if ( formData )
-    {
-        console.log( formData.userId );
-        redirect( `http://localhost:3000/success` );
+export async function paymentForm(formData) {
+    console.log(formData);
+    if (formData) {
+        const email = formData.get("email");
+        console.log(email);
+
+        try {
+            // Ensure you specify the method and headers for the fetch request
+            const response = await fetch("http://localhost:3000/api/email", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email, 
+                    subject: "Email Confirmation",
+                    confirmationMessage: "Booking confirmation oka!!!!!",
+                }),
+            });
+
+            const result = await response.json();
+            // console.log(result);
+
+            if (response.status === 200) {
+                console.log("Email sent successfully:", result);
+            } else {
+                console.error("Error in response:", result.message || result);
+            }
+        } catch (error) {
+            console.error("Error sending email:", error);
+        }
+
+        // Uncomment if redirect logic is needed
+        // window.location.href = "http://localhost:3000/success";
     }
 }
 

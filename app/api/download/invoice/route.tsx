@@ -15,7 +15,7 @@ export async function GET(request: Request): Promise<Response> {
 
         const browser = await puppeteer.launch({
             executablePath,
-            args: isServerless ? chromium.args : [], // Use chromium args in serverless, none in local
+            args: isServerless ? chromium.args : [],
             headless: isServerless ? chromium.headless : true,
             defaultViewport: isServerless ? chromium.defaultViewport : null,
         });
