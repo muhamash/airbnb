@@ -159,4 +159,45 @@
     80% { height: 65%; opacity: 1;}
     100% { height: 65%; opacity: 0;}
  }
-      
+
+/* HTML: <div class="loader"></div> */
+.loaderButton {
+  width: 190px;
+  height: 30px;
+  box-shadow: 0 3px 0 #027445;
+  --g:repeat-x repeating-linear-gradient(90deg,#858a8a 0 16px,#0000 0 18px,#c1c3b6 0 34px,#0000 0 100%);
+  background: var(--g),var(--g);
+  background-size: 60px 14px,60px 14px;
+  animation: l8 1s infinite linear;
+}
+@keyframes l8 {
+  0%   {background-position:0    0,0    100%}
+  100% {background-position:60px 0,60px 100%}
+}
+
+/* HTML: <div class="loader"></div> */
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 220px;
+  height: 25px;
+  background: 
+    linear-gradient(#67b707 50%,#0485a8d2 0),
+    linear-gradient(#ce0c0c97 50%,#bd8905 0),
+    linear-gradient(#104582 50%,#72068abe 0),
+    linear-gradient(#a8a30aae 50%,#0c4ca7 0),
+    linear-gradient(#11b2e3 50%,#e50404dc 0),
+    linear-gradient(#700893e4 50%,#035f90 0)
+    #ddd;
+  background-size: calc(100%/6 + 1px) 200%;
+  background-repeat: no-repeat;
+  animation: l12 2s infinite;
+}
+@keyframes l12 {
+  0%     {background-position: calc(0*100%/5) 100%,calc(1*100%/5)   0%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0%}
+  16.67% {background-position: calc(0*100%/5)   0%,calc(1*100%/5)   0%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0%}
+  33.33% {background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5) 100%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0%}
+  50%    {background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5)   0%,calc(4*100%/5) 100%,calc(5*100%/5)   0%}
+  66.67% {background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5) 100%,calc(5*100%/5)   0%}
+  83.33% {background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5)   0%}
+  100%   {background-position: calc(0*100%/5)   0%,calc(1*100%/5) 100%,calc(2*100%/5)   0%,calc(3*100%/5) 100%,calc(4*100%/5)   0%,calc(5*100%/5) 100%}
+}

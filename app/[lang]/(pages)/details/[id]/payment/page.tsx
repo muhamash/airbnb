@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import BackButton from "@/components/paymentDetails/BackButton";
 import PaymentForm from "@/components/paymentDetails/PaymentForm";
 import PriceCard from "@/components/paymentDetails/PriceCard";
@@ -19,11 +20,13 @@ interface PaymentProps {
 export default async function Payment({ searchParams, params }: PaymentProps) {
     try
     {
-        const [ dictionaryResponse, daysPromise, stocksPromise ] = await Promise.all( [
+        const [ dictionaryResponse, daysPromise, stocksPromise, authPromise ] = await Promise.all( [
             fetchDictionary( params?.lang ),
             calculateDaysBetween( searchParams?.checkIn, searchParams?.checkOut ),
+            auth(),
         ] );
 
+        const user = await authPromise;
         const responseData = await dictionaryResponse;
         const days = await daysPromise;
         const rate = JSON.parse( searchParams?.rate );
@@ -36,6 +39,9 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
                 <BackButton language={params?.lang} text={responseData?.payment?.back} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     <PaymentForm
+                        name={user?.user?.name}
+                        userId={user?.user?.userId}
+                        email={user?.user?.userId}
                         calculateRentedPrice={calculateRentedPrice}
                         params={params}
                         searchParams={searchParams}

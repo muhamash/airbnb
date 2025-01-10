@@ -64,7 +64,7 @@ export default function RedirectionPage() {
     return (
         <div className="w-full h-screen flex items-center justify-center py-20 bg-gray-900 text-white">
             <div className="text-center flex flex-col gap-5 items-center">
-                <span className="loaderPending"></span>
+                <div className="loader"></div>
                 <motion.div
                     className="text-4xl font-bold p-4 rounded-md"
                     variants={discoVariants}
@@ -99,7 +99,7 @@ export default function RedirectionPage() {
                     transition={{ duration: 0.8, delay: 1 }}
                 >
                     {langData?.redirect?.lastText || "Redirecting you to the target in"} {countdown}{" "}
-                    {countdown !== 1 ? "seconds" : "second"}...
+                    {countdown !== 1 ? langData?.redirect?.second : langData?.redirect?.seconds}...
                 </motion.p>
 
                 {/* Animated Loader */}

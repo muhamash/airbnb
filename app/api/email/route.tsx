@@ -10,6 +10,8 @@ export async function POST(request: Request): Promise<Response> {
         name, checkIn, checkOut, hotelName, hotelAddress, unitPrice, lang, count, rentType, total
       } = body;
 
+      console.log(rentType);
+
       if (!email || !subject || !confirmationMessage) {
         return new Response(
           JSON.stringify( {
@@ -34,7 +36,7 @@ export async function POST(request: Request): Promise<Response> {
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airbnb booking email</title>
+    <title>${langData?.email?.emailTitle}</title>
   </head>
   <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
     <table
@@ -47,7 +49,7 @@ export async function POST(request: Request): Promise<Response> {
     >
       <tr>
         <td align="center" style="background-color: #087d60; color: #ffffff; padding: 20px 0; border-radius: 10px 10px 0 0;">
-          <h1 style="margin: 0; font-size: 24px;">Email Confirmation</h1>
+          <h1 style="margin: 0; font-size: 24px;">${langData?.email?.emailHead}</h1>
         </td>
       </tr>
       <tr>
@@ -80,7 +82,7 @@ export async function POST(request: Request): Promise<Response> {
               <tr>
                 <th style="text-align: center;">${langData?.email?.checkIn}</th>
                 <th style="text-align: center;">${langData?.email?.checkOut}</th>
-                <th style="text-align: center;">${langData?.email?.rentType}</th>
+                <th style="text-align: center;">${langData?.email?.rent}</th>
                 <th style="text-align: center;">${langData?.email?.count}</th>
                 <th style="text-align: center;">${langData?.email?.unitPrice}</th>
                 <th style="text-align: center;">${langData?.email?.total}</th>

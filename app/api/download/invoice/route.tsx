@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import chromium from 'chrome-aws-lambda';
+// import puppeteer from 'puppeteer-core';
 import puppeteer from 'puppeteer';
 import QRCode from 'qrcode';
+// process.env.IS_AWS_LAMBDA ||
 
-const isServerless = true || false; 
+export const dynamic = "force-dynamic";
+const isServerless =  false; 
 
 export async function GET(request: Request): Promise<Response> {
     try
@@ -11,9 +14,15 @@ export async function GET(request: Request): Promise<Response> {
         const qrCodeData = await QRCode.toDataURL( `http://localhost:3000/bn/details/67729c78f72778397a3e5627?ratings=3&ratingsLength=2&personMax=10&roomMax=2&bedMax=5&available=true` );
         // console.log( qrCodeData );
 
+        if (isServerless) {
+            console.log("Running on AWS Lambda");
+        } else {
+            console.log("Running locally or in another environment");
+        };
+
         const executablePath = isServerless
             ? await chromium.executablePath
-            : await puppeteer.executablePath(); 
+            : await puppeteer.executablePath() ;
         if (!executablePath) {
             throw new Error('Chromium not available in this environment.');
         }
@@ -26,7 +35,7 @@ export async function GET(request: Request): Promise<Response> {
         });
 
         // invoice
-        const content = `<html>
+        const content : string = `<html>
 <head>
     <title>Booking Confirmation</title>
     <style>

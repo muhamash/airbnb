@@ -1,7 +1,9 @@
-import { auth } from "@/auth";
+'use client'
+
 import { paymentForm } from "@/utils/serverActions";
-import { Session } from "next-auth";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
 import TripDetails from "./TripDetails";
 
 interface Buttons {
@@ -30,36 +32,62 @@ interface PaymentFormProps {
     params: Params;
     stocksPromise: Promise;
     calculateRentedPrice: number;
+    email: string;
+    userId: string;
+    name: string;
 }
 
-// interface FormData
-// {
-//     email: string;
-//     password: string;
-//     action: string;
-// }
-
-export default async function PaymentForm ( { searchParams, languageData, params, calculateRentedPrice }: PaymentFormProps )
+interface FormData
 {
-    const session: Session = await auth();
-    const rate = JSON.parse( searchParams?.rate )
-    // console.log( searchParams, params, session?.user, rate[ searchParams?.selection ] );
+    email: string;
+    password: string;
+    action: string;
+}
 
+export default  function PaymentForm ( { searchParams, languageData, params, calculateRentedPrice, userId, email, name }: PaymentFormProps )
+{
+    const [ isPending, startTransition ] = useTransition();
+    const [ session, setSession ] = useState();
+    const router = useRouter();
+    const rate = searchParams?.rate ? JSON.parse( searchParams.rate ) : {};
+
+    const handleSubmit = async (e) =>
+    {
+        e.preventDefault();
+        const formData = new FormData( e.target );
+        if ( formData )
+        {
+            startTransition( async () =>
+            {
+                try
+                {
+                    await paymentForm( formData );
+                }
+                catch ( error )
+                {
+                    console.error( 'Payment submission failed:', error );
+                }
+            } );
+        }
+    }
+
+    // console.log( session.user );
+    // if (!session) return <div>Loading user data...</div>;
     return (
         <div>
             <TripDetails languageData={languageData} />
-            <form className="mt-3" action={paymentForm}>
+            <form className="mt-3" onSubmit={handleSubmit}>
                 <input type="hidden" name="rate" value={rate[ searchParams?.selection ]} />
                 <input type="hidden" name="total" value={calculateRentedPrice} />
-                <input type="hidden" name="name" value={session?.user?.name} />
-                <input type="hidden" name="email" value={session?.user?.email} />
+                <input type="hidden" name="name" value={name} />
+                <input type="hidden" name="email" value={email} />
                 <input type="hidden" name="checkOut" value={searchParams?.checkOut} />
                 <input type="hidden" name="checkIn" value={searchParams?.checkIn} />
                 <input type="hidden" name="type" value={searchParams?.selection} />
                 <input type="hidden" name={searchParams?.selection} value={searchParams[ searchParams?.selection ]} />
                 <input type="hidden" name="hotelId" value={params?.id} />
                 <input type="hidden" name="lang" value={params?.lang} />
-                <input type="hidden" name="userId" value={session?.user?.id} />
+                <input type="hidden" name="userId" value={userId} />
                 <input type="hidden" name="hotelName" value={searchParams?.hotelName} />
                 <input type="hidden" name="hotelAddress" value={searchParams?.hotelAddress} />
 
@@ -144,13 +172,21 @@ export default async function PaymentForm ( { searchParams, languageData, params
                     </div>
                 </section>
 
-                <button
-                    type="submit"
-                    className="w-full block text-center bg-teal-600 text-white py-3 rounded-lg mt-6 hover:brightness-90"
-                >
-                    {languageData?.buttons?.buttonText}
-                </button>
-                
+                {
+                    isPending ? (
+                        <div className="flex items-center justify-center">
+                            <div className="loaderButton"></div>
+                        </div>
+                    ) : (
+                        <button
+                            disabled={isPending}
+                            type="submit"
+                            className="w-full block text-center bg-teal-600 text-white py-3 rounded-lg mt-6 hover:brightness-90"
+                        >
+                            {languageData?.buttons?.buttonText}
+                        </button>
+                    )
+                }
             </form>
         </div>
     );

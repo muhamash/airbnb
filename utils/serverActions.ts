@@ -28,7 +28,7 @@ export async function paymentForm(formData) {
         {
             formObject[ key ] = value;
         } );
-        console.log(formObject);
+        console.log(formObject?.type);
 
         try {
             const response = await fetch( "http://localhost:3000/api/email", {
@@ -46,7 +46,7 @@ export async function paymentForm(formData) {
                     hotelName: formObject?.hotelName,
                     hotelAddress: formObject?.hotelAddress,
                     unitPrice: formObject?.rate,
-                    renType: formObject?.type,
+                    rentType: formObject?.type,
                     count: formObject[formObject?.type],
                     lang: formObject?.lang,
                     total: formObject?.total,
