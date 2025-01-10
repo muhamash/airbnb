@@ -19,22 +19,29 @@ export async function handleAuth(formData: FormData) {
 }
 
 export async function paymentForm(formData) {
-    console.log(formData);
-    if (formData) {
-        const email = formData.get("email");
-        console.log(email);
+    // console.log( formData );
+    const formObject = {};
+    if ( formData )
+    {
+        
+        formData.forEach( ( value, key ) =>
+        {
+            formObject[ key ] = value;
+        } );
+        console.log(formObject);
 
         try {
-            // Ensure you specify the method and headers for the fetch request
+            
             const response = await fetch("http://localhost:3000/api/email", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    email: email, 
+                    email: formObject?.email, 
                     subject: "Email Confirmation",
                     confirmationMessage: "Booking confirmation oka!!!!!",
+                    name: formObject?.name,
                 }),
             });
 
