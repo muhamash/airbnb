@@ -2,8 +2,7 @@
 
 import { paymentForm } from "@/utils/serverActions";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 import TripDetails from "./TripDetails";
 
 interface Buttons {
@@ -47,14 +46,14 @@ interface FormData
 export default  function PaymentForm ( { searchParams, languageData, params, calculateRentedPrice, userId, email, name }: PaymentFormProps )
 {
     const [ isPending, startTransition ] = useTransition();
-    const [ session, setSession ] = useState();
-    const router = useRouter();
+    // const router = useRouter();
     const rate = searchParams?.rate ? JSON.parse( searchParams.rate ) : {};
 
     const handleSubmit = async (e) =>
     {
         e.preventDefault();
         const formData = new FormData( e.target );
+        console.log( formData );
         if ( formData )
         {
             startTransition( async () =>

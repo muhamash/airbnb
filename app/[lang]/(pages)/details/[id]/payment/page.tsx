@@ -20,7 +20,7 @@ interface PaymentProps {
 export default async function Payment({ searchParams, params }: PaymentProps) {
     try
     {
-        const [ dictionaryResponse, daysPromise, stocksPromise, authPromise ] = await Promise.all( [
+        const [ dictionaryResponse, daysPromise, authPromise ] = await Promise.all( [
             fetchDictionary( params?.lang ),
             calculateDaysBetween( searchParams?.checkIn, searchParams?.checkOut ),
             auth(),
