@@ -1,4 +1,6 @@
-export default async function layout({children}:React.ReactNode) {
+export default async function layout({children}:Readonly<{
+  children: React.ReactNode;
+}>) {
     return (
         <>
             {children}
