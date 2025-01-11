@@ -39,7 +39,7 @@ export default function RedirectionPage() {
             }, 1000);
 
             const timeout = setTimeout(() => {
-                router.push(target as string);
+                router.push(target);
             }, 3000);
 
             return () => {
