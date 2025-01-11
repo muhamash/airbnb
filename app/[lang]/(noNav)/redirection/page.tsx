@@ -2,11 +2,12 @@
 
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { motion } from "framer-motion";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function RedirectionPage() {
-    const searchParams = useSearchParams();
+    const searchParams : URLSearchParams = useSearchParams();
     const router = useRouter();
     const target = searchParams?.get("target");
     const userName = searchParams?.get("name");
@@ -14,12 +15,12 @@ export default function RedirectionPage() {
     const hotelAddress = searchParams?.get("hotelAddress");
     const [countdown, setCountdown] = useState(3);
     const [langData, setLangData] = useState(null);
-    const params = useParams();
+    const params :  Params = useParams();
 
     useEffect(() => {
         const fetchLang = async () => {
             try {
-                const data = await fetchDictionary(params?.lang);
+                const data = await fetchDictionary(params?.lang as string);
                 setLangData(data);
                 // console.log("Language data:", data);
             } catch (error) {
