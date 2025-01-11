@@ -3,7 +3,7 @@ import { dbConnect } from '@/services/mongoDB';
 import { ObjectId } from 'mongodb';
 import { NextResponse } from 'next/server';
 
-export async function POST(request: Request) {
+export async function POST(request: Request) : Promise<Response> {
     try {
         const { userId, hotelId, rating, reviewText, image, name } = await request.json();
 
@@ -41,8 +41,7 @@ export async function POST(request: Request) {
     }
 }
 
-
-export async function PATCH(request: Request) {
+export async function PATCH(request: Request) : Promise<Response> {
     try {
         const { reviewId, hotelId, rating, reviewText } = await request.json();
 
@@ -80,7 +79,7 @@ export async function PATCH(request: Request) {
     }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(request: Request) : Promise<Response> {
     try {
         const { reviewId, hotelId } = await request.json();
 

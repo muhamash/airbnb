@@ -20,58 +20,100 @@ export async function handleAuth(formData: FormData) {
 }
 
 export async function paymentForm(formData) {
-    // console.log( formData );
-    const formObject = {};
-    if ( formData )
-    {
-        formData.forEach( ( value, key ) =>
-        {
-            formObject[ key ] = value;
-        } );
-        // console.log(formObject?.type);
+  const formObject = {};
+  if (!formData) return;
 
-        try {
-            const response = await fetch( "http://localhost:3000/api/email", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify( {
-                    email: formObject?.email,
-                    subject: "Booking Confirmation from Airbnb",
-                    confirmationMessage: "Booking confirmation oka!!!!!",
-                    name: formObject?.name,
-                    checkIn: formObject?.checkIn,
-                    checkOut: formObject?.checkOut,
-                    hotelName: formObject?.hotelName,
-                    hotelAddress: formObject?.hotelAddress,
-                    unitPrice: formObject?.rate,
-                    rentType: formObject?.type,
-                    count: formObject[formObject?.type],
-                    lang: formObject?.lang,
-                    total: formObject?.total,
-                } ),
-            } );
+  formData.forEach((value, key) => {
+    formObject[key] = value;
+  });
 
-            const result = await response.json();
-            // console.log(result);
+  try {
+      const responseBooking = await fetch( "http://localhost:3000/api/booking", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify( {
+              rate: formObject?.rate,
+              total: formObject?.total,
+              name: formObject?.name,
+              email: formObject?.email,
+              checkOut: formObject?.checkOut,
+              checkIn: formObject?.checkIn,
+              rentType: formObject?.type,
+              rentCount: formObject[ formObject?.type ],
+              hotelId: formObject?.hotelId,
+              lang: formObject?.lang,
+              userId: formObject?.userId,
+              hotelName: formObject?.hotelName,
+              hotelAddress: formObject?.hotelAddress,
+              rate: formObject?.rate,
+              total: formObject?.total,
+              paymentDetails: {
+                  cardNumber: formObject?.cardNumber,
+                  expiration: formObject?.expiration,
+                  ccv: formObject?.ccvNumber,
+                  streetAddress: formObject?.streetAddress,
+                  aptSuite: formObject?.aptSuite,
+                  city: formObject?.city,
+                  state: formObject?.state,
+              },
+          } ),
+      } );
 
-            if (response.status === 200) {
-                console.log("Email sent successfully:", result);
-            } else {
-                console.error("Error in response:", result.message || result);
-            }
-        } catch (error) {
-            console.error("Error sending email:", error);
-        }
-        finally
-        {
-            const queryString = new URLSearchParams( formObject ).toString();
-            
-            redirect( `http://localhost:3000/bn/redirection?target=${ encodeURIComponent( `http://localhost:3000/bn/success?${ queryString }` ) }&user=${ formObject?.name }&hotelName=${ formObject?.hotelName }&hotelAddress=${ formObject?.hotelAddress }` );
-        }
+    const bookingResult = await responseBooking.json();
+
+    if (responseBooking.status === 200 && bookingResult?.status === 200) {
+      console.log("Booking successful:", bookingResult);
+
+      const responseEmail = await fetch("http://localhost:3000/api/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formObject?.email,
+          subject: "Booking Confirmation from Airbnb",
+          confirmationMessage: "Booking confirmation ok!",
+          name: formObject?.name,
+          checkIn: formObject?.checkIn,
+          checkOut: formObject?.checkOut,
+          hotelName: formObject?.hotelName,
+          hotelAddress: formObject?.hotelAddress,
+          unitPrice: formObject?.rate,
+          rentType: formObject?.type,
+          count: formObject[formObject?.type],
+          lang: formObject?.lang,
+          total: formObject?.total,
+        }),
+      });
+
+      const emailResult = await responseEmail.json();
+
+      if (responseEmail.status === 200) {
+        console.log("Email sent successfully:", emailResult);
+      } else {
+        console.error("Error sending email:", emailResult.message || emailResult);
+      }
+
+      // Redirect to success page upon successful booking and email
+      const queryString = new URLSearchParams(formObject).toString();
+      redirect(
+        `http://localhost:3000/bn/redirection?target=${encodeURIComponent(
+          `http://localhost:3000/bn/success?${queryString}`
+        )}&user=${formObject?.name}&hotelName=${formObject?.hotelName}&hotelAddress=${formObject?.hotelAddress}`
+      );
+    } else {
+      console.error("Booking failed:", bookingResult.message || bookingResult);
+      throw new Error("Booking failed");
     }
-}
+  } catch (error) {
+    console.error("Error occurred during payment or booking:", error);
+
+    // Redirect to home page upon failure
+    redirect("http://localhost:3000");
+  }
+};
 
 export const getReviewById = async (hotelId: string) =>
 {

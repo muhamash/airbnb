@@ -1,42 +1,66 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
-export interface IBooking extends Document {
-    hotelId: mongoose.Types.ObjectId;
-    checkIn: Date;
-    checkOut: Date;
-    userId: mongoose.Types.ObjectId;
-    roomCount: number;
-    bedCount: number
-};
+export interface IPaymentDetails {
+  cardNumber: number;
+  ccv: number;
+  expiration: Date;
+  streetAddress: string;
+  aptSuite: string;
+  city: string;
+  state: string;
+  total: string;
+}
 
-export interface IBookings extends Document
-{
-    hotelId: mongoose.Schema.Types.ObjectId;
-    bookings: IBooking[]
-};
+export interface IBooking extends Document {
+  hotelId: mongoose.Types.ObjectId;
+  checkIn: Date;
+  checkOut: Date;
+  userId: mongoose.Types.ObjectId;
+  roomCount: number;
+  rentCount: number;
+  email: string;
+    name: string;
+    lang: string;
+  hotelName: string;
+  hotelAddress: string;
+  rate: number;
+  paymentDetails: IPaymentDetails;
+}
+
+export interface IBookings extends Document {
+  hotelId: mongoose.Types.ObjectId;
+  bookings: IBooking[];
+}
+
+const PaymentDetailsSchema: Schema = new mongoose.Schema( {
+    cardNumber: { type: Number, required: true },
+    ccv: { type: Number, required: true },
+    expiration: { type: Date, required: true },
+    streetAddress: { type: String, required: true },
+    aptSuite: { type: String, required: true },
+    city: { type: String, required: true },
+    state: { type: String, required: true },
+    total: { type: String, required: true },
+} );
 
 const BookingSchema: Schema = new mongoose.Schema(
     {
-        checkIn: {
-            type: Date,
-            required: true,
-        },
-        checkOut: {
-            type: Date,
-            required: true,
-        },
-        userId: {
+        hotelId: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
+            ref: "hotels",
         },
-        roomCount: {
-            type: Number,
-            required: false,
-        },
-        bedCount: {
-            type: Number,
-            required: false,
-        },
+        checkIn: { type: Date, required: true },
+        checkOut: { type: Date, required: true },
+        userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+        roomCount: { type: Number, required: false },
+        rentCount: { type: Number, required: false },
+        email: { type: String, required: true },
+        name: { type: String, required: true },
+        hotelName: { type: String, required: true },
+        hotelAddress: { type: String, required: true },
+        rate: { type: Number, required: true },
+        paymentDetails: { type: PaymentDetailsSchema, required: true },
     },
     { timestamps: true }
 );
@@ -44,13 +68,14 @@ const BookingSchema: Schema = new mongoose.Schema(
 const BookingsSchema: Schema = new mongoose.Schema(
     {
         hotelId: {
-            type: mongoose.Schema.Types.ObjectId,  
+            type: mongoose.Schema.Types.ObjectId,
             required: true,
-            ref: 'hotels', 
+            ref: "hotels",
         },
-        bookings: [BookingSchema],
+        bookings: [ BookingSchema ],
     },
     { timestamps: true }
-)
+);
 
-export const bookingsModel: Model<IBookings> = mongoose.models.bookings || mongoose.model<IBookings>( "bookings", BookingsSchema );
+export const bookingsModel: Model<IBookings> =
+    mongoose.models.bookings || mongoose.model<IBookings>( "bookings", BookingsSchema );
