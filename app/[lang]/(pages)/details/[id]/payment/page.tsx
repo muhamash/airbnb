@@ -40,8 +40,8 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                     <PaymentForm
                         name={user?.user?.name}
-                        userId={user?.user?.userId}
-                        email={user?.user?.userId}
+                        userId={user?.user?.id}
+                        email={user?.user?.email}
                         calculateRentedPrice={calculateRentedPrice}
                         params={params}
                         searchParams={searchParams}

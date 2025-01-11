@@ -28,7 +28,7 @@ export async function paymentForm(formData) {
         {
             formObject[ key ] = value;
         } );
-        console.log(formObject?.type);
+        // console.log(formObject?.type);
 
         try {
             const response = await fetch( "http://localhost:3000/api/email", {

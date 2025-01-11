@@ -1,11 +1,11 @@
 'use client';
 
 import { updateSearchParams } from "@/utils/utils";
-import { DatePicker, Form, InputNumber, Radio } from "antd";
+import { DatePicker, Form, InputNumber, Radio, Skeleton } from "antd";
 import dayjs from "dayjs";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const { RangePicker } = DatePicker;
 const formItemLayout = {
@@ -55,7 +55,18 @@ export default function TripDetails({ languageData }: TripProps) {
       : null;
   const roomsAvailable = Number(searchParams.get("roomMax"));
   const bedsAvailable = Number(searchParams.get("bedMax"));
-  const [editMode, setEditMode] = useState({ dates: false, type: false });
+  const [ editMode, setEditMode ] = useState( { dates: false, type: false } );
+  const [ loading, setLoading ] = useState<boolean>( true );
+  
+  useEffect( () =>
+  {
+    const timer = setTimeout( () =>
+    {
+      setLoading( false );
+    }, 2000 );
+  
+    return () => clearTimeout( timer );
+  }, [] );
 
   const handleCancel = (field: "dates" | "type") => {
     setEditMode((prev) => ({ ...prev, [field]: false }));
@@ -106,6 +117,14 @@ export default function TripDetails({ languageData }: TripProps) {
     // {
     //   window.location.reload();
     // }, 500 );
+  };
+
+  if (loading) {
+    return (
+      <div className='flex w-full items-center justify-center p-3 h-fit'>
+        <Skeleton active paragraph={{ rows: 4 }} />
+      </div>
+    );
   };
 
   return (

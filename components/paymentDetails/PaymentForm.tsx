@@ -70,7 +70,7 @@ export default  function PaymentForm ( { searchParams, languageData, params, cal
         }
     }
 
-    // console.log( session.user );
+    console.log( userId );
     // if (!session) return <div>Loading user data...</div>;
     return (
         <div>
