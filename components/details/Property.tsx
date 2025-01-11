@@ -123,12 +123,26 @@ export default async function Property ( { hotel, searchParams, languagePromise 
                         }
                     </div>
                 </div>
+                <div className="absolute right-0 -top-5">
+                    <div className="styleProperty">
 
+                    </div>
+                </div>
                 <div className="absolute h-[250px] w-[250px] bg-sky-800 rounded-full blur-3xl bg-opacity-90 z-0 right-5 -top-10">
 
                 </div>
                 {/* <!-- Right Column: Booking Card --> */}
-                <div>
+                <div className="relative">
+                    <div className="absolute bottom-5 left-20 z-20">
+                        <div className="loaderDance">
+
+                        </div>
+                    </div>
+                    <div className="absolute -bottom-10 z-20">
+                        <div className="flipStyles">
+
+                        </div>
+                    </div>
                     <Reserve
                         hotelName={hotel?.name}
                         hotelAddress={hotel?.address}
