@@ -8,7 +8,6 @@ export interface IPaymentDetails {
   aptSuite: string;
   city: string;
   state: string;
-  total: string;
 }
 
 export interface IBooking extends Document {

@@ -79,7 +79,7 @@ export default async function Property ( { hotel, searchParams, languagePromise 
                     <div className="border-b border-orange-500 pb-6 mb-6">
                         {/* hotel owner */}
                         <h2 className="text-2xl font-semibold mb-4 font-kanit">
-                            {  responseData?.details?.owner } : Entire villa hosted by Sarah
+                            {responseData?.details?.owner} : Entire villa hosted by Sarah
                         </h2>
                         {/* details */}
                         <div className="py-2 flex gap-3 items-center w-fit p-1">
@@ -90,20 +90,34 @@ export default async function Property ( { hotel, searchParams, languagePromise 
                                 {responseData?.details?.footer} ***
                             </p>
                         </div>
-
+                        
+                        {/* stocks */}
                         <div className="grid grid-cols-3 gap-4 text-gray-600">
-                            <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
-                                <i className="fas fa-person"></i>
-                                <span>{searchParams?.personMax} {responseData?.details?.guest}</span>
-                            </div>
-                            <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
-                                <i className="fas fa-door-open"></i>
-                                <span>{searchParams?.roomMax} {responseData?.details?.bedrooms}</span>
-                            </div>
-                            <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
-                                <i className="fas fa-bed"></i>
-                                <span>{searchParams?.bedMax} {responseData?.details?.beds}</span>
-                            </div>
+                            {
+                                searchParams?.available === "true" ? (
+                                    <>
+                                        <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
+                                            <i className="fas fa-person"></i>
+                                            <span>{searchParams?.personMax} {responseData?.details?.guest}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
+                                            <i className="fas fa-door-open"></i>
+                                            <span>{searchParams?.roomMax} {responseData?.details?.bedrooms}</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 hover:scale-105 transtion-all duration-200 hover:text-green-700">
+                                            <i className="fas fa-bed"></i>
+                                            <span>{searchParams?.bedMax} {responseData?.details?.beds}</span>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="flex gap-3">
+                                        <span className="loaderS">
+                                            
+                                        </span>
+                                        <p className="text-lg bg-rose-600 p-2 rounded-md text-white">stock out!</p>
+                                    </div>
+                                )
+                            }
                         </div>
                     </div>
 

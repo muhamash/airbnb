@@ -270,3 +270,28 @@
 @keyframes l4-2 {
    80%,100% {box-shadow: 16px 0 #FF3D7F}
 }
+
+/* HTML: <div class="loader"></div> */
+.loaderS {
+  width: 30px;
+  aspect-ratio: 1.154;
+  display: grid;
+  background: conic-gradient(from 149deg at top,#0000, #BF1E62 1deg 60deg,#0000 61deg);
+  animation: ls14 2s infinite cubic-bezier(0.5,500,0.5,-500);
+  transform-origin: top;
+}
+.loaderS:before,
+.loaderS:after {
+  content: "";
+  grid-area: 1/1;
+  background: conic-gradient(from 149deg at top,#0000, #FFA588 1deg 60deg,#0000 61deg);
+  transform-origin: inherit;
+  animation: inherit;
+}
+.loaderS:after {
+  background: conic-gradient(from 149deg at top,#0000, #027B7F 1deg 60deg,#0000 61deg);
+  animation-timing-function: cubic-bezier(0.5,800,0.5,-800);
+}
+@keyframes ls14{
+  100% {transform: rotate(0.2deg)}
+}

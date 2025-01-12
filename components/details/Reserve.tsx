@@ -53,11 +53,13 @@ export default function Reserve({ rate, perNight, langData, hotelAddress, hotelN
     const params = useParams();
     const [form] = Form.useForm();
     const roomsAvailable = Number(searchParams.get("roomMax"));
-    const bedsAvailable = Number(searchParams.get("bedMax"));
+    const bedsAvailable = Number( searchParams.get( "bedMax" ) );
+    const availability =  searchParams.get( "available" ) ;
     const [selection, setSelection] = useState<string>('beds');
     const router = useRouter();
     const [ loading, setLoading ] = useState<boolean>( true );
 
+    // console.log("Reservation Data:", availability);
     useEffect( () =>
     {
         const timer = setTimeout( () =>
@@ -93,7 +95,6 @@ export default function Reserve({ rate, perNight, langData, hotelAddress, hotelN
             ]);
             return;
         }
-        // console.log("Reservation Data:", reservationData);
         
         const parseSearchParams = {
             checkIn: reservationData?.checkIn || null,
@@ -250,7 +251,9 @@ export default function Reserve({ rate, perNight, langData, hotelAddress, hotelN
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     type="submit"
-                    className="w-full block text-center bg-cyan-700 text-white py-3 rounded-lg transition-all hover:brightness-90"
+                    aria-disabled={availability === "true" ? false : true}
+                    disabled={availability === "true" ? false : true}
+                    className={`w-full block text-center ${availability === "true" ? "bg-cyan-700 cursor-pointer" : "bg-red-700 cursor-not-allowed"} text-white py-3 rounded-lg transition-all hover:brightness-90`}
                 >
                     {langData?.reserve}
                 </motion.button>
