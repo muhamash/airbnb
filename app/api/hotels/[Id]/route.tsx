@@ -33,8 +33,6 @@ export async function GET(request: Request): Promise<Response> {
             );
         }
 
-
-
         return NextResponse.json({
             status: 200,
             success: true,

@@ -2,7 +2,9 @@
 
 import { paymentForm } from "@/utils/serverActions";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { redirect } from "next/navigation";
 import { useTransition } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 import TripDetails from "./TripDetails";
 
 interface Buttons {
@@ -61,19 +63,29 @@ export default  function PaymentForm ( { searchParams, languageData, params, cal
                 try
                 {
                     await paymentForm( formData );
+                    toast.success( "payment oka!!" );
                 }
                 catch ( error )
                 {
+                    toast.error("payment failed!!")
                     console.error( 'Payment submission failed:', error );
                 }
             } );
         }
     }
 
-    console.log( userId );
+    if ( !userId )
+    {
+        redirect( "/login" );
+    }
+    // console.log( userId );
     // if (!session) return <div>Loading user data...</div>;
     return (
         <div>
+            <Toaster
+                position="top-center"
+                reverseOrder={false}
+            />
             <TripDetails languageData={languageData} />
             <form className="mt-3" onSubmit={handleSubmit}>
                 <input type="hidden" name="rate" value={rate[ searchParams?.selection ]} />

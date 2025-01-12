@@ -16,6 +16,7 @@ export default async function Success ({searchParams, params}: SuccessProps)
     // {
     //     redirect( "/login" );
     // }
+    
     console.log( searchParams, params );
 
     return (

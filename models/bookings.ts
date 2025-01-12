@@ -11,10 +11,10 @@ export interface IPaymentDetails {
 }
 
 export interface IBooking extends Document {
-  hotelId: mongoose.Types.ObjectId;
+  hotelId: string;
   checkIn: Date;
   checkOut: Date;
-  userId: mongoose.Types.ObjectId;
+  userId: string;
   roomCount: number;
   rentCount: number;
   email: string;
@@ -23,11 +23,12 @@ export interface IBooking extends Document {
   hotelName: string;
   hotelAddress: string;
   rate: number;
+  rentType: string;
   paymentDetails: IPaymentDetails;
 }
 
 export interface IBookings extends Document {
-  hotelId: mongoose.Types.ObjectId;
+  hotelId: string;
   bookings: IBooking[];
 }
 
@@ -45,13 +46,14 @@ const PaymentDetailsSchema: Schema = new mongoose.Schema( {
 const BookingSchema: Schema = new mongoose.Schema(
     {
         hotelId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             required: true,
             ref: "hotels",
-        },
+    },
+        rentType: { type: String, required: true },
         checkIn: { type: Date, required: true },
         checkOut: { type: Date, required: true },
-        userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+        userId: { type: String, required: true },
         roomCount: { type: Number, required: false },
         rentCount: { type: Number, required: false },
         email: { type: String, required: true },
@@ -67,7 +69,7 @@ const BookingSchema: Schema = new mongoose.Schema(
 const BookingsSchema: Schema = new mongoose.Schema(
     {
         hotelId: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             required: true,
             ref: "hotels",
         },

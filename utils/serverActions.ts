@@ -10,6 +10,18 @@ interface FormData
     action: string;
 }
 
+interface BookingFormObject {
+  rate: string;
+  total: string;
+  name: string;
+  email: string;
+  checkOut: string;
+  checkIn: string;
+  type: string;
+  [key: string]: string | undefined;
+}
+
+
 export async function handleAuth(formData: FormData) {
     const action = formData.get("action");
     if (typeof action === "string") {
@@ -20,45 +32,43 @@ export async function handleAuth(formData: FormData) {
 }
 
 export async function paymentForm(formData) {
-  const formObject = {};
+  const formObject: BookingFormObject = {};
   if (!formData) return;
 
   formData.forEach((value, key) => {
     formObject[key] = value;
   });
 
-  console.log( formObject?.cardNumber );
+  console.log( formObject?.cvv );
   try {
-      const responseBooking = await fetch( "http://localhost:3000/api/booking", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify( {
-              rate: formObject?.rate,
-              total: formObject?.total,
-              name: formObject?.name,
-              email: formObject?.email,
-              checkOut: formObject?.checkOut,
-              checkIn: formObject?.checkIn,
-              rentType: formObject?.type,
-              rentCount: formObject[ formObject?.type ],
-              hotelId: formObject?.hotelId,
-              lang: formObject?.lang,
-              userId: formObject?.userId,
-              hotelName: formObject?.hotelName,
-              hotelAddress: formObject?.hotelAddress,
-              paymentDetails: {
-                  cardNumber: formObject?.cardNumber,
-                  expiration: formObject?.expiration,
-                  ccv: formObject?.ccvNumber,
-                  streetAddress: formObject?.streetAddress,
-                  aptSuite: formObject?.aptSuite,
-                  city: formObject?.city,
-                  state: formObject?.state,
-              },
-          } ),
-      } );
+    const responseBooking = await fetch( "http://localhost:3000/api/booking", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify( {
+        rate: formObject?.rate,
+        total: formObject?.total,
+        name: formObject?.name,
+        email: formObject?.email,
+        checkOut: formObject?.checkOut,
+        checkIn: formObject?.checkIn,
+        rentType: formObject?.type,
+        rentCount: formObject[ formObject?.type ],
+        hotelId: formObject?.hotelId,
+        lang: formObject?.lang,
+        userId: formObject?.userId,
+        hotelName: formObject?.hotelName,
+        hotelAddress: formObject?.hotelAddress,
+        cardNumber: formObject?.cardNumber,
+        expiration: formObject?.expiration,
+        ccv: formObject?.cvv,
+        streetAddress: formObject?.streetAddress,
+        aptSuite: formObject?.aptSuite,
+        city: formObject?.city,
+        state: formObject?.state,
+      } ),
+    } );
 
     const bookingResult = await responseBooking.json();
 
@@ -96,10 +106,10 @@ export async function paymentForm(formData) {
       }
 
       // Redirect to success page upon successful booking and email
-      const queryString = new URLSearchParams(formObject).toString();
+      // const queryString = new URLSearchParams(formObject).toString();
       redirect(
-        `http://localhost:3000/bn/redirection?target=${encodeURIComponent(
-          `http://localhost:3000/bn/success?${queryString}`
+        `http://localhost:3000/${formObject?.lang}/redirection?hotelName=${formObject?.hotelName}&name=${formObject?.name}&hotelAddress=${formObject?.hotelAddress}&bookingId=${bookingResult?.bookingId}&target=${encodeURIComponent(
+          `http://localhost:3000/${formObject?.lang}/success?bookingId=${bookingResult?.bookingId}`
         )}&user=${formObject?.name}&hotelName=${formObject?.hotelName}&hotelAddress=${formObject?.hotelAddress}`
       );
     } else {
@@ -108,9 +118,10 @@ export async function paymentForm(formData) {
     }
   } catch (error) {
     console.error("Error occurred during payment or booking:", error);
-
     // Redirect to home page upon failure
-    redirect("http://localhost:3000");
+    // redirect("http://localhost:3000");
+    // console.error( error );
+    throw new Error("payment failed");
   }
 };
 
