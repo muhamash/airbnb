@@ -2,46 +2,72 @@ import { getBookingByHotelId } from "@/queries";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request): Promise<Response> {
-    try
-    {
+    try {
         const url = new URL(request.url);
-        const id = url.pathname.split( "/" ).pop();
+        const id = url.pathname.split("/").pop();
+        const bookingId = url.searchParams.get("bookingId");
+        const bookingsData = await getBookingByHotelId(id);
 
-        const bookingsData = await getBookingByHotelId( id );
-        if ( !bookingsData )
-        {
+        if (!bookingsData || !Array.isArray(bookingsData)) {
             return NextResponse.json(
                 {
                     status: 404,
                     success: false,
-                    message: "bookings not found",
+                    message: "Bookings not found",
                 },
+                { status: 404 }
             );
         }
-        else
-        {
+
+        console.log("Bookings Data:", bookingsData);
+
+        if (bookingId) {
+            const filteredBooking = bookingsData.find((booking) => 
+                booking._id.toString() === bookingId
+            );
+            
+            if (!filteredBooking) {
+                return NextResponse.json(
+                    {
+                        status: 404,
+                        success: false,
+                        message: "Booking not found for the given bookingId",
+                    },
+                    { status: 404 }
+                );
+            }
+
+            console.log("Filtered Booking:", filteredBooking);
+
             return NextResponse.json(
                 {
                     status: 200,
                     success: true,
-                    message: "bookings found!!",
-                    data:bookingsData
+                    message: "Booking found",
+                    data: filteredBooking,
                 },
                 { status: 200 }
             );
         }
 
+        return NextResponse.json(
+            {
+                status: 200,
+                success: true,
+                message: "Bookings found",
+                data: bookingsData,
+            },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error("Error fetching booking:", error);
+        return NextResponse.json(
+            {
+                status: 500,
+                success: false,
+                message: "Internal server error",
+            },
+            { status: 500 }
+        );
     }
-    catch ( error )
-    {
-            console.error("Error fetching booking:", error);
-            return NextResponse.json(
-                {
-                    status: 500,
-                    success: false,
-                    message: "Internal server error",
-                },
-                { status: 500 }
-            );
-        }
-};
+}

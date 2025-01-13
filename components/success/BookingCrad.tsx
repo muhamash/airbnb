@@ -1,4 +1,7 @@
-export default async function BookingCrad() {
+export default async function BookingCrad ( { bookingPromise }: Promise )
+{
+    const booking = await bookingPromise;
+    console.log( booking );
     return (
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
             <div className="flex items-start gap-6 mb-6 pb-6 border-b">
@@ -8,7 +11,7 @@ export default async function BookingCrad() {
                     className="w-32 h-32 rounded-lg object-cover"
                 />
                 <div className='font-kanit'>
-                    <h2 className="text-2xl font-semibold mb-2">Sea View Room</h2>
+                    <h2 className="text-2xl font-semibold mb-2">{ booking?.hotelName }</h2>
                     <div className="flex items-center mb-2">
                         <i className="fas fa-star text-sm mr-1"></i>
                         <span className="text-sm">4.6 (500+ reviews)</span>

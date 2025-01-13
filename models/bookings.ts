@@ -23,7 +23,7 @@ export interface IBooking extends Document {
   hotelName: string;
   hotelAddress: string;
   rate: number;
-  rentType: string;
+  rentCount: string;
   paymentDetails: IPaymentDetails;
 }
 
@@ -50,7 +50,7 @@ const BookingSchema: Schema = new mongoose.Schema(
             required: true,
             ref: "hotels",
     },
-        rentType: { type: String, required: true },
+        rentCount: { type: String, required: true },
         checkIn: { type: Date, required: true },
         checkOut: { type: Date, required: true },
         userId: { type: String, required: true },

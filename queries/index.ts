@@ -4,7 +4,7 @@ import { dbConnect } from "@/services/mongoDB";
 import { replaceMongoIdInArray } from "@/utils/mongoData";
 import { ObjectId } from "mongodb";
 // import mongoose from "mongoose";
-import { bookingsModel } from "@/models/bookings";
+import { bookingsModel, IBooking } from "@/models/bookings";
 import { IReviews, reviewsModel } from '../models/reviews';
 // const { ObjectId } = mongoose.Types;
 
@@ -70,26 +70,20 @@ export async function getReviewsByHotelId ( hotelId: string ): Promise<IReviews[
   }
 }
 
-export async function getBookingByHotelId ( hotelId: string )
-{
+export async function getBookingByHotelId(hotelId: string): Promise<IBooking[] | null> {
   await dbConnect();
 
-  try
-  {
-    const bookings = await bookingsModel.findOne( { hotelId: new ObjectId( hotelId ) } );
+  console.log(hotelId)
+  try {
+    const bookings = await bookingsModel.findOne({ hotelId: new ObjectId(hotelId) });
 
-    if ( bookings )
-    {
-      return bookings?.bookings;
+    console.log("Fetched Bookings:", bookings);
+    if (bookings) {
+      return bookings.bookings;
     }
-    else
-    {
-      return null;
-    }
-  }
-  catch(error)
-  {
-    console.error( error );
+    return null;
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
     return null;
   }
 }

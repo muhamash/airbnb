@@ -1,5 +1,6 @@
 import ActionButton from "@/components/success/ActionButton";
 import BookingCrad from "@/components/success/BookingCrad";
+import { fetchBookingDetails, fetchDictionary } from "@/utils/fetchFunction";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
 interface SuccessProps
@@ -11,13 +12,17 @@ interface SuccessProps
 export default async function Success ({searchParams, params}: SuccessProps)
 {
     // const session: Session | null = await auth();
-    
     // if ( !session?.user )
     // {
     //     redirect( "/login" );
     // }
-    
-    console.log( searchParams, params );
+    const [ bookingPromise, languagePromise ] = await Promise.all(
+        [
+            fetchBookingDetails( searchParams?.hotelId, searchParams?.bookingId ),
+            fetchDictionary( params?.lang )
+        ] );
+    const language = await languagePromise;
+    // console.log( searchParams, params, languagePromise );
 
     return (
         <div className='py-[20px] max-w-3xl mx-auto p-6'>
@@ -33,7 +38,7 @@ export default async function Success ({searchParams, params}: SuccessProps)
             </div>
 
             {/* <!-- Booking Details Card --> */}
-            <BookingCrad />
+            <BookingCrad bookingPromise={ bookingPromise } />
 
             {/* <!-- Next Steps --> */}
             <div className="bg-white rounded-lg shadow-sm p-6 mb-8 font-ubuntu">
