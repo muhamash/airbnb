@@ -140,30 +140,29 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
             </svg>
             <h1>${language?.invoice?.head}</h1>
             <div style="display: flex; flex-direction: column; gap: 5px;">
-                <img style="align-self: end;" src=${ qrCodeData } class="gradient-qr" style="height: 100px; width: 100px; padding:5px; margin:3px;" alt="qrCode"/>
+                <img style="align-self: center;" src=${ qrCodeData } class="gradient-qr" style="height: 80px; width: 80px; padding:5px; margin:3px;" alt="qrCode"/>
                 <p>${content?.createdAt}</p>
                 <p>${language?.invoice?.bookingId} : ${content?._id}</p>
-                <p>${language?.invoice?.hotelId} : ${content?.hotelId}</p>
             </div>
         </div>
         <hr style="height: 2px; background-color:yellow; margin:0;"/>
         <div class="section">
-            <h2 style="padding: 20px 0 10px 0;">${content?.hotelName}</h2>
+            <h2 style="padding: 20px 0 8px 0;">${content?.hotelName}</h2>
             <hr style="height: 1px; background-color:teal; margin:0;"/>
         </div>
         <div class="section">
-            <h3 style="padding: 20px 0 10px 0; color:teal">${language?.invoice?.guestInfo}</h3>
+            <h3 style="padding: 20px 0 8px 0; color:teal">${language?.invoice?.guestInfo}</h3>
             <div style="background-color: #e3e3e3; padding:20px; border-radius:10px;">
                 <p style="font-size: 15px; color: #080808">${language?.invoice?.name}: ${content?.name}</p>
                 <p style="font-size: 15px; color: #080808 ;padding:10px 0 0 0; ">${language?.invoice?.email}: ${content?.email}</p>
             </div>
         </div>
         <div class="section">
-            <h3 style="padding: 0px 0 10px 0; color:teal">${language?.invoice?.reservationDetails}</h3>
+            <h3 style="padding: 0px 0 8px 0; color:teal">${language?.invoice?.reservationDetails}</h3>
             
             <!-- reserve table -->
             <div style="background-color: #c9e2e9; padding:20px; border-radius:10px;">
-                <table style="border-radius: 10px; width: 100%; border-collapse: collapse;">
+                <table style="border-radius: 8px; width: 100%; border-collapse: collapse;">
                 <tr>
                     <td style="font-size: 15px; color: #080808; padding: 5px;">${language?.invoice?.checkIn}:</td>
                     <td style="font-size: 15px; color: #080808; padding: 5px;">${content?.checkIn}</td>
@@ -185,7 +184,7 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
 
         </div>
         <div class="section">
-            <h3 style="padding: 0px 0 10px 0; color:teal">${language?.invoice?.billingAddress}</h3>
+            <h3 style="padding: 0px 0 8px 0; color:teal">${language?.invoice?.billingAddress}</h3>
             <div style="background-color: #e3e3e3; padding:20px; border-radius:10px; display:flex; gap: 20px; flex-direction:column;">
                 <div style="display: flex; gap:30px;">
                     <p >${language?.invoice?.street}: ${content?.paymentDetails?.streetAddress}</p>
@@ -199,7 +198,7 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
         </div>
 
         <div class="section">
-            <h3 style="padding: 0px 0 10px 0; color:teal">${language?.invoice?.paySummery}</h3>
+            <h3 style="padding: 0px 0 8px 0; color:teal">${language?.invoice?.paySummery}</h3>
             <!-- bill -->
             <table style="background-color: teal; padding: 20px; border-radius: 10px; width: 100%; border-collapse: separate; border-spacing: 10px;">
     <tr>
@@ -221,13 +220,13 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
             </table>
 
         </div>
-        <div style="padding:10px;" class="contact">
+        <div style="padding:5px;" class="contact">
             <p>${content?.hotelName}</p>
             <p>${content?.hotelAddress}</p>
             <p>Tel: +1 234 567 8900 | Email: contact@hotel_sunshine.com</p>
         </div>
-        <footer style="padding: 50px;">
-    <p style="text-align: center; font-family: monospace; font-size: 14px; color: #333;">
+        <footer style="padding: 10px;">
+    <p style="text-align: center; font-family: monospace; font-size: 8px; color: #333;">
         © All rights reserved. <a href="https://github.com/muhamash" style="color: teal; text-decoration: none;">github.com/muhamash</a>
     </p>
         </footer>
