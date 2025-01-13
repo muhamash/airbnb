@@ -30,7 +30,9 @@ export async function POST(request: Request): Promise<Response> {
             fetchDictionary( lang ),
         ] );
 
-        const qrCodeData = await QRCode.toDataURL( `http://localhost:3000/bn/details/67729c78f72778397a3e5627?ratings=3&ratingsLength=2&personMax=10&roomMax=2&bedMax=5&available=true` );
+        const qrCodeData = await QRCode.toDataURL(
+            `http://localhost:3000/bn/redirect?bookingId=${ bookingId }&hotelName=${ bookingDetails?.hotelName }&name=${ bookingDetails?.name }&hotelAddress=${ bookingDetails?.hotelAddress }&target=${ encodeURIComponent( `http://localhost:3000/${ lang }/success?bookingId=${ encodeURIComponent( bookingId ) }&hotelId=${ encodeURIComponent( hotelId ) }` ) }`
+        );
         // console.log( qrCodeData );
         // console.log( "from booking api", bookingDetails );
         if (isServerless) {

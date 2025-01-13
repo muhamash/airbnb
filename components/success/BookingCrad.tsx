@@ -65,7 +65,7 @@ export default async function BookingCrad ( { bookingPromise, checkIn,checkOut, 
                     <div className="space-y-3">
                         <div className="flex justify-between">
                             <span className="text-zinc-600">{total}</span>
-                            <span className="font-semibold">{booking?.paymentDetails?.total}tk</span>
+                            <span className="font-semibold">{booking?.paymentDetails?.total} ৳</span>
                         </div>
                         <div className="flex justify-between text-sm">
                             <span className="text-zinc-600 text-sm">{bookingId}</span>
