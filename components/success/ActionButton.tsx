@@ -1,7 +1,20 @@
-
-export default function ActionButton() {
+interface ActionButtonProps
+{
+    hotelId : string;
+    bookingId: string;
+    lang: string;
+}
+export default async function ActionButton ( { hotelId, lang, bookingId }: ActionButtonProps )
+{
+    console.log( lang, hotelId, bookingId );
+    const actionUrl = `/api/download/invoice?hotelId=${hotelId}&bookingId=${bookingId}&lang=${lang}`;
+    console.log( "Constructed action URL:", actionUrl );
     return (
-        <form action={`/api/download/invoice`} method="GET" className="flex flex-col sm:flex-row gap-4 justify-center">
+        <form
+            action={actionUrl}
+            method="POST"
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+        >
             <button
                 type="submit"
                 className="px-6 py-3 bg-green-700 text-white rounded-lg hover:brightness-90"
@@ -10,5 +23,6 @@ export default function ActionButton() {
                 Download Receipt
             </button>
         </form>
+
     );
 }

@@ -123,5 +123,23 @@
         "emailHead":"জানিয়ে দিলাম ইমেইল করে",
         "emailTitle":"Airbnb ইমেইল সার্ভিস"
 
+    },
+    "invoice": {
+        "head": "বুকিং নিশ্চিতকরণ",
+        "bookingId": "বুকিং আইডি",
+        "hotelId": "হোটেল আইডি",
+        "guestInfo": "অতিথির তথ্য",
+        "name": "নাম",
+        "email": "ইমেইল",
+        "reservationDetails": "রিজার্ভেশন বিস্তারিত",
+        "checkIn": "চেক-ইন",
+        "checkOut": "চেক-আউট",
+        "billingAddress": "বিলিং ঠিকানা",
+        "city": "শহর",
+        "street": "রাস্তা",
+        "apt": "অ্যাপার্টমেন্ট",
+        "zip": "জিপ কোড",
+        "state": "রাজ্য",
+        "paySummery": "পেমেন্ট সারাংশ"
     }
 }

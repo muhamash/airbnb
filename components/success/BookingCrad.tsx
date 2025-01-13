@@ -1,7 +1,7 @@
 export default async function BookingCrad ( { bookingPromise }: Promise )
 {
     const booking = await bookingPromise;
-    console.log( booking );
+    console.log( "ffcff",booking );
     return (
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
             <div className="flex items-start gap-6 mb-6 pb-6 border-b">

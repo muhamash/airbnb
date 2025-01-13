@@ -78,7 +78,7 @@ export async function getBookingByHotelId(hotelId: string): Promise<IBooking[] |
   try {
     const bookings = await bookingsModel.find().lean();
     // console.log("Fetched Bookings:", bookings);
-    const foundBooking = bookings?.find((booking) => booking.hotelId.toString() === hotelId);
+    const foundBooking = bookings?.find((booking) => booking.hotelId === hotelId);
 
     if (foundBooking) {
       return foundBooking.bookings; 

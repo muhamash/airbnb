@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import ActionButton from "@/components/success/ActionButton";
 import BookingCrad from "@/components/success/BookingCrad";
 import { fetchBookingDetails, fetchDictionary } from "@/utils/fetchFunction";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import Link from "next/link";
 
 interface SuccessProps
 {
@@ -85,7 +87,11 @@ export default async function Success ({searchParams, params}: SuccessProps)
             </div>
 
             {/* <!-- Action Buttons --> */}
-            <ActionButton/>
+            <ActionButton bookingId={searchParams?.bookingId} hotelId={searchParams?.hotelId} lang={params?.lang} />
+            <Link href={"/"} className="px-6 py-3 bg-cyan-700 text-white rounded-lg hover:brightness-90">
+                <i className="fas fa-home mr-2"></i>
+                Back to Home
+            </Link>
 
             {/* <!-- Need Help Section --> */}
             <div className="mt-12 text-center font-kanit">
