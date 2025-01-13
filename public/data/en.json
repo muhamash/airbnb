@@ -140,5 +140,25 @@
         "zip": "Zip code",
         "state": "State",
         "paySummery": "Payment Summary"
+    },
+    "success":{
+        "payment":"Payment Successful!",
+        "title":"Your booking has been confirmed. Check your email for details.",
+        "next": "Next Steps",
+        "checkEmail": "Check your email",
+        "okaEmail": "We&rsquo;ve sent your confirmation and trip details to your email address.",
+        "hostMessage": "Message your host",
+        "text": "Introduce yourself and let them know your travel plans.",
+        "tripPlan": "Plan your trip",
+        "info": "Review house rules and check-in instructions in your trip details.",
+        "back": " Back to Home",
+        "help": "Need help with your booking?",
+        "visit": "Visit our Help Center",
+        "receipt" :" Download Receipt",
+        "checkOut": "Check-out",
+        "checkIn": "Check-in",
+        "rooms": "Rooms",
+        "beds": "Beds",
+        "rentType": "Rent-type"
     }
 }

@@ -2,7 +2,6 @@
 
 import { signIn } from "@/auth";
 import { getReviewsByHotelId } from "@/queries";
-import { redirect } from "next/navigation";
 interface FormData
 {
     email: string;
@@ -107,13 +106,20 @@ export async function paymentForm(formData) {
 
       // Redirect to success page upon successful booking and email
       // const queryString = new URLSearchParams(formObject).toString();
-      redirect(
-        `http://localhost:3000/${ formObject?.lang }/redirection?hotelName=${ encodeURIComponent( formObject?.hotelName ) }&name=${ encodeURIComponent( formObject?.name ) }&hotelAddress=${ encodeURIComponent( formObject?.hotelAddress ) }&bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&target=${ encodeURIComponent(
-          `http://localhost:3000/${ formObject?.lang }/success?bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&hotelId=${encodeURIComponent( formObject?.hotelId )}`
-        ) }&user=${ encodeURIComponent( formObject?.name ) }`
-      );
+      // redirect(
+      //   `http://localhost:3000/${ formObject?.lang }/redirection?hotelName=${ encodeURIComponent( formObject?.hotelName ) }&name=${ encodeURIComponent( formObject?.name ) }&hotelAddress=${ encodeURIComponent( formObject?.hotelAddress ) }&bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&target=${ encodeURIComponent(
+      //     `http://localhost:3000/${ formObject?.lang }/success?bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&hotelId=${encodeURIComponent( formObject?.hotelId )}`
+      //   ) }&user=${ encodeURIComponent( formObject?.name ) }`
+      // );
+
+      console.log(bookingResult?.bookingId)
+      const responseObject = {
+        formObject,
+        bookingId : bookingResult?.bookingId
+      }
+      return responseObject;
     } else {
-      console.error("Booking failed:", bookingResult.message || bookingResult);
+      console.error("Booking failed:", bookingResult.message);
       throw new Error("Booking failed");
     }
   } catch (error) {

@@ -3,8 +3,9 @@ interface ActionButtonProps
     hotelId : string;
     bookingId: string;
     lang: string;
+    text: string
 }
-export default async function ActionButton ( { hotelId, lang, bookingId }: ActionButtonProps )
+export default async function ActionButton ( { hotelId, lang, bookingId, text }: ActionButtonProps )
 {
     console.log( lang, hotelId, bookingId );
     const actionUrl = `/api/download/invoice?hotelId=${hotelId}&bookingId=${bookingId}&lang=${lang}`;
@@ -20,7 +21,7 @@ export default async function ActionButton ( { hotelId, lang, bookingId }: Actio
                 className="px-6 py-3 bg-green-700 text-white rounded-lg hover:brightness-90"
             >
                 <i className="fas fa-download mr-2"></i>
-                Download Receipt
+                {text}
             </button>
         </form>
 

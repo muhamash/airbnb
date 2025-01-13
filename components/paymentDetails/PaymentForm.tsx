@@ -2,7 +2,7 @@
 
 import { paymentForm } from "@/utils/serverActions";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useTransition } from "react";
 import toast, { Toaster } from 'react-hot-toast';
 import TripDetails from "./TripDetails";
@@ -48,7 +48,7 @@ interface PaymentFormProps {
 export default  function PaymentForm ( { searchParams, languageData, params, calculateRentedPrice, userId, email, name }: PaymentFormProps )
 {
     const [ isPending, startTransition ] = useTransition();
-    // const router = useRouter();
+    const router = useRouter();
     const rate = searchParams?.rate ? JSON.parse( searchParams.rate ) : {};
 
     const handleSubmit = async (e) =>
@@ -62,12 +62,22 @@ export default  function PaymentForm ( { searchParams, languageData, params, cal
             {
                 try
                 {
-                    await paymentForm( formData );
-                    toast.success( "payment oka!!" );
+                    const response = await paymentForm( formData );
+                    console.log( response );
+                    const { formObject, bookingId } = response;
+                    if ( bookingId )
+                    {
+                        toast.success( "payment oka!!" );
+                        router.push(
+                            `http://localhost:3000/${ formObject?.lang }/redirection?hotelName=${ encodeURIComponent( formObject?.hotelName ) }&name=${ encodeURIComponent( formObject?.name ) }&hotelAddress=${ encodeURIComponent( formObject?.hotelAddress ) }&bookingId=${ encodeURIComponent( bookingId ) }&target=${ encodeURIComponent(
+                                `http://localhost:3000/${ formObject?.lang }/success?bookingId=${ encodeURIComponent( bookingId ) }&hotelId=${ encodeURIComponent( formObject?.hotelId ) }`
+                            ) }&user=${ encodeURIComponent( formObject?.name ) }`
+                        )
+                    }
                 }
                 catch ( error )
                 {
-                    toast.error("payment failed!!")
+                    toast.error( "payment failed!!" )
                     console.error( 'Payment submission failed:', error );
                 }
             } );

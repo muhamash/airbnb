@@ -1,7 +1,25 @@
-export default async function BookingCrad ( { bookingPromise }: Promise )
+import { formatDate } from "@/utils/utils";
+
+interface bookingPromise
+{
+    bookingPromise: Promise;
+    checkIn: string;
+    checkOut: string;
+    rooms?: string;
+    beds?: string;
+    rentType?: string;
+    total?: string;
+    bookingId: string;
+    paySum: string;
+    bookingSum: string;
+    unitPrice?: string;
+    bookingId: string;
+}
+
+export default async function BookingCrad ( { bookingPromise, checkIn,checkOut, paySum, bookingSum, rentType, rooms, beds,total, unitPrice, bookingId }: bookingPromise )
 {
     const booking = await bookingPromise;
-    console.log( "ffcff",booking );
+    // console.log( "ffcff",booking );
     return (
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
             <div className="flex items-start gap-6 mb-6 pb-6 border-b">
@@ -17,7 +35,7 @@ export default async function BookingCrad ( { bookingPromise }: Promise )
                         <span className="text-sm">4.6 (500+ reviews)</span>
                     </div>
                     <p className="text-zinc-600">
-                        One room and one living room with a straight sea view....
+                       {booking?.hotelAddress}
                     </p>
                 </div>
             </div>
@@ -25,32 +43,32 @@ export default async function BookingCrad ( { bookingPromise }: Promise )
             {/* <!-- Reservation Details --> */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <h3 className="font-semibold mb-4">Reservation Details</h3>
+                    <h3 className="font-semibold mb-4">{ bookingSum }</h3>
                     <div className="space-y-3">
                         <div className="flex justify-between">
-                            <span className="text-zinc-600 text-sm">Check-in</span>
-                            <span className="text-zinc-500 text-sm">Jan 3, 2025</span>
+                            <span className="text-zinc-600 text-sm">{checkIn}</span>
+                            <span className="text-zinc-500 text-sm">{ formatDate(booking?.checkIn) }</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-zinc-600 text-sm">Check-out</span>
-                            <span className="text-zinc-500 text-sm">Jan 8, 2025</span>
+                            <span className="text-zinc-600 text-sm">{checkOut}</span>
+                            <span className="text-zinc-500 text-sm">{ formatDate(booking?.checkOut) }</span>
                         </div>
                         <div className="flex justify-between">
-                            <span className="text-zinc-600 text-sm">Guests</span>
+                            <span className="text-zinc-600 text-sm">{rentType}</span>
                             <span className="text-zinc-500 text-sm">1 guest</span>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <h3 className="font-semibold mb-4">Payment Summary</h3>
+                    <h3 className="font-semibold mb-4">{paySum}</h3>
                     <div className="space-y-3">
                         <div className="flex justify-between">
-                            <span className="text-zinc-600">Total amount paid</span>
+                            <span className="text-zinc-600">{total}</span>
                             <span className="font-semibold">{booking?.paymentDetails?.total}tk</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                            <span className="text-zinc-600 text-sm">Booking ID</span>
+                            <span className="text-zinc-600 text-sm">{bookingId}</span>
                             <span>{booking?._id}</span>
                         </div>
                     </div>
