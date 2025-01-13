@@ -5,7 +5,8 @@ export async function GET(request: Request): Promise<Response> {
     try {
         const url = new URL(request.url);
         const id = url.pathname.split("/").pop();
-        const bookingId = url.searchParams.get("bookingId");
+        const bookingId = url.searchParams.get( "bookingId" );
+        
         const bookingsData = await getBookingByHotelId(id);
 
         if (!bookingsData || !Array.isArray(bookingsData)) {
@@ -22,7 +23,7 @@ export async function GET(request: Request): Promise<Response> {
         console.log("Bookings Data:", bookingsData);
 
         if (bookingId) {
-            const filteredBooking = bookingsData.find((booking) => 
+            const filteredBooking = bookingsData?.find((booking) => 
                 booking._id.toString() === bookingId
             );
             

@@ -73,13 +73,15 @@ export async function getReviewsByHotelId ( hotelId: string ): Promise<IReviews[
 export async function getBookingByHotelId(hotelId: string): Promise<IBooking[] | null> {
   await dbConnect();
 
-  console.log(hotelId)
-  try {
-    const bookings = await bookingsModel.findOne({ hotelId: new ObjectId(hotelId) });
+  console.log("Hotel ID:", hotelId);
 
-    console.log("Fetched Bookings:", bookings);
-    if (bookings) {
-      return bookings.bookings;
+  try {
+    const bookings = await bookingsModel.find().lean();
+    // console.log("Fetched Bookings:", bookings);
+    const foundBooking = bookings?.find((booking) => booking.hotelId.toString() === hotelId);
+
+    if (foundBooking) {
+      return foundBooking.bookings; 
     }
     return null;
   } catch (error) {
