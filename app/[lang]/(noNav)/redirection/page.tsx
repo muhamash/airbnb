@@ -62,8 +62,7 @@ export default function RedirectionPage() {
             },
         },
     };
-
-    console.log("bookingId")
+    // console.log("bookingId")
     return (
         <div className="w-full h-screen flex items-center justify-center py-20 bg-gray-900 text-white">
             <div className="text-center flex flex-col gap-5 items-center">

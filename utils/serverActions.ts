@@ -72,7 +72,7 @@ export async function paymentForm(formData) {
     const bookingResult = await responseBooking.json();
 
     if (responseBooking.status === 200 && bookingResult?.status === 200) {
-      console.log("Booking successful:", bookingResult);
+      // console.log("Booking successful:", bookingResult);
 
       const responseEmail = await fetch("http://localhost:3000/api/email", {
         method: "POST",

@@ -14,9 +14,10 @@ interface bookingPromise
     bookingSum: string;
     unitPrice?: string;
     bookingId: string;
+    count: string;
 }
 
-export default async function BookingCrad ( { bookingPromise, checkIn,checkOut, paySum, bookingSum, rentType, rooms, beds,total, unitPrice, bookingId }: bookingPromise )
+export default async function BookingCrad ( { bookingPromise, checkIn,checkOut, paySum, bookingSum, rentType,count, rooms, beds,total, unitPrice, bookingId }: bookingPromise )
 {
     const booking = await bookingPromise;
     // console.log( "ffcff",booking );
@@ -55,7 +56,8 @@ export default async function BookingCrad ( { bookingPromise, checkIn,checkOut, 
                         </div>
                         <div className="flex justify-between">
                             <span className="text-zinc-600 text-sm">{rentType}</span>
-                            <span className="text-zinc-500 text-sm">1 guest</span>
+                            <span className="text-zinc-500 text-sm">{booking?.rentType}</span>
+                            
                         </div>
                     </div>
                 </div>
@@ -63,6 +65,10 @@ export default async function BookingCrad ( { bookingPromise, checkIn,checkOut, 
                 <div>
                     <h3 className="font-semibold mb-4">{paySum}</h3>
                     <div className="space-y-3">
+                        <div className="flex justify-between text-sm">
+                            <span className="text-zinc-600 text-sm">{count}</span>
+                            <span>{booking?.rentCount}</span>
+                        </div>
                         <div className="flex justify-between">
                             <span className="text-zinc-600">{total}</span>
                             <span className="font-semibold">{booking?.paymentDetails?.total} ৳</span>

@@ -40,7 +40,7 @@ export default async function Success ({searchParams, params}: SuccessProps)
             </div>
 
             {/* <!-- Booking Details Card --> */}
-            <BookingCrad checkIn={language?.success?.checkIn} checkOut={language?.success?.checkOut} paySum={language?.success?.paySummery} bookingSum={language?.success?.reservationDetails} total={language?.success?.total} unitPrice={language?.success?.unitPrice} bookingPromise={bookingPromise} bookingId={language?.success?.bookingId} rentType={ language?.success?.rentType  } />
+            <BookingCrad checkIn={language?.success?.checkIn} checkOut={language?.success?.checkOut} paySum={language?.success?.paySummery} bookingSum={language?.success?.reservationDetails} total={language?.success?.total} unitPrice={language?.success?.unitPrice} bookingPromise={bookingPromise} bookingId={language?.success?.bookingId} rentType={language?.success?.rentType} count={ language?.success?.count } />
 
             {/* <!-- Next Steps --> */}
             <div className="bg-white rounded-lg shadow-sm p-6 mb-8 font-ubuntu">
