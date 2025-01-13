@@ -47,11 +47,11 @@ export default async function BookingCrad ( { bookingPromise }: Promise )
                     <div className="space-y-3">
                         <div className="flex justify-between">
                             <span className="text-zinc-600">Total amount paid</span>
-                            <span className="font-semibold">$364.20</span>
+                            <span className="font-semibold">{booking?.paymentDetails?.total}tk</span>
                         </div>
                         <div className="flex justify-between text-sm">
                             <span className="text-zinc-600 text-sm">Booking ID</span>
-                            <span>BOOK123456</span>
+                            <span>{booking?._id}</span>
                         </div>
                     </div>
                 </div>
