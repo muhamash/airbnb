@@ -108,9 +108,9 @@ export async function paymentForm(formData) {
       // Redirect to success page upon successful booking and email
       // const queryString = new URLSearchParams(formObject).toString();
       redirect(
-        `http://localhost:3000/${formObject?.lang}/redirection?hotelName=${formObject?.hotelName}&name=${formObject?.name}&hotelAddress=${formObject?.hotelAddress}&bookingId=${bookingResult?.bookingId}&target=${encodeURIComponent(
-          `http://localhost:3000/${formObject?.lang}/success?bookingId=${bookingResult?.bookingId}`
-        )}&user=${formObject?.name}&hotelName=${formObject?.hotelName}&hotelAddress=${formObject?.hotelAddress}`
+        `http://localhost:3000/${ formObject?.lang }/redirection?hotelName=${ encodeURIComponent( formObject?.hotelName ) }&name=${ encodeURIComponent( formObject?.name ) }&hotelAddress=${ encodeURIComponent( formObject?.hotelAddress ) }&bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&target=${ encodeURIComponent(
+          `http://localhost:3000/${ formObject?.lang }/success?bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&hotelId=${encodeURIComponent( formObject?.hotelId )}`
+        ) }&user=${ encodeURIComponent( formObject?.name ) }`
       );
     } else {
       console.error("Booking failed:", bookingResult.message || bookingResult);

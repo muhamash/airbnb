@@ -11,7 +11,8 @@ export default function RedirectionPage() {
     const router = useRouter();
     const target = searchParams?.get("target");
     const userName = searchParams?.get("name");
-    const hotelName = searchParams?.get("hotelName");
+    const hotelName = searchParams?.get( "hotelName" );
+    const bookingId = searchParams?.get( "bookingId" );
     const hotelAddress = searchParams?.get("hotelAddress");
     const [countdown, setCountdown] = useState(3);
     const [langData, setLangData] = useState(null);
@@ -62,6 +63,7 @@ export default function RedirectionPage() {
         },
     };
 
+    console.log("bookingId")
     return (
         <div className="w-full h-screen flex items-center justify-center py-20 bg-gray-900 text-white">
             <div className="text-center flex flex-col gap-5 items-center">
@@ -90,7 +92,7 @@ export default function RedirectionPage() {
                     transition={{ duration: 1, delay: 0.5 }}
                 >
                     {langData?.redirect?.text || "You have completed booking a property"} <strong>{hotelName} ;</strong>{" "}
-                    {langData?.redirect?.place || "at"} <strong>: {hotelAddress}</strong>
+                    {langData?.redirect?.place || "at"} <strong>: {hotelAddress} and your bookingId : ${bookingId} </strong>
                 </motion.p>
 
                 <motion.p
