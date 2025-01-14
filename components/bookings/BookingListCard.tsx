@@ -1,3 +1,4 @@
+import Link from "next/link";
 import ActionButton from "../success/ActionButton";
 
 interface BookingListCardProps
@@ -14,8 +15,6 @@ export default async function BookingListCard ({title, hotelId, bookingId, booki
 {
     // console.log( title, hotelId, bookingId, bookingDate );
     // console.log( lang, hotelId, bookingId );
-    const invoiceActionUrl = `/api/download/invoice?hotelId=${ hotelId }&bookingId=${ bookingId }&lang=${ lang }`;
-    
     return (
         <div
             className="bg-white shadow-md rounded-lg p-4 flex items-center justify-between hover:shadow-lg transition-shadow"
@@ -35,12 +34,13 @@ export default async function BookingListCard ({title, hotelId, bookingId, booki
                 </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button
-                    className="px-3 py-2 text-sm bg-teal-600 text-white rounded-lg hover:brightness-90"
+                <Link
+                    href={`http://localhost:3000/${lang}/trip`}
+                    className="px-3 py-2 text-sm bg-teal-600 text-white rounded-lg flex items-center justify-center hover:brightness-90"
                 >
                     <i className="fas fa-image mr-2"></i>
                     View Trip Details
-                </button>
+                </Link>
                 <ActionButton hotelId={hotelId} lang={lang} bookingId={bookingId} text={ " Download Receipt" } />
             </div>
         </div>
