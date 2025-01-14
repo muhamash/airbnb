@@ -1,5 +1,21 @@
+import ActionButton from "../success/ActionButton";
 
-export default async function BookingListCard() {
+interface BookingListCardProps
+{
+    title: string;
+    hotelId: string;
+    bookingId: string;
+    bookingDate: string;
+    hotelImage?: string;
+    lang: string;
+}
+
+export default async function BookingListCard ({title, hotelId, bookingId, bookingDate, lang}:BookingListCardProps)
+{
+    // console.log( title, hotelId, bookingId, bookingDate );
+    // console.log( lang, hotelId, bookingId );
+    const invoiceActionUrl = `/api/download/invoice?hotelId=${ hotelId }&bookingId=${ bookingId }&lang=${ lang }`;
+    
     return (
         <div
             className="bg-white shadow-md rounded-lg p-4 flex items-center justify-between hover:shadow-lg transition-shadow"
@@ -12,10 +28,10 @@ export default async function BookingListCard() {
                 />
                 <div>
                     <h2 className="text-lg text-zinc-800 font-semibold">
-                        Cozy Mountain Cabin
+                        {title}
                     </h2>
-                    <p className="text-zinc-500 text-sm">Booking Date: June 15, 2024</p>
-                    <p className="text-zinc-500 text-sm">Booking Code: #AB12345</p>
+                    <p className="text-zinc-500 text-sm">Booking Date: {bookingDate}</p>
+                    <p className="text-zinc-500 text-sm">Booking Code: #{bookingId}</p>
                 </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -24,12 +40,7 @@ export default async function BookingListCard() {
                 >
                     View Trip Details
                 </button>
-                <button
-                    className="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
-                >
-                    <i className="fas fa-download mr-2"></i>
-                    Download Receipt
-                </button>
+                <ActionButton hotelId={hotelId} lang={lang} bookingId={bookingId} text={ " Download Receipt" } />
             </div>
         </div>
     );

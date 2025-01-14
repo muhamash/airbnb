@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { formatDate } from "@/utils/utils";
 
 interface bookingPromise
@@ -75,7 +76,7 @@ export default async function BookingCrad ( { bookingPromise, checkIn,checkOut, 
                         </div>
                         <div className="flex justify-between text-sm">
                             <span className="text-zinc-600 text-sm">{bookingId}</span>
-                            <span>{booking?._id}</span>
+                            <span className="text-cyan-800">{booking?._id}</span>
                         </div>
                     </div>
                 </div>

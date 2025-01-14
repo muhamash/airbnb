@@ -7,7 +7,7 @@ interface ActionButtonProps
 }
 export default async function ActionButton ( { hotelId, lang, bookingId, text }: ActionButtonProps )
 {
-    console.log( lang, hotelId, bookingId );
+    // console.log( lang, hotelId, bookingId );
     const actionUrl = `/api/download/invoice?hotelId=${hotelId}&bookingId=${bookingId}&lang=${lang}`;
     console.log( "Constructed action URL:", actionUrl );
     return (

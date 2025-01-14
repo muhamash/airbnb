@@ -1,4 +1,3 @@
-
 export async function fetchDictionary(locale: string) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/language?locale=${locale}`, {
