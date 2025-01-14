@@ -8,6 +8,7 @@ export interface IPaymentDetails {
   aptSuite: string;
   city: string;
   state: string;
+  zipCode: string;
 }
 
 export interface IBooking extends Document {
@@ -33,14 +34,15 @@ export interface IBookings extends Document {
 }
 
 const PaymentDetailsSchema: Schema = new mongoose.Schema( {
-    cardNumber: { type: Number, required: true },
-    ccv: { type: Number, required: true },
-    expiration: { type: Date, required: true },
-    streetAddress: { type: String, required: true },
-    aptSuite: { type: String, required: true },
-    city: { type: String, required: true },
-    state: { type: String, required: true },
-    total: { type: String, required: true },
+  cardNumber: { type: Number, required: true },
+  ccv: { type: Number, required: true },
+  expiration: { type: Date, required: true },
+  streetAddress: { type: String, required: true },
+  aptSuite: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  total: { type: String, required: true },
+  zipCode: { type: String, required: true },
 } );
 
 const BookingSchema: Schema = new mongoose.Schema(
@@ -50,7 +52,7 @@ const BookingSchema: Schema = new mongoose.Schema(
             required: true,
             ref: "hotels",
     },
-        rentType: { type: String, required: true },
+    rentType: { type: String, required: true },
         checkIn: { type: Date, required: true },
         checkOut: { type: Date, required: true },
         userId: { type: String, required: true },

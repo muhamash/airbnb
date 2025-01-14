@@ -66,6 +66,7 @@ export async function paymentForm(formData) {
         aptSuite: formObject?.aptSuite,
         city: formObject?.city,
         state: formObject?.state,
+        zipCode: formObject?.zipcode
       } ),
     } );
 

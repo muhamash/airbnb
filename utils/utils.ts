@@ -50,7 +50,10 @@ export const updateSearchParams = async ( updates: Record<string, string | null>
 export async function generateHtml ( content: never, language:never, qrCodeData: string ) : Promise<string>
 {
   // console.log( language, content );
-  const days = await calculateDaysBetween(content?.checkIn, content?.checkOut)
+  const days: number = await calculateDaysBetween( content?.checkIn, content?.checkOut );
+  const calculatePrice: number = ( content?.rate * content?.rentCount ) * days;
+  const total: number = calculatePrice + 17.50 + 51.31;
+  
   return `<html>
 <head>
     <title>Booking Confirmation</title>
@@ -193,7 +196,7 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
                 </div>
                 <div style="display: flex; gap:30px;">
                     <p >${language?.invoice?.state}: ${content?.paymentDetails?.state}</p>
-                    <p >ZIP Code: 68527</p>
+                    <p >${language?.invoice?.zip}: ${content?.paymentDetails?.zipCode}</p>
                 </div>
             </div>
         </div>
@@ -203,20 +206,20 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
             <!-- bill -->
             <table style="background-color: teal; padding: 20px; border-radius: 10px; width: 100%; border-collapse: separate; border-spacing: 10px;">
     <tr>
-        <td style="font-size: 15px; color: #ffffff; padding: 10px;">Room Rate (1 night × $120):</td>
-        <td style="font-size: 15px; color: #ffffff; padding: 10px;">$120</td>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">${content?.rentCount} x ${content?.rentType} x ( ${days} ${language?.invoice?.nights} × ${content?.rate} ৳):</td>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">${calculatePrice} ৳</td>
     </tr>
     <tr>
-        <td style="font-size: 15px; color: #ffffff; padding: 10px;">Cleaning Fee:</td>
-        <td style="font-size: 15px; color: #ffffff; padding: 10px;">$17.50</td>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">${language?.invoice?.cFee}</td>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">17.50 ৳</td>
     </tr>
     <tr>
-        <td style="font-size: 15px; color: #ffffff; padding: 10px;">Service Fee:</td>
-        <td style="font-size: 15px; color: #ffffff; padding: 10px;">$51.31</td>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">${language?.invoice?.sFee}</td>
+        <td style="font-size: 15px; color: #ffffff; padding: 10px;">51.31 ৳</td>
     </tr>
     <tr>
-        <td style="font-size: 18px; color: #ffffff; font-weight: bold; padding: 10px;">Total Amount:</td>
-        <td style="font-size: 18px; color: #ffffff; font-weight: bold; padding: 10px;">$188.81</td>
+        <td style="font-size: 18px; color: #ffffff; font-weight: bold; padding: 10px;">${language?.invoice?.total}:</td>
+        <td style="font-size: 18px; color: #ffffff; font-weight: bold; padding: 10px;">${total} ৳</td>
     </tr>
             </table>
 
@@ -224,11 +227,11 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
         <div style="padding:5px;" class="contact">
             <p>${content?.hotelName}</p>
             <p>${content?.hotelAddress}</p>
-            <p>Tel: +1 234 567 8900 | Email: contact@hotel_sunshine.com</p>
+            <p>${language?.invoice?.tel}: *1 234 567 8900 | ${language?.invoice?.email}: contact@hotel_${content?.hotelName.slice(0,3)}.com</p>
         </div>
         <footer style="padding: 10px;">
     <p style="text-align: center; font-family: monospace; font-size: 8px; color: #333;">
-        © All rights reserved. <a href="https://github.com/muhamash" style="color: teal; text-decoration: none;">github.com/muhamash</a>
+        © ${language?.invoice?.coppyRight} <a href="https://github.com/muhamash" style="color: teal; text-decoration: none;">github.com/muhamash</a>
     </p>
         </footer>
     </div>

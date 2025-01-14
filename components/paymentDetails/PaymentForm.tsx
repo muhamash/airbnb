@@ -186,6 +186,7 @@ export default  function PaymentForm ( { searchParams, languageData, params, cal
                             <input
                                 required
                                 type="text"
+                                name="zipcode"
                                 placeholder={languageData?.placeholders?.zip}
                                 className="text-green-800 w-full text-sm p-2 bg-orange-100 rounded-md focus:border-1 border-violet-800"
                             />

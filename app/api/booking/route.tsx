@@ -27,6 +27,7 @@ export async function POST(request: Request): Promise<Response> {
       aptSuite,
       city,
       state,
+      zipCode
     } = await request.json();
 
     const requiredFields = {
@@ -49,6 +50,7 @@ export async function POST(request: Request): Promise<Response> {
       streetAddress,
       city,
       state,
+      zipCode
     };
 
     const missingFields = Object.entries(requiredFields)
@@ -116,6 +118,7 @@ export async function POST(request: Request): Promise<Response> {
         city,
         state,
         total,
+        zipCode
       },
     };
 
