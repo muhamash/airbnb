@@ -230,7 +230,7 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
             <p>${language?.invoice?.tel}: *1 234 567 8900 | ${language?.invoice?.email}: contact@hotel_${content?.hotelName.slice(0,3)}.com</p>
         </div>
         <footer style="padding: 10px;">
-    <p style="text-align: center; font-family: monospace; font-size: 8px; color: #333;">
+    <p style="text-align: center; font-family: monospace; font-size: 12px; color: #333;">
         © ${language?.invoice?.coppyRight} <a href="https://github.com/muhamash" style="color: teal; text-decoration: none;">github.com/muhamash</a>
     </p>
         </footer>
