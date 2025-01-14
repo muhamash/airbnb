@@ -1,3 +1,4 @@
+
 export async function fetchDictionary(locale: string) {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/language?locale=${locale}`, {
@@ -36,5 +37,27 @@ export async function fetchBookingDetails(hotelId: string, bookingId: string) {
   } catch (error) {
     console.error("Error fetching booking", error);
     throw error;
+  }
+}
+
+export async function fetchUserBookings(userId: string) {
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/booking?userId=${userId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (!response.status === 200) {
+      console.error("Failed to fetch user bookings:", response.status);
+      return null; 
+    }
+
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error while fetching user bookings:", error);
+    return null;
   }
 }

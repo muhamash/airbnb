@@ -101,6 +101,7 @@ export default  function PaymentForm ( { searchParams, languageData, params, cal
                 <input type="hidden" name="rate" value={rate[ searchParams?.selection ]} />
                 <input type="hidden" name="total" value={calculateRentedPrice} />
                 <input type="hidden" name="name" value={name} />
+                 {/* <input type="hidden" name="thumb" value={} /> */}
                 <input type="hidden" name="email" value={email} />
                 <input type="hidden" name="checkOut" value={searchParams?.checkOut} />
                 <input type="hidden" name="checkIn" value={searchParams?.checkIn} />

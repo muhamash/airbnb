@@ -90,7 +90,12 @@ export default function UserActions({ session }: UserActionsProps) {
                                     {session.user.email}
                                 </li>
                             </p>
-                            <Link  href={`http://localhost:3000/${ params?.lang }/create`} className="w-full bg-gradient-to-t from-blue-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md">
+                            <Link href={`http://localhost:3000/${ params?.lang }/bookings`} className="w-full bg-gradient-to-t from-sky-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md my-1">
+                                <li className="px-2 py-2 text-sm text-white transition-all duration-200 hover:bg-pink-600 font-mono rounded-md text-[12px] text-center">
+                                    Booking list
+                                </li>
+                            </Link>
+                            <Link href={`http://localhost:3000/${ params?.lang }/create`} className="w-full bg-gradient-to-t from-blue-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md">
                                 <li className="px-2 py-2 text-sm text-white transition-all duration-200 hover:bg-green-600 font-mono rounded-md text-[12px] text-center">
                                     Start your business
                                 </li>

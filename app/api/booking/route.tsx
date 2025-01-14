@@ -169,3 +169,50 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 }
+
+export async function GET(request) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
+  const page = parseInt(searchParams.get('page')) || 1;
+  const limit = 8;
+
+  if (!userId) {
+    return NextResponse.json({ message: 'User ID is required' }, { status: 400 });
+  }
+
+  try {
+    await dbConnect();
+
+    // Fetch all bookings and filter by userId
+    const allBookings = await bookingsModel.aggregate([
+      { $unwind: '$bookings' },
+      { $match: { 'bookings.userId': userId } }, 
+      { $skip: (page - 1) * limit }, 
+      { $limit: limit }, 
+    ]);
+
+    const totalCount = await bookingsModel.aggregate([
+      { $unwind: '$bookings' },
+      { $match: { 'bookings.userId': userId } },
+      { $count: 'total' },
+    ]);
+    
+    const total = totalCount[0]?.total || 0;
+
+    return NextResponse.json({
+      bookings: allBookings.map(doc => doc.bookings),
+      pagination: {
+        total,
+        page,
+        pages: Math.ceil(total / limit),
+      },
+      status: 200
+    });
+  } catch (error) {
+    console.error('Error while getting booking details:', error);
+    return NextResponse.json(
+      { message: 'Error while searching booking details', error: error.message },
+      { status: 500 }
+    );
+  }
+}
