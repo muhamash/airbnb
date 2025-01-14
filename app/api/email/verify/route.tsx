@@ -3,7 +3,7 @@ import { dbConnect } from '@/services/mongoDB';
 import { generateVerificationToken } from '@/utils/utils';
 import nodemailer from 'nodemailer';
 
-async function sendVerificationEmail(email: string, token: string) {
+async function sendVerificationEmail(email: string, token: string, lang: string) {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -12,7 +12,7 @@ async function sendVerificationEmail(email: string, token: string) {
         },
     });
 
-    const verificationLink = `${process.env.NEXT_PUBLIC_URL}/api/email/verify?token=${token}`;
+    const verificationLink = `${ process.env.NEXT_PUBLIC_URL }/${ lang }/verify/success?token=${ token }&email=${ email }`;
 
     const message = {
         from: process.env.GMAIL_ADDRESS_HOST,
@@ -24,32 +24,33 @@ async function sendVerificationEmail(email: string, token: string) {
     await transporter.sendMail(message);
 }
 
-export async function POST(request: Request): Promise<Response>  {
-    try
-    {
-        const email = request?.body;
+export async function POST(request: Request): Promise<Response> {
+    try {
+        const body = await request.json();
+        const {email, lang }= body;
         await dbConnect();
 
-        const existingUser = await userModel.findOne( { email } );
-        if ( existingUser )
-        {
-            if ( existingUser?.verified )
-            {
+        const existingUser = await userModel.findOne({ email });
+        if (existingUser) {
+            if (existingUser?.emailVerified) {
                 return new Response(
-                    JSON.stringify( {
+                    JSON.stringify({
                         success: false,
                         message: 'User already verified!',
                         status: 400,
-                    } ),
+                    }),
                     { status: 400, headers: { 'Content-Type': 'application/json' } }
                 );
             }
         }
 
-        const token = generateVerificationToken();
+        const token = await generateVerificationToken();
+        const tokenExpiration = new Date(Date.now() + 10 * 60 * 1000);
+
         existingUser.verificationToken = token;
+        existingUser.tokenExpiration = tokenExpiration;
         await existingUser.save();
-        await sendVerificationEmail(email, token);
+        await sendVerificationEmail(email, token, lang);
 
         return new Response(
             JSON.stringify({
@@ -59,9 +60,7 @@ export async function POST(request: Request): Promise<Response>  {
             }),
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
-    }
-    catch ( error )
-    {
+    } catch (error) {
         console.error('Failed to send email:', error);
         return new Response(
             JSON.stringify({
@@ -74,51 +73,68 @@ export async function POST(request: Request): Promise<Response>  {
     }
 }
 
-export async function GET(request:Request): Promise<Response> {
-    try
-    {
-        const token = request?.body;
-        if ( !token )
-        {
+export async function GET(request: Request): Promise<Response> {
+    try {
+        const url = new URL(request.url);
+        const token = url.searchParams.get('token');
+        
+        if (!token) {
             return new Response(
-                JSON.stringify( {
+                JSON.stringify({
                     success: false,
-                    message: 'no token!',
+                    message: 'No token!',
                     status: 400,
-                } ),
+                }),
                 { status: 400, headers: { 'Content-Type': 'application/json' } }
             );
         }
 
         await dbConnect();
-        const user = await userModel.findOne( { verificationToken: token } );
+        const user = await userModel.findOne({ verificationToken: token });
 
         if (!user) {
             return new Response(
-                JSON.stringify( {
+                JSON.stringify({
                     success: false,
                     message: 'User not found!',
                     status: 404,
-                } ),
+                }),
                 { status: 404, headers: { 'Content-Type': 'application/json' } }
             );
         }
 
-        user.verified = true;
+        // Check if the token has expired
+        const currentTime = new Date();
+        if (currentTime > user.tokenExpiration) {
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    message: 'Verification token has expired!',
+                    status: 400,
+                }),
+                { status: 400, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
+
+        user.emailVerified = true;
         user.verificationToken = null;
+        user.tokenExpiration = null; 
         await user.save();
 
         return new Response(
-            JSON.stringify( {
+            JSON.stringify({
                 success: true,
-                message: 'Verification oka!!!!',
+                message: 'Verification successful!',
                 status: 200,
-            } ),
-            { status: 200, headers: { 'Content-Type': 'application/json' } }
+            }),
+            {
+                status: 200,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
         );
-    }
-    catch ( error )
-    {
+    } catch (error) {
         console.error('Failed to verify:', error);
         return new Response(
             JSON.stringify({

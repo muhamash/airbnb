@@ -44,13 +44,13 @@ export default function Form({ isLogIn }: FormProps) {
     // Login handling
     const handleLogin = async (formData: FormData) => {
         try {
-            const res = await fetch("http://localhost:3000/api/auth/login", {
+            const res = await fetch( "http://localhost:3000/api/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(Object.fromEntries(formData.entries())),
-            });
+                body: JSON.stringify( Object.fromEntries( formData.entries() ) ),
+            } );
 
             const result = await res.json();
             // console.log( result );
@@ -76,7 +76,7 @@ export default function Form({ isLogIn }: FormProps) {
             });
 
             if (res.status === 201) {
-                router.push("/login");
+                router.push( "/verify" );
             } else {
                 const result = await res.json();
                 setError(result.message || "Registration failed.");

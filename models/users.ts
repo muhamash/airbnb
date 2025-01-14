@@ -5,9 +5,10 @@ export interface IUser extends Document {
     email: string;
     password: string;
     image?: string;
-    // emailVerified: boolean;
-    verified: boolean;
+    emailVerified: boolean;
+    // verified: boolean;
     verificationToken: string | null;
+    tokenExpiration: Date;
 };
 
 const userSchema: Schema<IUser> = new Schema( {
@@ -27,12 +28,13 @@ const userSchema: Schema<IUser> = new Schema( {
         required: false,
         type: String
     },
-    verified: { type: Boolean, default: false },
-    // emailVerified: {
-    //     required: true,
-    //     type: Boolean,
-    // },
+    // verified: { type: Boolean, default: false },
+    emailVerified: {
+        default: false,
+        type: Boolean,
+    },
     verificationToken: { type: String, default: null },
+    tokenExpiration: { type: Date, default: null },
 } );
 
 export const userModel: Model<IUser> =

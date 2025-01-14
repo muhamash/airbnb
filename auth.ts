@@ -129,15 +129,6 @@ export const {
                     throw new Error( "User not found" );
                 }
 
-                if ( !user.verified )
-                {
-                    console.error( 'User email not verified:', credentials.email );
-                    return {
-                        error: 'EmailNotVerified',
-                        email: user.email,
-                    };
-                }
-
                 if ( typeof user.password === "string" && typeof credentials.password === "string" )
                 {
                     const isMatch = await bcrypt.compare( credentials.password, user.password );
@@ -174,14 +165,6 @@ export const {
         {
             if ( account && user )
             {
-                if ( !user.verified )
-                {
-                    return {
-                        error: 'EmailNotVerified',
-                        email: user.email,
-                    };
-                    // redirect( `/verify?email=${ user.email }` );
-                }
                 return {
                     accessToken: account.access_token,
                     accessTokenExpires: Date.now() + ( account.expires_in || 0 ) * 1000,
@@ -200,23 +183,9 @@ export const {
         },
         async session ( { session, token }: { session: MySession; token: MyToken } ): Promise<MySession>
         {
-            if ( token.error === 'EmailNotVerified' )
-            {
-                session.error = 'EmailNotVerified';
-                session.email = token.email;
-                return {
-                    error: 'EmailNotVerified',
-                    email: session.email,
-                };
-                // redirect( `/verify?email=${ session.email }` );
-            }
-            else
-            {
-                session.user = token.user;
-                session.accessToken = token.accessToken;
-                session.error = token.error;
-                // session.user = token.user;
-            }
+            session.user = token.user;
+            session.accessToken = token.accessToken;
+            session.error = token.error;
 
             // console.log( "sessions auth--->>>>", session );
             return session;

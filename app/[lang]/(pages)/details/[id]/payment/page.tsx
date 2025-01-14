@@ -37,16 +37,17 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
         const cleaningFee = 17.50; 
         const serviceFee = 51.31;
         const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;
-        // console.log(  searchParams?.[ searchParams?.selection ] );
+        // console.log(  authPromise );
 
         return (
             <div
                 className="max-w-7xl mx-auto px-6 py-[100px]">
                 <BackButton language={params?.lang} text={responseData?.payment?.back} />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
                     <PaymentForm
+                        isVerified={user?.user?.emailVerified}
                         name={user?.user?.name}
-                        userId={user?.user?.id}
+                        userId={user?.user?._id}
                         email={user?.user?.email}
                         calculateRentedPrice={totalPrice}
                         imageUrl={hotel?.data?.thumbNailUrl}

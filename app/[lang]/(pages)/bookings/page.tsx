@@ -14,7 +14,7 @@ export default async function Bookings ({params}: Params)
 {
   const session: Session | null = await auth();
   const usersBookings = await fetchUserBookings( session?.user?.id );
-  // console.log(usersBookings.bookings)
+  // console.log( session );
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-[130px] md:py-[100px]">

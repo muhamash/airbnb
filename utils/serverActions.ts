@@ -23,9 +23,10 @@ interface BookingFormObject {
 
 export async function handleAuth(formData: FormData) {
     const action = formData.get( "action" );
-    // const email = formData.get( "email" );
+  // const email = formData.get( "email" );
+  // console.log(formData)
     if (typeof action === "string") {
-      await signIn( action, { redirectTo: `/verify` } );
+      await signIn( action, { redirectTo: `/bookings` } );
     } else {
       console.error( "Action is missing or invalid." );
     }
@@ -39,7 +40,7 @@ export async function paymentForm(formData) {
     formObject[key] = value;
   });
 
-  console.log( formObject );
+  // console.log( formObject );
   try {
     const responseBooking = await fetch( "http://localhost:3000/api/booking", {
       method: "POST",
