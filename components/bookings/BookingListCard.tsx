@@ -1,3 +1,4 @@
+import { formatDate } from "@/utils/utils";
 import Link from "next/link";
 import ActionButton from "../success/ActionButton";
 
@@ -29,13 +30,13 @@ export default async function BookingListCard ({title, hotelId, bookingId, booki
                     <h2 className="text-lg text-zinc-800 font-semibold">
                         {title}
                     </h2>
-                    <p className="text-zinc-500 text-sm">Booking Date: {bookingDate}</p>
+                    <p className="text-zinc-500 text-sm">Booking Date: {await formatDate(bookingDate)}</p>
                     <p className="text-zinc-500 text-sm">Booking Code: #{bookingId}</p>
                 </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                    href={`http://localhost:3000/${lang}/trip`}
+                    href={`http://localhost:3000/${lang}/trip?bookingId=${bookingId}&hotelId=${hotelId}&scan=false`}
                     className="px-3 py-2 text-sm bg-teal-600 text-white rounded-lg flex items-center justify-center hover:brightness-90"
                 >
                     <i className="fas fa-image mr-2"></i>
