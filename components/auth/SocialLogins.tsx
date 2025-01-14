@@ -1,6 +1,6 @@
 import { handleAuth } from "@/utils/serverActions";
 
-export default function SocialLogins ()
+export default async function SocialLogins ()
 {
     return (
         <form action={handleAuth} className="space-y-4 mb-4">

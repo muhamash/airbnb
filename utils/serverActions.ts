@@ -22,13 +22,14 @@ interface BookingFormObject {
 
 
 export async function handleAuth(formData: FormData) {
-    const action = formData.get("action");
+    const action = formData.get( "action" );
+    // const email = formData.get( "email" );
     if (typeof action === "string") {
-        await signIn(action, { redirectTo: '/bookings' });
+      await signIn( action, { redirectTo: `/verify` } );
     } else {
-        console.error("Action is missing or invalid.");
+      console.error( "Action is missing or invalid." );
     }
-}
+};
 
 export async function paymentForm(formData) {
   const formObject: BookingFormObject = {};

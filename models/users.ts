@@ -6,6 +6,8 @@ export interface IUser extends Document {
     password: string;
     image?: string;
     // emailVerified: boolean;
+    verified: boolean;
+    verificationToken: string | null;
 };
 
 const userSchema: Schema<IUser> = new Schema( {
@@ -25,10 +27,12 @@ const userSchema: Schema<IUser> = new Schema( {
         required: false,
         type: String
     },
+    verified: { type: Boolean, default: false },
     // emailVerified: {
     //     required: true,
     //     type: Boolean,
-    // }
+    // },
+    verificationToken: { type: String, default: null },
 } );
 
 export const userModel: Model<IUser> =

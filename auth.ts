@@ -38,13 +38,11 @@ interface MyToken {
     user: User;
     error?: string;
 }
-
 interface RefreshedTokens {
     access_token: string;
     expires_in: number;
     refresh_token: string;
 }
-
 interface MySession {
     user: User;
     accessToken: string;
@@ -82,7 +80,7 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
 
         const refreshedTokens: RefreshedTokens = await response.json();
 
-        // console.log( "response data: ", refreshedTokens );
+        console.log( "response data: ", refreshedTokens );
         if (!response.ok) {
             throw refreshedTokens;
         }
@@ -95,7 +93,6 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
         };
     } catch (error) {
         console.error("Error refreshing access token:", error);
-
         return {
             ...token,
             error: "RefreshAccessTokenError"
@@ -130,6 +127,15 @@ export const {
                 {
                     console.error( "User not found:", credentials.email );
                     throw new Error( "User not found" );
+                }
+
+                if ( !user.verified )
+                {
+                    console.error( 'User email not verified:', credentials.email );
+                    return {
+                        error: 'EmailNotVerified',
+                        email: user.email,
+                    };
                 }
 
                 if ( typeof user.password === "string" && typeof credentials.password === "string" )
@@ -168,6 +174,14 @@ export const {
         {
             if ( account && user )
             {
+                if ( !user.verified )
+                {
+                    return {
+                        error: 'EmailNotVerified',
+                        email: user.email,
+                    };
+                    // redirect( `/verify?email=${ user.email }` );
+                }
                 return {
                     accessToken: account.access_token,
                     accessTokenExpires: Date.now() + ( account.expires_in || 0 ) * 1000,
@@ -186,9 +200,23 @@ export const {
         },
         async session ( { session, token }: { session: MySession; token: MyToken } ): Promise<MySession>
         {
-            session.user = token.user;
-            session.accessToken = token.accessToken;
-            session.error = token.error;
+            if ( token.error === 'EmailNotVerified' )
+            {
+                session.error = 'EmailNotVerified';
+                session.email = token.email;
+                return {
+                    error: 'EmailNotVerified',
+                    email: session.email,
+                };
+                // redirect( `/verify?email=${ session.email }` );
+            }
+            else
+            {
+                session.user = token.user;
+                session.accessToken = token.accessToken;
+                session.error = token.error;
+                // session.user = token.user;
+            }
 
             // console.log( "sessions auth--->>>>", session );
             return session;

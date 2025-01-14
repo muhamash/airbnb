@@ -1,4 +1,5 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import crypto from 'crypto';
 
 export async function formatDate ( dateString: string ): Promise<string>
 {
@@ -237,4 +238,8 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
     </div>
 </body>
             </html>`;
+}
+
+export async function generateVerificationToken() : Promise<number> {
+    return crypto.randomBytes(32).toString('hex');
 }
