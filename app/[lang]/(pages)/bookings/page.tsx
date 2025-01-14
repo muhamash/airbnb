@@ -17,7 +17,7 @@ export default async function Bookings ({params}: Params)
         {
           usersBookings?.bookings && usersBookings?.bookings?.length !== 0 ? (
             usersBookings?.bookings?.map( book => (
-              <BookingListCard title={book?.hotelName} hotelId={book?.hotelId} bookingId={book?._id} bookingDate={book?.createdAt} key={book?._id} lang={ params?.lang } />
+              <BookingListCard hotelImage={book?.thumbnail} title={book?.hotelName} hotelId={book?.hotelId} bookingId={book?._id} bookingDate={book?.createdAt} key={book?._id} lang={ params?.lang } />
             ) )
           ) : (
             <Empty />

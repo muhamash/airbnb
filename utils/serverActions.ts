@@ -38,7 +38,7 @@ export async function paymentForm(formData) {
     formObject[key] = value;
   });
 
-  console.log( formObject?.cvv );
+  console.log( formObject );
   try {
     const responseBooking = await fetch( "http://localhost:3000/api/booking", {
       method: "POST",
@@ -66,7 +66,8 @@ export async function paymentForm(formData) {
         aptSuite: formObject?.aptSuite,
         city: formObject?.city,
         state: formObject?.state,
-        zipCode: formObject?.zipcode
+        zipCode: formObject?.zipcode,
+        thumbnail: formObject?.thumbnail
       } ),
     } );
 

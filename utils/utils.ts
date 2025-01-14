@@ -145,7 +145,7 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
             <h1>${language?.invoice?.head}</h1>
             <div style="display: flex; flex-direction: column; gap: 5px;">
                 <img style="align-self: center;" src=${ qrCodeData } class="gradient-qr" style="height: 80px; width: 80px; padding:5px; margin:3px;" alt="qrCode"/>
-                <p> ${language?.invoice?.date}  : ${formatDate(content?.createdAt)}</p>
+                <p> ${language?.invoice?.date}  : ${await formatDate(content?.createdAt)}</p>
                 <p>${language?.invoice?.bookingId} : ${content?._id}</p>
             </div>
         </div>
@@ -169,11 +169,11 @@ export async function generateHtml ( content: never, language:never, qrCodeData:
                 <table style="border-radius: 8px; width: 100%; border-collapse: collapse;">
                 <tr>
                     <td style="font-size: 15px; color: #080808; padding: 5px;">${language?.invoice?.checkIn}:</td>
-                    <td style="font-size: 15px; color: #080808; padding: 5px;">${formatDate(content?.checkIn)}</td>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">${await  formatDate(content?.checkIn)}</td>
                 </tr>
                 <tr>
                     <td style="font-size: 15px; color: #080808; padding: 5px;">${language?.invoice?.checkOut}:</td>
-                    <td style="font-size: 15px; color: #080808; padding: 5px;">${formatDate(content?.checkOut)}</td>
+                    <td style="font-size: 15px; color: #080808; padding: 5px;">${await formatDate(content?.checkOut)}</td>
                 </tr>
                 <tr>
                     <td style="font-size: 15px; color: #080808; padding: 5px;">${language?.invoice?.nights}:</td>

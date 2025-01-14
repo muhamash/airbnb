@@ -27,7 +27,8 @@ export async function POST(request: Request): Promise<Response> {
       aptSuite,
       city,
       state,
-      zipCode
+      zipCode,
+      thumbnail
     } = await request.json();
 
     const requiredFields = {
@@ -50,7 +51,8 @@ export async function POST(request: Request): Promise<Response> {
       streetAddress,
       city,
       state,
-      zipCode
+      zipCode,
+      thumbnail
     };
 
     const missingFields = Object.entries(requiredFields)
@@ -70,7 +72,7 @@ export async function POST(request: Request): Promise<Response> {
 
     await dbConnect();
 
-    const hotelStocks = await getStockByHotelId(hotelId);
+    const hotelStocks = await getStockByHotelId( hotelId );
     if (!hotelStocks) {
       return NextResponse.json(
         { message: "Hotel stocks not found.", status: 404 },
@@ -97,7 +99,6 @@ export async function POST(request: Request): Promise<Response> {
 
     const bookingDetails = {
       rate,
-      total,
       name,
       email,
       checkOut,
@@ -109,6 +110,7 @@ export async function POST(request: Request): Promise<Response> {
       userId,
       hotelName,
       hotelAddress,
+      thumbnail,
       paymentDetails: {
         cardNumber,
         expiration,

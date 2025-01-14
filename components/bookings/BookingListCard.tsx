@@ -1,4 +1,5 @@
 import { formatDate } from "@/utils/utils";
+import Image from "next/image";
 import Link from "next/link";
 import ActionButton from "../success/ActionButton";
 
@@ -12,7 +13,7 @@ interface BookingListCardProps
     lang: string;
 }
 
-export default async function BookingListCard ({title, hotelId, bookingId, bookingDate, lang}:BookingListCardProps)
+export default async function BookingListCard ({title,hotelImage, hotelId, bookingId, bookingDate, lang}:BookingListCardProps)
 {
     // console.log( title, hotelId, bookingId, bookingDate );
     // console.log( lang, hotelId, bookingId );
@@ -21,9 +22,11 @@ export default async function BookingListCard ({title, hotelId, bookingId, booki
             className="bg-white shadow-md rounded-lg p-4 flex items-center justify-between hover:shadow-lg transition-shadow"
         >
             <div className="flex items-center space-x-4">
-                <img
-                    src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                <Image
+                    src={hotelImage}
                     alt="Property Thumbnail"
+                    width={100}
+                    height={100}
                     className="w-24 h-24 object-cover rounded-md"
                 />
                 <div>

@@ -1,4 +1,3 @@
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Image from "next/image";
 
 interface Buttons {
@@ -27,18 +26,13 @@ interface PriceCardProps {
     calculateRentedPrice: number;
     ratings: number;
     days: number;
-    params: Params;
+    imageUrl: string;
+    hotelName: string;
 }
 
 
-export default async function PriceCard({ languageData,days, calculateRentedPrice, params, searchParams }: PriceCardProps) {
-    try {
-        // Create promises
-        const hotelPromise = fetch(`http://localhost:3000/api/hotels/${params?.id}`);
-
-        // Resolve both promises concurrently
-        const [ hotelResponse ] = await Promise.all( [ hotelPromise ] );
-        const hotel = await hotelResponse.json();
+export default async function PriceCard({ languageData,days, calculateRentedPrice, searchParams, imageUrl, hotelName }: PriceCardProps) {
+    try {        
         const cleaningFee = 17.50; 
         const serviceFee = 51.31;
         const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;
@@ -49,7 +43,7 @@ export default async function PriceCard({ languageData,days, calculateRentedPric
             <div className="bg-white p-6 rounded-lg mb-8 sticky top-0 shadow-sm shadow-orange-300 border-[0.4px] border-orange-300 hover:shadow-md transition-all duration-200">
                 <div className="flex items-start gap-4 mb-6">
                     <Image
-                        src={hotel?.data?.thumbNailUrl}
+                        src={imageUrl}
                         alt="Property"
                         width={100}
                         height={100}
@@ -57,7 +51,7 @@ export default async function PriceCard({ languageData,days, calculateRentedPric
                     />
                     <div>
                         <p className="text-sm text-wrap">
-                            {hotel?.data?.name}
+                            {hotelName}
                         </p>
                         <div className="flex items-center">
                             <i className="fas text-orange-500 fa-star text-sm mr-1"></i>

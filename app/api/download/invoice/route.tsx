@@ -31,7 +31,7 @@ export async function POST(request: Request): Promise<Response> {
         ] );
 
         const qrCodeData = await QRCode.toDataURL(
-            `http://localhost:3000/bn/redirect?bookingId=${ bookingId }&hotelName=${ bookingDetails?.hotelName }&name=${ bookingDetails?.name }&hotelAddress=${ bookingDetails?.hotelAddress }&target=${ encodeURIComponent( `http://localhost:3000/${ lang }/success?bookingId=${ encodeURIComponent( bookingId ) }&hotelId=${ encodeURIComponent( hotelId ) }` ) }`
+            `http://localhost:3000/bn/redirect?bookingId=${ bookingId }&hotelName=${ bookingDetails?.hotelName }&name=${ bookingDetails?.name }&hotelAddress=${ bookingDetails?.hotelAddress }&target=http://localhost:3000/${ lang }/trip?bookingId=${ bookingId }&hotelId=${ hotelId }`
         );
         // console.log( qrCodeData );
         // console.log( "from booking api", bookingDetails );

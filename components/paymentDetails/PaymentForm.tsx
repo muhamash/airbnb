@@ -36,6 +36,7 @@ interface PaymentFormProps {
     email: string;
     userId: string;
     name: string;
+    imageUrl: string;
 }
 
 // interface FormData
@@ -45,13 +46,14 @@ interface PaymentFormProps {
 //     action: string;
 // }
 
-export default  function PaymentForm ( { searchParams, languageData, params, calculateRentedPrice, userId, email, name }: PaymentFormProps )
+export default  function PaymentForm ( { searchParams, languageData, params, calculateRentedPrice, userId, email, name, imageUrl }: PaymentFormProps )
 {
     const [ isPending, startTransition ] = useTransition();
     const router = useRouter();
     const rate = searchParams?.rate ? JSON.parse( searchParams.rate ) : {};
+    console.log( imageUrl, params?.lang, params?.id );
 
-    const handleSubmit = async (e) =>
+    const handleSubmit = async (e:React.ChangeEvent<HTMLInputElement>) =>
     {
         e.preventDefault();
         const formData = new FormData( e.target );
@@ -99,6 +101,7 @@ export default  function PaymentForm ( { searchParams, languageData, params, cal
             <TripDetails languageData={languageData} />
             <form className="mt-3" onSubmit={handleSubmit}>
                 <input type="hidden" name="rate" value={rate[ searchParams?.selection ]} />
+                <input type="hidden" name="thumbnail" value={imageUrl } />
                 <input type="hidden" name="total" value={calculateRentedPrice} />
                 <input type="hidden" name="name" value={name} />
                  {/* <input type="hidden" name="thumb" value={} /> */}
