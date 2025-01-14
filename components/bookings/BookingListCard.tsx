@@ -38,6 +38,7 @@ export default async function BookingListCard ({title, hotelId, bookingId, booki
                 <button
                     className="px-3 py-2 text-sm bg-teal-600 text-white rounded-lg hover:brightness-90"
                 >
+                    <i className="fas fa-image mr-2"></i>
                     View Trip Details
                 </button>
                 <ActionButton hotelId={hotelId} lang={lang} bookingId={bookingId} text={ " Download Receipt" } />
