@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import { formatDate } from "@/utils/utils";
-import Image from "next/image";
 import Ratings from "./Ratings";
 import ReviewClient from "./ReviewClient";
 
@@ -23,11 +23,11 @@ export default async function ReviewCard({ review, isUserHasReview }: ReviewProp
             <div className="flex flex-col gap-4 space-y-4">
                 <div className="flex items-center gap-2">
                     <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden">
-                        <Image
+                        <img
                             src={review?.image || "/default-avatar.jpg"}
                             alt={review?.name || "Anonymous"}
-                            width={48}
-                            height={48}
+                            // width={48}
+                            // height={48}
                             className="w-full h-full object-cover"
                         />
                     </div>

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import PreviewButton from "@/components/create/PreviewButton";
@@ -211,7 +212,7 @@ export default function Create () {
                     {errors.propertyLocation && <span className="text-red-500 text-sm">{errors.propertyLocation.message}</span>}
                 </div>
 
-                {/* Image Gallery */}
+                {/* img Gallery */}
                 <div className="grid grid-cols-4 grid-rows-2 gap-4 mb-8 h-[500px]">
                     {Array(5)
                         .fill(null)
@@ -228,7 +229,7 @@ export default function Create () {
                                     className="w-full h-full object-cover rounded-lg"
                                 />
                                 <input
-                                    {...register(`image${idx}`, { required: "Image is required" })}
+                                    {...register(`image${idx}`, { required: "img is required" })}
                                     placeholder={`https://placehold.co/600x400`}
                                     defaultValue={formData[`image${idx}`] as string}
                                     className="text-sm w-11/12 p-2 border border-primary rounded-lg mt-2 absolute left-1/2 -translate-x-1/2 bottom-2 bg-white"

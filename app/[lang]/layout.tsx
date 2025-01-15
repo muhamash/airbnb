@@ -1,8 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import { kanit, playfairDisplay, rubik, ubuntu } from "@/components/fonts/font";
 import { dbConnect } from "@/services/mongoDB";
 import type { Metadata } from "next";
 import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import Image from "next/image";
 import "../globals.css";
 
 export const metadata: Metadata = {
@@ -38,7 +38,7 @@ export default async function RootLayout({
         className={`${ kanit.className } ${ playfairDisplay.className } ${ rubik.className } ${ ubuntu.className } antialiased bg-gray-100 relative`}
       >
         <div className="absolute inset-0 bg-cover bg-center">
-          <Image
+          <img
             alt="Login background"
             src="/homeBg.jpg"
             layout="fill"

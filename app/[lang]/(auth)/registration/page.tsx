@@ -1,11 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 import Form from "@/components/auth/Form";
-import Image from "next/image";
 
 export default function RegistrationPage() {
   return (
     <div className="relative w-full h-screen flex justify-center items-center">
       <div className="absolute inset-0 bg-cover bg-center">
-        <Image
+        <img
           alt="Login background"
           src="/assets/bgPay.jpg"
           layout="fill"

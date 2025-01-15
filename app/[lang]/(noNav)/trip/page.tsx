@@ -1,10 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import CardContainer from "@/components/home/CardContainer";
 import BackButton from "@/components/paymentDetails/BackButton";
 import { fetchBookingDetails, fetchDictionary } from "@/utils/fetchFunction";
 import { formatDate } from "@/utils/utils";
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -39,11 +39,11 @@ export default async function TripDetails ({searchParams, params}: TripProps)
         <div className="bg-gray-100 min-h-screen">
             {/* Header Section */}
             <div className="relative">
-                <Image
+                <img
                     src={bookings?.thumbnail}
                     alt="Trip Banner"
-                    width={700}
-                    height={200}
+                    // width={700}
+                    // height={200}
                     className="w-full h-72 object-cover"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">

@@ -95,7 +95,7 @@ export default  function PaymentForm ( {isVerified, searchParams, languageData, 
     {
         redirect( "/verify" );
     }
-    // console.log( userId );
+    console.log( userId );
     // if (!session) return <div>Loading user data...</div>;
     return (
         <div>
