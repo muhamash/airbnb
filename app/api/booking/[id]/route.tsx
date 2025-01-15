@@ -1,13 +1,19 @@
 import { getBookingByHotelId } from "@/queries";
 import { NextResponse } from "next/server";
 
+interface Booking {
+    _id: string;
+    [key: string]: any;
+}
+
+
 export async function GET(request: Request): Promise<Response> {
     try {
         const url = new URL(request.url);
         const id = url.pathname.split("/").pop();
         const bookingId = url.searchParams.get( "bookingId" );
         
-        const bookingsData = await getBookingByHotelId(id);
+        const bookingsData = await getBookingByHotelId(id as string);
 
         if (!bookingsData || !Array.isArray(bookingsData)) {
             return NextResponse.json(
@@ -23,7 +29,7 @@ export async function GET(request: Request): Promise<Response> {
         console.log("Bookings Data:", bookingsData);
 
         if (bookingId) {
-            const filteredBooking = bookingsData?.find((booking) => 
+            const filteredBooking = bookingsData?.find((booking : Booking) => 
                 booking._id.toString() === bookingId
             );
             
