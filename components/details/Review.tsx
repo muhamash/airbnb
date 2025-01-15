@@ -5,7 +5,7 @@ import ReviewCard from "./ReviewCard";
 
 interface ReviewProps
 {
-  reviewPromise: Promise<[ string, string ]>;
+  reviewPromise: Promise;
   searchParams: URLSearchParams;
   languagePromise: Promise;
 }

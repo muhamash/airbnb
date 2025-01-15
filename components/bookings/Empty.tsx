@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-export default async function Empty({ text, ex, no}: string) {
+interface EmptyProps {
+    [ key: string ]: string;
+}
+
+export default async function Empty({ text, ex, no}: EmptyProps) {
     return (
         <div id="empty-state" className=" text-center py-12">
             <div className="flex items-center justify-center w-full h-full py-10">

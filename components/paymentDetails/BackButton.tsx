@@ -2,7 +2,12 @@
 
 import { useRouter } from "next/navigation";
 
-export default function BackButton ({text}:string)
+interface BackProps
+{
+    text: string;
+}
+
+export default function BackButton ({text}: BackProps)
 {
     const router = useRouter();
     return (

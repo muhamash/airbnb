@@ -43,7 +43,9 @@ export async function generateMetadata({ params }: { params: Params }) {
     }
 }
 
-export default function layout({children}:React.ReactNode) {
+export default function layout({children}:Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <>
       {children}

@@ -3,7 +3,7 @@ import BookingListCard from "@/components/bookings/BookingListCard";
 import Empty from "@/components/bookings/Empty";
 import { fetchDictionary, fetchUserBookings } from "@/utils/fetchFunction";
 import type { Metadata } from "next";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+import { Session } from "next-auth";
 
 export const metadata: Metadata = {
   title: "Airbnb || Booking list",
@@ -12,15 +12,35 @@ export const metadata: Metadata = {
 
 interface BookingsProps
 {
-  params: Params;
+  params: Promise<{ slug: string }>;
+}
+
+interface Booking {
+  _id: string;
+  hotelId: string;
+  hotelName: string;
+  thumbnail: string;
+  createdAt: string;
 }
 
 export default async function Bookings ({params}: BookingsProps)
 {
   const session: Session | null = await auth();
-  const usersBookings = await fetchUserBookings( session?.user?.id );
-  const language = await fetchDictionary( params?.lang );
+  const userId = session?.user?.id;
+  const { slug } = await params;
+  const lang = slug;
+
+  if (!userId) {
+
+    return <div>Error: User not authenticated or session expired</div>;
+  }
+
+  const usersBookings = await fetchUserBookings( userId );
+  const language = await fetchDictionary( lang );
   // console.log( session );
+  const text = language?.booking?.text as string;
+  const no = language?.booking?.no as string;
+  const ex = language?.booking?.ex as string;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-[130px] md:py-[100px]">
@@ -28,11 +48,11 @@ export default async function Bookings ({params}: BookingsProps)
       <div className="space-y-4">
         {
           usersBookings?.bookings && usersBookings?.bookings?.length !== 0 ? (
-            usersBookings?.bookings?.map( book => (
-              <BookingListCard hotelImage={book?.thumbnail} title={book?.hotelName} hotelId={book?.hotelId} bookingId={book?._id} bookingDate={book?.createdAt} key={book?._id} lang={ params?.lang } />
+            usersBookings?.bookings?.map(( book : Booking) => (
+              <BookingListCard hotelImage={book?.thumbnail} title={book?.hotelName} hotelId={book?.hotelId} bookingId={book?._id} bookingDate={book?.createdAt} key={book?._id} lang={ lang } />
             ) )
           ) : (
-              <Empty text={ language?.booking?.text } no={ language?.booking?.no } ex={ language?.booking?.ex }/>
+              <Empty text={text} no={no} ex={ex} />
           )
         }
       </div>

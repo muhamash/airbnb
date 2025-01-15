@@ -2,7 +2,6 @@ import Property from "@/components/details/Property";
 import Review from "@/components/details/Review";
 import { getReviewsByHotelId } from "@/queries";
 import { fetchDictionary } from "@/utils/fetchFunction";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { notFound } from "next/navigation";
 
 interface Hotel {
@@ -14,12 +13,15 @@ interface Hotel {
 
 interface DetailsProps
 {
-    params: Params;
+    params: Promise<{ slug: string, id: string }>;
     searchParams: URLSearchParams;
 }
 
 export default async function Details({ params, searchParams }: DetailsProps) {
-    const hotelId = params?.id;
+    // const hotelId = params?.id;
+    const { slug, id } = await params;
+    const lang = slug;
+    const hotelId = id;
 
     if (!hotelId) {
         return notFound();
@@ -29,13 +31,13 @@ export default async function Details({ params, searchParams }: DetailsProps) {
         const [ hotelResponse, reviews, languagePromise ] = await Promise.all( [
             fetch( `http://localhost:3000/api/hotels/${ hotelId }` ),
             getReviewsByHotelId( hotelId ),
-            fetchDictionary(params?.lang),
+            fetchDictionary(lang),
         ] );
 
         const hotel: { data: Hotel, status: number } = await hotelResponse.json();
 
-        console.log(hotel.status)
-        if (!hotel?.status === 200) {
+        // console.log(hotel.status)
+        if (hotel?.status !== 200) {
             return notFound();
         }
 
@@ -46,8 +48,8 @@ export default async function Details({ params, searchParams }: DetailsProps) {
         
         return (
             <div className="md:py-[80px] py-[110px]">
-                <Property languagePromise={languagePromise} searchParams={searchParams} hotel={plainHotel} lang={params?.lang} />
-                <Review languagePromise={languagePromise} searchParams={searchParams} params={params} lang={params?.lang} reviewPromise={reviews} />
+                <Property languagePromise={languagePromise} searchParams={searchParams} hotel={plainHotel} />
+                <Review languagePromise={languagePromise} searchParams={searchParams} reviewPromise={reviews} />
             </div>
         );
     }

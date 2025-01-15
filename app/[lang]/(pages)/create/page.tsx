@@ -21,6 +21,7 @@ interface FormData {
     gallery: string[];
     amenities: string[];
     stocks: Stock[];
+    [key: string]: string | string[] | Stock[]; 
 }
 
 export default function Create () {
@@ -55,9 +56,10 @@ export default function Create () {
         setEditFields((prev) => ({ ...prev, [field]: !prev[field] }));
     };
 
-    const handleCancel = (field: keyof FormData) => {
-        setValue(field, defaultFormData[field]);
-        setEditFields((prev) => ({ ...prev, [field]: false }));
+    const handleCancel = ( field: keyof FormData ) =>
+    {
+        setValue( field as string, defaultFormData[ field ] );
+        setEditFields( ( prev ) => ( { ...prev, [ field ]: false } ) );
     };
 
     const toggleAmenity = (amenity: string) => {
@@ -221,14 +223,14 @@ export default function Create () {
                                 animate={{ opacity: 1, y: 0 }}
                             >
                                 <img
-                                    src={formData[`image${idx}`] || "https://placehold.co/600x400"}
+                                    src={formData[`image${idx}`] as string || "https://placehold.co/600x400"}
                                     alt={`Room ${idx}`}
                                     className="w-full h-full object-cover rounded-lg"
                                 />
                                 <input
                                     {...register(`image${idx}`, { required: "Image is required" })}
                                     placeholder={`https://placehold.co/600x400`}
-                                    defaultValue={formData[`image${idx}`]}
+                                    defaultValue={formData[`image${idx}`] as string}
                                     className="text-sm w-11/12 p-2 border border-primary rounded-lg mt-2 absolute left-1/2 -translate-x-1/2 bottom-2 bg-white"
                                 />
                                 {errors[`image${idx}`] && <span className="text-red-500 text-sm">{errors[`image${idx}`]?.message}</span>}

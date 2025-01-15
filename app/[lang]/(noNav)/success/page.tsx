@@ -3,7 +3,6 @@ import ActionButton from "@/components/success/ActionButton";
 import BookingCrad from "@/components/success/BookingCrad";
 import { fetchBookingDetails, fetchDictionary } from "@/utils/fetchFunction";
 import type { Metadata } from "next";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -12,8 +11,8 @@ export const metadata: Metadata = {
 };
 interface SuccessProps
 {
-    searchParams: URLSearchParams;
-    params: Params | never;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+    params: Promise<{ slug: string }>;
 }
 
 export default async function Success ({searchParams, params}: SuccessProps)
@@ -23,13 +22,16 @@ export default async function Success ({searchParams, params}: SuccessProps)
     // {
     //     redirect( "/login" );
     // }
-    const hotelId = searchParams.get('hotelId') as string;
-    const bookingId = searchParams.get( 'bookingId' ) as string;
+    const resolvedSearchParams = await searchParams;
+    const hotelId = resolvedSearchParams['hotelId'] as string;
+    const bookingId = resolvedSearchParams[ 'bookingId' ] as string;
+    const { slug } = await params;
+    const lang = slug;
     
     const [ bookingPromise, languagePromise ] = await Promise.all(
         [
             fetchBookingDetails( hotelId as string, bookingId as string ),
-            fetchDictionary( params?.lang )
+            fetchDictionary( lang as string)
         ] );
     const language = await languagePromise;
     // console.log(  languagePromise.success );
@@ -94,7 +96,7 @@ export default async function Success ({searchParams, params}: SuccessProps)
 
             {/* <!-- Action Buttons --> */}
             <div className="flex flex-wrap-reverse gap-3 items-center justify-center">
-                <ActionButton bookingId={bookingId} hotelId={hotelId} lang={params?.lang} text={language?.success?.receipt} />
+                <ActionButton bookingId={bookingId} hotelId={hotelId} lang={lang} text={language?.success?.receipt} />
                 <Link href={"/"} className="px-6 py-3 bg-cyan-700 text-white rounded-lg hover:brightness-90">
                     <i className="fas fa-home mr-2"></i>
                     {language?.success?.back}

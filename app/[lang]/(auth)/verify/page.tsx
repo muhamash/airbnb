@@ -29,7 +29,6 @@ export default function VerifyEmailPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [timer, setTimer] = useState<number | null>(null);
     const params = useParams();
-
     const lang: string = Array.isArray(params?.lang) ? params.lang[0] : params?.lang || 'en';
 
     async function fetchLanguage() {

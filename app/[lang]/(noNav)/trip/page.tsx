@@ -13,16 +13,23 @@ export const metadata: Metadata = {
 };
 interface TripProps
 {
-    searchParams: URLSearchParams;
-    params: Params | never;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+    params: Promise<{ slug: string }>;
 }
 
 export default async function TripDetails ({searchParams, params}: TripProps)
 {
+    const resolvedSearchParams = await searchParams;
+    const hotelId = resolvedSearchParams['hotelId'] as string;
+    const bookingId = resolvedSearchParams[ 'bookingId' ] as string;
+    const scan = resolvedSearchParams?.scan === 'true';
+    const { slug } = await params;
+    const lang = slug;
+
     const [ bookingPromise, languagePromise ] = await Promise.all(
         [
-            fetchBookingDetails( searchParams?.hotelId, searchParams?.bookingId ),
-            fetchDictionary( params?.lang )
+            fetchBookingDetails( hotelId, bookingId ),
+            fetchDictionary( lang )
         ] );
     const language = await languagePromise;
     const bookings = await bookingPromise;
@@ -44,13 +51,13 @@ export default async function TripDetails ({searchParams, params}: TripProps)
                 </div>
                 <div className="absolute bg-black/30 rounded-md backdrop-blur-sm inset-0 bg-opacity-50 flex items-start justify-start w-fit h-fit px-4 py-2">
                     {
-                        searchParams?.scan === 'true' ? (
-                            <Link href={`http://localhost:3000/${ params?.lang }`} className="text-rose-600 hover:underline">
+                        scan === true ? (
+                            <Link href={`http://localhost:3000/${ lang }`} className="text-rose-600 hover:underline">
                                 <i className="fas fa-home mr-2"></i>
                                 {language?.trip?.back}
                             </Link>
                         ) : (
-                            <BackButton language={params?.lang} text={language?.payment?.back} />
+                            <BackButton text={language?.payment?.back} />
                         )
                     }
                 </div>
@@ -152,7 +159,7 @@ export default async function TripDetails ({searchParams, params}: TripProps)
                 {/* Highlights */}
                 <section className="bg-white p-6 rounded-lg shadow-md shadow-orange-200 mb-6">
                     <h2 className="text-2xl font-semibold mb-4"> {language?.trip?.like}</h2>
-                    <CardContainer params={params} lang={params?.lang} languageData={language?.home} />
+                    <CardContainer params={params}  languageData={language?.home} />
                 </section>
             </div>
         </div>

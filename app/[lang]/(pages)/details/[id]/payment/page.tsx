@@ -5,50 +5,77 @@ import PriceCard from "@/components/paymentDetails/PriceCard";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween } from "@/utils/utils";
 import { Metadata } from "next";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
+// import { Session } from "next-auth";
 
 export const metadata: Metadata = {
   title: "Airbnb || Payment",
   description: "Do not payment; only input fake details!!",
 };
 
+interface User {
+    emailVerified?: boolean | string;
+    name?: string | null;  
+    email?: string | null; 
+    _id: string | null;
+    image: string;
+    accessToken: string;
+    [key: string]: string | boolean | number | Date | undefined | null; 
+}
 interface PaymentProps {
-  params: Params;
-  searchParams: URLSearchParams;
+  params: Promise<{ slug: string, id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[]  }>;
 }
 
 export default async function Payment({ searchParams, params }: PaymentProps) {
-    try
-    {
-        const [ dictionaryResponse, daysPromise, authPromise, hotelResponse ] = await Promise.all( [
-            fetchDictionary( params?.lang ),
-            calculateDaysBetween( searchParams?.checkIn, searchParams?.checkOut ),
+    const resolvedSearchParams = await searchParams;
+
+    const searchParamsObject = new URLSearchParams(
+        Object.entries(resolvedSearchParams).flatMap(([key, value]) =>
+            Array.isArray(value) ? value.map(val => [key, val]) : [[key, value]]
+        )
+    );
+
+    const { slug, id } = await params;
+    const lang = slug;
+    const hotelId = id;
+
+    const checkIn = searchParamsObject.get("checkIn") ?? '';
+    const checkOut = searchParamsObject.get("checkOut") ?? '';
+    const selection = searchParamsObject.get("selection") ?? '';
+    const rateString = searchParamsObject.get("rate");
+
+    try {
+        const [dictionaryResponse, daysPromise, authPromise, hotelResponse] = await Promise.all([
+            fetchDictionary(lang),
+            calculateDaysBetween(checkIn, checkOut),
             auth(),
-            fetch( `http://localhost:3000/api/hotels/${ params?.id }` ),
-            
-        ] );
+            fetch(`http://localhost:3000/api/hotels/${hotelId}`),
+        ]);
 
         const user = await authPromise;
         const responseData = await dictionaryResponse;
         const days = await daysPromise;
         const hotel = await hotelResponse.json();
-        const rate = JSON.parse( searchParams?.rate );
-        const calculateRentedPrice = rate[ searchParams?.selection ] * days * searchParams?.[ searchParams?.selection ];
-        const cleaningFee = 17.50; 
+        const rate = rateString ? JSON.parse(rateString) : {};
+
+        const rentedPricePerDay = Number(rate[selection]) || 0;
+        const selectedQuantity = Number(resolvedSearchParams[selection]) || 1;
+        const calculateRentedPrice = rentedPricePerDay * days * selectedQuantity;
+        const cleaningFee = 17.50;
         const serviceFee = 51.31;
         const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;
-        // console.log(  authPromise );
+
+        const userInfo: User | undefined  = user?.user;
 
         return (
-            <div
-                className="max-w-7xl mx-auto px-6 py-[100px]">
-                <BackButton language={params?.lang} text={responseData?.payment?.back} />
+            <div className="max-w-7xl mx-auto px-6 py-[100px]">
+                <BackButton text={responseData?.payment?.back} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
                     <PaymentForm
-                        isVerified={user?.user?.emailVerified}
-                        name={user?.user?.name}
-                        userId={user?.user?._id}
-                        email={user?.user?.email}
+                        isVerified={userInfo?.emailVerified}
+                        name={userInfo?.name}
+                        userId={userInfo?._id}
+                        email={userInfo?.email}
                         calculateRentedPrice={totalPrice}
                         imageUrl={hotel?.data?.thumbNailUrl}
                         searchParams={searchParams}
@@ -61,10 +88,8 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
                 </div>
             </div>
         );
-    }
-    catch ( error )
-    {
-        console.error( "Error in Payment page:", error );
+    } catch (error) {
+        console.error("Error in Payment page:", error);
         return <div>Error loading payment details. Please try again later.</div>;
-    };
+    }
 };
