@@ -50,10 +50,10 @@ export default  function PaymentForm ( {isVerified, searchParams, languageData, 
 {
     const [ isPending, startTransition ] = useTransition();
     const router = useRouter();
-    const rate = searchParams?.rate ? JSON.parse( searchParams.rate ) : {};
+    const rate = searchParams?.rate ? JSON.parse( searchParams?.rate ) : {};
     console.log( userId);
 
-    const handleSubmit = async (e:React.ChangeEvent<HTMLInputElement>) =>
+    const handleSubmit = (e:React.ChangeEvent<HTMLInputElement>) =>
     {
         e.preventDefault();
         const formData = new FormData( e.target );
