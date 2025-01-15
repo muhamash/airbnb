@@ -1,4 +1,3 @@
-import Pagination from "@/components/common/Pagination";
 import CardContainer from "@/components/home/CardContainer";
 import { fetchDictionary } from "@/utils/fetchFunction";
 interface HomeProps
@@ -17,7 +16,6 @@ export default async function Home ( { params } : HomeProps )
       <div className="px-6">
         <CardContainer params={params}  languageData={responseData?.home} />
       </div>
-      <Pagination />
     </div>
   );
 };

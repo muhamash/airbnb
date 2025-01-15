@@ -60,3 +60,24 @@ export async function fetchUserBookings(userId: string) {
     return null;
   }
 }
+
+export async function fetchHotels ( page: string )
+{
+  try {
+    const response = await fetch(`${ process.env.NEXT_PUBLIC_URL }/api/hotels/page/${page}`, {
+      cache: "no-store",
+    });
+
+    const data = await response.json();
+
+    if (data?.success) {
+      return data?.data;
+    } else {
+      console.error("Failed to fetch dictionary", data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching dictionary", error);
+    throw error;
+  }
+}

@@ -42,7 +42,7 @@ export async function paymentForm(formData) {
 
   // console.log( formObject );
   try {
-    const responseBooking = await fetch( "${ process.env.NEXT_PUBLIC_URL }/api/booking", {
+    const responseBooking = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/booking`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export async function paymentForm(formData) {
     if (responseBooking.status === 200 && bookingResult?.status === 200) {
       // console.log("Booking successful:", bookingResult);
 
-      const responseEmail = await fetch("${ process.env.NEXT_PUBLIC_URL }/api/email", {
+      const responseEmail = await fetch(`${ process.env.NEXT_PUBLIC_URL }/api/email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

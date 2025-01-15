@@ -16,7 +16,7 @@ export async function GET(request: Request): Promise<Response> {
     try {
         const { searchParams } = new URL(request.url);
         const page = parseInt(searchParams.get("page") || "1", 10);
-        const limit = 8;
+        const limit = 1;
         const skip = (page - 1) * limit;
 
         const { hotels, total } = await getAllHotels(skip, limit);
@@ -28,6 +28,7 @@ export async function GET(request: Request): Promise<Response> {
                 page,
                 pages: Math.ceil(total / limit),
             },
+            limit: limit,
             status: 200
         };
 

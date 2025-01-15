@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import BackButton from "@/components/paymentDetails/BackButton";
 import PaymentForm from "@/components/paymentDetails/PaymentForm";
+import PriceCard from "@/components/paymentDetails/PriceCard";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween } from "@/utils/utils";
 import { Metadata } from "next";
@@ -16,13 +17,13 @@ interface PaymentProps {
 }
 
 export default async function Payment({ searchParams, params }: PaymentProps) {
-  const resolvedSearchParams = Object.fromEntries(searchParams.entries());
+//   const resolvedSearchParams = Object.fromEntries(searchParams.entries());
   const { lang, id } = await params;
 
-  const checkIn = searchParams.get("checkIn") ?? '';
-  const checkOut = searchParams.get("checkOut") ?? '';
-  const selection = searchParams.get("selection") ?? '';
-  const rateString = searchParams.get("rate");
+  const checkIn = searchParams.checkIn;
+  const checkOut = searchParams.checkOut;
+  const selection = searchParams.checkOut;
+//   const rateString = searchParams.checkOut;
 
   try {
     const [dictionaryResponse, days, user, hotelResponse] = await Promise.all([
@@ -34,10 +35,10 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
 
     const responseData = await dictionaryResponse;
     const hotel = await hotelResponse.json();
-    const rate = rateString ? JSON.parse(rateString) : {};
+    const rate = JSON.parse(searchParams?.rate)
 
     const rentedPricePerDay = Number(rate[selection] || 0);
-    const selectedQuantity = Number(resolvedSearchParams[selection] || 1);
+    const selectedQuantity = Number(searchParams[selection] || 1);
     const calculateRentedPrice = rentedPricePerDay * days * selectedQuantity;
     const cleaningFee = 17.50;
     const serviceFee = 51.31;
@@ -54,19 +55,19 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
             email={user?.user?.email || ''}
             calculateRentedPrice={totalPrice}
             imageUrl={hotel?.data?.thumbNailUrl}
-            searchParams={resolvedSearchParams}
+            searchParams={searchParams}
             params={{ lang, id }}
             languageData={responseData?.payment}
           />
           <div>
-            {/* <PriceCard
+            <PriceCard
               hotelName={hotel?.data?.name}
               languageData={responseData?.payment}
               calculateRentedPrice={calculateRentedPrice}
               days={days}
-              searchParams={resolvedSearchParams}
+              searchParams={searchParams}
               imageUrl={hotel?.data?.thumbNailUrl}
-            /> */}
+            />
           </div>
         </div>
       </div>

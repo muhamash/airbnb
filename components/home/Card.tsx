@@ -38,7 +38,7 @@ export default async function Card ( {  hotel, lang, languageData, stockPromise,
     const getStock = stocksPromise?.find( stock => hotel?.id === stock?.hotelId.toString() );
     const ratings = await reviewPromise;
     const rating = ratings?.find( rating => hotel?.id === rating?.hotelId.toString() )?.reviews ?? 0;
-    const avgRatings = rating?.reduce( ( sum, review ) => sum + review?.ratings, 0 ) / rating?.length ?? 0;
+    const avgRatings = rating?.reduce( ( sum, review ) => sum + review?.ratings, 0 ) / rating?.length;
     // console.log( getStock );
 
     const parseData = {
