@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { bookingsModel } from "@/models/bookings";
+import { bookingsModel, IBooking } from "@/models/bookings";
+import { IStock } from "@/models/stocks";
 import { getStockByHotelId } from "@/queries";
 import { dbConnect } from "@/services/mongoDB";
+import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request): Promise<Response> {
@@ -73,14 +75,15 @@ export async function POST(request: Request): Promise<Response> {
     await dbConnect();
 
     const hotelStocks = await getStockByHotelId( hotelId );
-    if (!hotelStocks) {
+    const hotelStock : IStock | null = Array.isArray(hotelStocks) ? hotelStocks[0] : hotelStocks;
+    if (!hotelStock) {
       return NextResponse.json(
         { message: "Hotel stocks not found.", status: 404 },
         { status: 404 }
       );
     }
 
-    if (!hotelStocks.available) {
+    if (!hotelStock?.available as boolean) {
       return NextResponse.json(
         { message: "No availability for the selected hotel.", status: 400 },
         { status: 400 }
@@ -88,8 +91,8 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     if (
-      (rentType === "rooms" && hotelStocks.roomMax < rentCount) ||
-      (rentType === "beds" && hotelStocks.bedMax < rentCount)
+      (rentType === "rooms" && hotelStock.roomMax < rentCount) ||
+      (rentType === "beds" && hotelStock.bedMax < rentCount)
     ) {
       return NextResponse.json(
         { message: "Not enough stock available.", status: 400 },
@@ -128,15 +131,26 @@ export async function POST(request: Request): Promise<Response> {
     let bookingId;
 
     if (bookings) {
-      const newBooking = bookings.bookings.push(bookingDetails);
-      bookingId = bookings.bookings[newBooking - 1]._id;
-    } else {
-      bookings = new bookingsModel({
+      const newBooking: IBooking = {
+        ...bookingDetails,
+       _id: new mongoose.Types.ObjectId(),
+      };
+      bookings?.bookings?.push( newBooking );
+      bookingId = newBooking?._id;
+    }
+    else
+    {
+      bookings = new bookingsModel( {
         hotelId,
-        bookings: [bookingDetails],
-      });
+        bookings: [
+          {
+            ...bookingDetails,
+            _id: new mongoose.Types.ObjectId(),
+          },
+        ],
+      } );
       await bookings.save();
-      bookingId = bookings.bookings[0]._id;
+      bookingId = bookings.bookings[ 0 ]._id;
     }
 
     // Update stock availability

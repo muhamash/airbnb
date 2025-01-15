@@ -30,7 +30,7 @@ export async function getAllReviews (): Promise<IReviews[]>
   return reviews;
 }
 
-export async function getStockByHotelId(hotelId: string): Promise<IStock[]| null> {
+export async function getStockByHotelId(hotelId: string): Promise<IStock | null> {
   await dbConnect();
 
   try {

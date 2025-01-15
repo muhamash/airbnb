@@ -12,7 +12,9 @@ export interface IPaymentDetails {
   total: number;
 }
 
-export interface IBooking extends Document {
+export interface IBooking extends Document
+{
+  _id: mongoose.Schema.Types.ObjectId;
   hotelId: string;
   checkIn: Date;
   checkOut: Date;
@@ -49,6 +51,7 @@ const PaymentDetailsSchema: Schema = new mongoose.Schema( {
 
 const BookingSchema: Schema = new mongoose.Schema(
   {
+    _id: { type: mongoose.Schema.Types.ObjectId, required: false },
     hotelId: {
       type: String,
       required: true,
