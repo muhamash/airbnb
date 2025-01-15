@@ -52,7 +52,7 @@ export default async function TripDetails ({searchParams, params}: TripProps)
                 <div className="absolute bg-black/30 rounded-md backdrop-blur-sm inset-0 bg-opacity-50 flex items-start justify-start w-fit h-fit px-4 py-2">
                     {
                         scan === true ? (
-                            <Link href={`http://localhost:3000/${ lang }`} className="text-rose-600 hover:underline">
+                            <Link href={`${ process.env.NEXT_PUBLIC_URL }/${ lang }`} className="text-rose-600 hover:underline">
                                 <i className="fas fa-home mr-2"></i>
                                 {language?.trip?.back}
                             </Link>

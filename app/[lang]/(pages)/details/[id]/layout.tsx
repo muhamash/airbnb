@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Params }) {
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/api/hotels/${hotelId}`);
+        const response = await fetch(`${ process.env.NEXT_PUBLIC_URL }/api/hotels/${hotelId}`);
 
         if (!response.ok) {
             throw new Error("Hotel not found");

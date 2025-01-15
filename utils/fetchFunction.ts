@@ -42,7 +42,7 @@ export async function fetchBookingDetails(hotelId: string, bookingId: string) {
 export async function fetchUserBookings(userId: string) {
   try {
     const response = await fetch(
-      `http://localhost:3000/api/booking?userId=${userId}`,
+      `${ process.env.NEXT_PUBLIC_URL }/api/booking?userId=${userId}`,
       {
         method: "GET",
       }

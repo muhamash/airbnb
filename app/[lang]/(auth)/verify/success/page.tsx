@@ -48,7 +48,7 @@ export default function VerificationSuccessPage() {
 
             try
             {
-                const response = await fetch( `http://localhost:3000/api/email/verify?token=${ token }`, {
+                const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/email/verify?token=${ token }`, {
                     method: "GET",
                     headers: { 'Content-Type': 'application/json' }
                 } );

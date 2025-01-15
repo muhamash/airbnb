@@ -59,7 +59,7 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
     // console.log("refresh token function", token);
     try {
         const url = token?.user?.password ? (
-            `http://localhost:3000/api/auth/token`
+            `${ process.env.NEXT_PUBLIC_URL }/api/auth/token`
         ) : (
             "https://oauth2.googleapis.com/token?" +
             new URLSearchParams({

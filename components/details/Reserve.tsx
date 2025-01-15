@@ -114,7 +114,7 @@ export default function Reserve({ rate, perNight, langData, hotelAddress, hotelN
         };
 
         const queryString = new URLSearchParams(parseSearchParams).toString();
-        router.push(`http://localhost:3000/${params?.lang}/details/${params?.id}/payment?${queryString}`);
+        router.push(`${ process.env.NEXT_PUBLIC_URL }/${params?.lang}/details/${params?.id}/payment?${queryString}`);
     };
 
     if (loading) {

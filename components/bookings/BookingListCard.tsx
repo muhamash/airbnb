@@ -39,7 +39,7 @@ export default async function BookingListCard ({title,hotelImage, hotelId, booki
             </div>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
-                    href={`http://localhost:3000/${lang}/trip?bookingId=${bookingId}&hotelId=${hotelId}&scan=false`}
+                    href={`${ process.env.NEXT_PUBLIC_URL }/${lang}/trip?bookingId=${bookingId}&hotelId=${hotelId}&scan=false`}
                     className="px-3 py-2 text-sm bg-teal-600 text-white rounded-lg flex items-center justify-center hover:brightness-90"
                 >
                     <i className="fas fa-image mr-2"></i>

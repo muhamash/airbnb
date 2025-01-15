@@ -24,7 +24,7 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
         {
             try
             {
-                const response = await fetch( 'http://localhost:3000/api/review', {
+                const response = await fetch( '${ process.env.NEXT_PUBLIC_URL }/api/review', {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',

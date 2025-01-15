@@ -49,7 +49,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
             fetchDictionary(lang),
             calculateDaysBetween(checkIn, checkOut),
             auth(),
-            fetch(`http://localhost:3000/api/hotels/${hotelId}`),
+            fetch(`${ process.env.NEXT_PUBLIC_URL }/api/hotels/${hotelId}`),
         ]);
 
         const user = await authPromise;

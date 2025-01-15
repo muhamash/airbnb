@@ -42,7 +42,7 @@ export async function paymentForm(formData) {
 
   // console.log( formObject );
   try {
-    const responseBooking = await fetch( "http://localhost:3000/api/booking", {
+    const responseBooking = await fetch( "${ process.env.NEXT_PUBLIC_URL }/api/booking", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export async function paymentForm(formData) {
     if (responseBooking.status === 200 && bookingResult?.status === 200) {
       // console.log("Booking successful:", bookingResult);
 
-      const responseEmail = await fetch("http://localhost:3000/api/email", {
+      const responseEmail = await fetch("${ process.env.NEXT_PUBLIC_URL }/api/email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,8 +111,8 @@ export async function paymentForm(formData) {
       // Redirect to success page upon successful booking and email
       // const queryString = new URLSearchParams(formObject).toString();
       // redirect(
-      //   `http://localhost:3000/${ formObject?.lang }/redirection?hotelName=${ encodeURIComponent( formObject?.hotelName ) }&name=${ encodeURIComponent( formObject?.name ) }&hotelAddress=${ encodeURIComponent( formObject?.hotelAddress ) }&bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&target=${ encodeURIComponent(
-      //     `http://localhost:3000/${ formObject?.lang }/success?bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&hotelId=${encodeURIComponent( formObject?.hotelId )}`
+      //   `${ process.env.NEXT_PUBLIC_URL }/${ formObject?.lang }/redirection?hotelName=${ encodeURIComponent( formObject?.hotelName ) }&name=${ encodeURIComponent( formObject?.name ) }&hotelAddress=${ encodeURIComponent( formObject?.hotelAddress ) }&bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&target=${ encodeURIComponent(
+      //     `${ process.env.NEXT_PUBLIC_URL }/${ formObject?.lang }/success?bookingId=${ encodeURIComponent( bookingResult?.bookingId ) }&hotelId=${encodeURIComponent( formObject?.hotelId )}`
       //   ) }&user=${ encodeURIComponent( formObject?.name ) }`
       // );
 
@@ -129,7 +129,7 @@ export async function paymentForm(formData) {
   } catch (error) {
     console.error("Error occurred during payment or booking:", error);
     // Redirect to home page upon failure
-    // redirect("http://localhost:3000");
+    // redirect("${ process.env.NEXT_PUBLIC_URL }");
     // console.error( error );
     throw new Error("payment failed");
   }

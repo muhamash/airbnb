@@ -20,7 +20,7 @@ export default function UserActions({ session, logOut, list, create, login, reg 
     // console.log( session );
     const handleLogout = async () => {
         try {
-            await signOut({ callbackUrl: 'http://localhost:3000' });
+            await signOut({ callbackUrl: '${ process.env.NEXT_PUBLIC_URL }' });
         } catch (error) {
             console.error("Logout error:", error);
         }
@@ -95,12 +95,12 @@ export default function UserActions({ session, logOut, list, create, login, reg 
                                     {session.user.email}
                                 </li>
                             </p>
-                            <Link href={`http://localhost:3000/${ params?.lang }/bookings`} className="w-full bg-gradient-to-t from-sky-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md my-1">
+                            <Link href={`${ process.env.NEXT_PUBLIC_URL }/${ params?.lang }/bookings`} className="w-full bg-gradient-to-t from-sky-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md my-1">
                                 <li className="px-2 py-2 text-sm text-white transition-all duration-200 hover:bg-pink-600 font-mono rounded-md text-[12px] text-center">
                                     {list}
                                 </li>
                             </Link>
-                            <Link href={`http://localhost:3000/${ params?.lang }/create`} className="w-full bg-gradient-to-t from-blue-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md">
+                            <Link href={`${ process.env.NEXT_PUBLIC_URL }/${ params?.lang }/create`} className="w-full bg-gradient-to-t from-blue-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md">
                                 <li className="px-2 py-2 text-sm text-white transition-all duration-200 hover:bg-green-600 font-mono rounded-md text-[12px] text-center">
                                     {create}
                                 </li>

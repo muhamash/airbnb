@@ -71,8 +71,8 @@ export default  function PaymentForm ( {isVerified, searchParams, languageData, 
                     {
                         toast.success( "payment oka!!" );
                         router.push(
-                            `http://localhost:3000/${ formObject?.lang }/redirection?hotelName=${ encodeURIComponent( formObject?.hotelName ) }&name=${ encodeURIComponent( formObject?.name ) }&hotelAddress=${ encodeURIComponent( formObject?.hotelAddress ) }&bookingId=${ encodeURIComponent( bookingId ) }&target=${ encodeURIComponent(
-                                `http://localhost:3000/${ formObject?.lang }/success?bookingId=${ encodeURIComponent( bookingId ) }&hotelId=${ encodeURIComponent( formObject?.hotelId ) }`
+                            `${ process.env.NEXT_PUBLIC_URL }/${ formObject?.lang }/redirection?hotelName=${ encodeURIComponent( formObject?.hotelName ) }&name=${ encodeURIComponent( formObject?.name ) }&hotelAddress=${ encodeURIComponent( formObject?.hotelAddress ) }&bookingId=${ encodeURIComponent( bookingId ) }&target=${ encodeURIComponent(
+                                `${ process.env.NEXT_PUBLIC_URL }/${ formObject?.lang }/success?bookingId=${ encodeURIComponent( bookingId ) }&hotelId=${ encodeURIComponent( formObject?.hotelId ) }`
                             ) }&user=${ encodeURIComponent( formObject?.name ) }`
                         )
                     }

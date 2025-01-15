@@ -29,7 +29,7 @@ export default async function Details({ params, searchParams }: DetailsProps) {
 
     try {
         const [ hotelResponse, reviews, languagePromise ] = await Promise.all( [
-            fetch( `http://localhost:3000/api/hotels/${ hotelId }` ),
+            fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels/${ hotelId }` ),
             getReviewsByHotelId( hotelId ),
             fetchDictionary(lang),
         ] );
