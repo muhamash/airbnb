@@ -12,15 +12,15 @@ export const metadata: Metadata = {
   description: "Do not payment; only input fake details!!",
 };
 
-interface User {
-    emailVerified?: boolean | string;
-    name?: string | null;  
-    email?: string | null; 
-    _id: string | null;
-    image: string;
-    accessToken: string;
-    [key: string]: string | boolean | number | Date | undefined | null; 
-}
+// interface User {
+//     emailVerified?: boolean | string;
+//     name?: string | null;  
+//     email?: string | null; 
+//     _id: string | null;
+//     image: string;
+//     accessToken: string;
+//     [key: string]: string | boolean | number | Date | undefined | null; 
+// }
 interface PaymentProps {
   params: Promise<{ lang: string, id: string }>;
   searchParams: Promise<{ [key: string]: string | string[]  }>;
@@ -64,17 +64,16 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
         const cleaningFee = 17.50;
         const serviceFee = 51.31;
         const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;
-
-        const userInfo = user?.user as User | undefined;
+        // const userInfo = user?.user as User | undefined;
 
         return (
             <div className="max-w-7xl mx-auto px-6 py-[100px]">
                 <BackButton text={responseData?.payment?.back} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
                     <PaymentForm
-                        isVerified={userInfo?.emailVerified ? (userInfo?.emailVerified as boolean) : false}
-                        name={userInfo?.name as string as string}
-                        userId={userInfo?._id as string}
+                        isVerified={user?.user?.emailVerified ? (userInfo?.emailVerified as boolean) : false}
+                        name={user?.user?.name as string as string}
+                        userId={user?.user?._id as string}
                         email={userInfo?.email as string}
                         calculateRentedPrice={totalPrice}
                         imageUrl={hotel?.data?.thumbNailUrl}

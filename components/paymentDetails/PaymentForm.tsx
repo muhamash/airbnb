@@ -2,7 +2,7 @@
 
 import { paymentForm } from "@/utils/serverActions";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import toast, { Toaster } from 'react-hot-toast';
 import TripDetails from "./TripDetails";
@@ -88,12 +88,12 @@ export default  function PaymentForm ( {isVerified, searchParams, languageData, 
 
     if ( !userId )
     {
-        redirect( "/login" );
+        router.push( "/login" );
     }
 
     if ( !isVerified )
     {
-        redirect( "/verify" );
+        router.push( "/verify" );
     }
     // console.log( userId );
     // if (!session) return <div>Loading user data...</div>;
