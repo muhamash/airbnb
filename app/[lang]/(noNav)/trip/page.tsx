@@ -24,7 +24,7 @@ export default async function TripDetails ({searchParams, params}: TripProps)
     const bookingId = resolvedSearchParams[ 'bookingId' ] as string;
     const scan = resolvedSearchParams?.scan === 'true';
     const { lang } = await params;
-    const lang = lang;
+    // const lang = lang;
 
     const [ bookingPromise, languagePromise ] = await Promise.all(
         [
