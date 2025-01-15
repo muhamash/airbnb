@@ -16,6 +16,7 @@ export default function LanguageSwitch() {
         const newPath = currentPath.replace( /^\/(en|bn)/, `/${ locale }` );
         const fullPath = queryString ? `${ newPath }?${ queryString }` : newPath;
 
+        // console.log(fullPath)
         router.push( fullPath );
     };
 
