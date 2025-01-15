@@ -3,12 +3,12 @@ import { fetchBookingDetails, fetchDictionary } from '@/utils/fetchFunction';
 import { generateHtml } from '@/utils/utils';
 import chromium from 'chrome-aws-lambda';
 // import puppeteer from 'puppeteer-core';
-import puppeteer from 'puppeteer';
+import puppeteer from 'puppeteer-core';
 import QRCode from 'qrcode';
 // process.env.IS_AWS_LAMBDA ||
 
 export const dynamic = "force-dynamic";
-const isServerless =  true; 
+const isServerless =  false; 
 
 export async function POST(request: Request): Promise<Response> {
     try
