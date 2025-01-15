@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 
 interface Buttons {
     [key: string]: string;
@@ -41,11 +41,11 @@ export default async function PriceCard({ languageData,days, calculateRentedPric
         return (
             <div className="bg-white p-6 rounded-lg mb-8 sticky top-0 shadow-sm shadow-orange-300 border-[0.4px] border-orange-300 hover:shadow-md transition-all duration-200">
                 <div className="flex items-start gap-4 mb-6">
-                    <img
+                    <Image
                         src={imageUrl}
                         alt="Property"
-                        // width={100}
-                        // height={100}
+                        width={100}
+                        height={100}
                         className="w-20 h-20 rounded-lg object-cover"
                     />
                     <div>

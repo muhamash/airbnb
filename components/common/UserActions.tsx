@@ -1,8 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 'use client';
 import { motion } from 'framer-motion';
 import { Session } from "next-auth";
 import { signOut } from 'next-auth/react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -44,11 +44,11 @@ export default function UserActions({ session, logOut, list, create, login, reg 
                 {session?.user && (
                     <span className="bg-zinc-600 w-6 h-6 rounded-full flex items-center justify-center text-xs text-white">
                         {session.user.image ? (
-                            <img
+                            <Image
                                 src={session.user.image}
-                                alt="userimg"
-                                // width={150}
-                                // height={150}
+                                alt="userImage"
+                                width={150}
+                                height={150}
                                 className="rounded-full"
                             />
                         ) : (

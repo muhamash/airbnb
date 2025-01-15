@@ -1,9 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { DatePicker, Form, InputNumber, Radio, Skeleton } from 'antd';
 import dayjs from 'dayjs';
 import { motion } from "framer-motion";
+import Image from 'next/image';
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from 'react';
 
@@ -169,10 +169,10 @@ export default function Reserve({ rate, perNight, langData, hotelAddress, hotelN
                         </div>
                     </div>
                     <div>
-                        <img
+                        <Image
                             alt='image?'
-                            // width={170}
-                            // height={170}
+                            width={170}
+                            height={170}
                             src={'/ttt.png'}
                             layout
                             className='object-fit'

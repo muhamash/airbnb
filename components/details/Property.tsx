@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 
+import Image from "next/image";
 import Amenities from './Ameniteis';
 import Reserve from "./Reserve";
 interface HotelProps
@@ -44,25 +44,25 @@ export default async function Property ( { hotel, searchParams, languagePromise 
                     <span className="font-ubuntu">{hotel?.address}</span>
                 </div>
             </div>
-            {/* <!-- img Gallery --> */}
+            {/* <!-- Image Gallery --> */}
             <div className="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-4 mb-8 h-auto">
                 {hotel?.gallery?.map( ( image, index ) =>
                 {
-                    const isLastimg = index === hotel?.gallery?.length - 1;
+                    const isLastImage = index === hotel?.gallery?.length - 1;
 
                     return (
                         <div
                             key={index}
                             className={`${ index === 0
                                 ? "col-span-4 md:col-span-8 lg:col-span-6 row-span-2"
-                                : isLastimg
+                                : isLastImage
                                     ? "col-span-4 md:col-span-8 lg:col-span-6"
                                     : "col-span-2 row-span-1"
                                 }`}
                         >
-                            <img
-                                // width={500}
-                                // height={500}
+                            <Image
+                                width={500}
+                                height={500}
                                 src={image}
                                 alt={`Gallery image ${ index + 1 }`}
                                 className="w-full h-full object-cover rounded-lg"

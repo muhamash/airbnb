@@ -1,5 +1,5 @@
-/* eslint-disable @next/next/no-img-element */
 import { formatDate } from "@/utils/utils";
+import Image from "next/image";
 import Link from "next/link";
 import ActionButton from "../success/ActionButton";
 
@@ -9,11 +9,11 @@ interface BookingListCardProps
     hotelId: string;
     bookingId: string;
     bookingDate: string;
-    hotelimg?: string;
+    hotelImage?: string;
     lang: string;
 }
 
-export default async function BookingListCard ({title,hotelimg, hotelId, bookingId, bookingDate, lang}:BookingListCardProps)
+export default async function BookingListCard ({title,hotelImage, hotelId, bookingId, bookingDate, lang}:BookingListCardProps)
 {
     // console.log( title, hotelId, bookingId, bookingDate );
     // console.log( lang, hotelId, bookingId );
@@ -22,11 +22,11 @@ export default async function BookingListCard ({title,hotelimg, hotelId, booking
             className="bg-white shadow-md rounded-lg p-4 flex items-center justify-between hover:shadow-lg transition-shadow"
         >
             <div className="flex items-center space-x-4">
-                <img
-                    src={hotelimg}
+                <Image
+                    src={hotelImage}
                     alt="Property Thumbnail"
-                    // width={100}
-                    // height={100}
+                    width={100}
+                    height={100}
                     className="w-24 h-24 object-cover rounded-md"
                 />
                 <div>

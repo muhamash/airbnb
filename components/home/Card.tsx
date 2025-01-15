@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface CardProps {
@@ -54,11 +54,11 @@ export default async function Card ( {  hotel, lang, languageData, stockPromise,
     return (
         <Link href={`${ process.env.NEXT_PUBLIC_URL }/${ lang }/details/${ hotel?.id }?${queryString}`} className="block group bg-black/5 backdrop-blur-md p-2 rounded-xl shadow shadow-violet-400 hover:shadow-md hover:shadow-slate-400 transition-all duration-200">
             <div className="relative">
-                <img
+                <Image
                     src={hotel?.thumbNailUrl}
-                    alt="hotelimg?"
-                    // width={200}
-                    // height={200}
+                    alt="hotelImage?"
+                    width={200}
+                    height={200}
                     className="w-full h-64 object-cover rounded-xl group-hover:scale-105 transition-transform"
                 />
                 {
