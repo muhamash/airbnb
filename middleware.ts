@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 import NextAuth from 'next-auth';
