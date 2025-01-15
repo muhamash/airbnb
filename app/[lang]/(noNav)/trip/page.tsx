@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 interface TripProps
 {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-    params: Promise<{ slug: string }>;
+    params: Promise<{ lang: string }>;
 }
 
 export default async function TripDetails ({searchParams, params}: TripProps)
@@ -23,8 +23,8 @@ export default async function TripDetails ({searchParams, params}: TripProps)
     const hotelId = resolvedSearchParams['hotelId'] as string;
     const bookingId = resolvedSearchParams[ 'bookingId' ] as string;
     const scan = resolvedSearchParams?.scan === 'true';
-    const { slug } = await params;
-    const lang = slug;
+    const { lang } = await params;
+    const lang = lang;
 
     const [ bookingPromise, languagePromise ] = await Promise.all(
         [

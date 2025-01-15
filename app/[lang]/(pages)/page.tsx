@@ -3,15 +3,14 @@ import CardContainer from "@/components/home/CardContainer";
 import { fetchDictionary } from "@/utils/fetchFunction";
 interface HomeProps
 {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string }>;
 }
 
 export default async function Home ( { params } : HomeProps )
 {
-  const { slug } = await params;
-  const lang = slug;
+  const { lang } = await params;
   const responseData = await fetchDictionary( lang );
-  // console.log( params );
+  // console.log( responseData, lang);
 
   return (
     <div className="md:py-[100px] py-[130px]">

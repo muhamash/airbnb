@@ -6,7 +6,7 @@ interface Language
   [ key: string ]: string;
 }
 interface ContainerProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string }>;
   languageData: Language;
 }
 
@@ -18,8 +18,8 @@ export default async function CardContainer({ params, languageData }: ContainerP
   ] );
 
   const hotels = await hotelsPromise;
-  const { slug } = await params;
-  const lang = slug;
+  const { lang } = await params;
+  // const lang = lang;
 
   return (
     <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

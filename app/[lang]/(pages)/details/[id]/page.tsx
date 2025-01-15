@@ -13,14 +13,14 @@ interface Hotel {
 
 interface DetailsProps
 {
-    params: Promise<{ slug: string, id: string }>;
+    params: Promise<{ lang: string, id: string }>;
     searchParams: URLSearchParams;
 }
 
 export default async function Details({ params, searchParams }: DetailsProps) {
     // const hotelId = params?.id;
-    const { slug, id } = await params;
-    const lang = slug;
+    const { lang, id } = await params;
+    // const lang = lang;
     const hotelId = id;
 
     if (!hotelId) {

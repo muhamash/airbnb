@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 interface BookingsProps
 {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string }>;
 }
 
 interface Booking {
@@ -27,8 +27,8 @@ export default async function Bookings ({params}: BookingsProps)
 {
   const session: Session | null = await auth();
   const userId = session?.user?.id;
-  const { slug } = await params;
-  const lang = slug;
+  const { lang } = await params;
+  // const lang = lang;
 
   if (!userId) {
 

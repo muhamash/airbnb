@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 interface SuccessProps
 {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-    params: Promise<{ slug: string }>;
+    params: Promise<{ lang: string }>;
 }
 
 export default async function Success ({searchParams, params}: SuccessProps)
@@ -25,8 +25,8 @@ export default async function Success ({searchParams, params}: SuccessProps)
     const resolvedSearchParams = await searchParams;
     const hotelId = resolvedSearchParams['hotelId'] as string;
     const bookingId = resolvedSearchParams[ 'bookingId' ] as string;
-    const { slug } = await params;
-    const lang = slug;
+    const { lang } = await params;
+    // const lang = lang;
     
     const [ bookingPromise, languagePromise ] = await Promise.all(
         [

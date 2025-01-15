@@ -22,7 +22,7 @@ interface User {
     [key: string]: string | boolean | number | Date | undefined | null; 
 }
 interface PaymentProps {
-  params: Promise<{ slug: string, id: string }>;
+  params: Promise<{ lang: string, id: string }>;
   searchParams: Promise<{ [key: string]: string | string[]  }>;
 }
 
@@ -35,8 +35,8 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
         )
     );
 
-    const { slug, id } = await params;
-    const lang = slug;
+    const { lang, id } = await params;
+    // const lang = lang;
     const hotelId = id;
 
     const checkIn = searchParamsObject.get("checkIn") ?? '';
