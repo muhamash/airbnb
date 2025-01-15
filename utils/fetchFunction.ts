@@ -1,6 +1,6 @@
 export async function fetchDictionary(locale: string) {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/language?locale=${locale}`, {
+    const response = await fetch(`${ process.env.NEXT_PUBLIC_URL }/api/language?locale=${locale}`, {
       cache: "no-store",
     });
 
@@ -20,7 +20,7 @@ export async function fetchDictionary(locale: string) {
 
 export async function fetchBookingDetails(hotelId: string, bookingId: string) {
   try {
-    const response = await fetch( `${ process.env.NEXT_PUBLIC_API_URL }/booking/${ hotelId }?bookingId=${ bookingId }`, {
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/booking/${ hotelId }?bookingId=${ bookingId }`, {
       // cache: "no-store",
     } );
 

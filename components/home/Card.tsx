@@ -52,7 +52,7 @@ export default async function Card ( {  hotel, lang, languageData, stockPromise,
     const queryString = new URLSearchParams(parseData).toString();
 
     return (
-        <Link href={`/${ lang }/details/${ hotel?.id }?${queryString}`} className="block group bg-black/5 backdrop-blur-md p-2 rounded-xl shadow shadow-violet-400 hover:shadow-md hover:shadow-slate-400 transition-all duration-200">
+        <Link href={`${ process.env.NEXT_PUBLIC_URL }/${ lang }/details/${ hotel?.id }?${queryString}`} className="block group bg-black/5 backdrop-blur-md p-2 rounded-xl shadow shadow-violet-400 hover:shadow-md hover:shadow-slate-400 transition-all duration-200">
             <div className="relative">
                 <Image
                     src={hotel?.thumbNailUrl}
