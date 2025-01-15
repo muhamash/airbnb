@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 interface Booking {
     _id: string;
-    [key: string]: any;
+    [key: string]: string;
 }
 
 

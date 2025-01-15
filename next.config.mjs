@@ -12,7 +12,7 @@ const nextConfig = {
         if (isServer) {
             config.externals = [
                 ...config.externals,
-                'puppeteer-core',
+                'puppeteer',
                 'chrome-aws-lambda',
             ];
         }
