@@ -1,6 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { auth } from "@/auth";
 import BackButton from "@/components/paymentDetails/BackButton";
-import PaymentForm from "@/components/paymentDetails/PaymentForm";
 import PriceCard from "@/components/paymentDetails/PriceCard";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween } from "@/utils/utils";
@@ -48,7 +48,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
       <div className="max-w-7xl mx-auto px-6 py-[100px]">
         <BackButton text={responseData?.payment?.back} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
-          <PaymentForm
+          {/* <PaymentForm
             isVerified={user?.user?.emailVerified || false}
             name={user?.user?.name || ''}
             userId={user?.user?._id || ''}
@@ -58,7 +58,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
             searchParams={resolvedSearchParams}
             params={{ lang, id }}
             languageData={responseData?.payment}
-          />
+          /> */}
           <div>
             <PriceCard
               hotelName={hotel?.data?.name}
