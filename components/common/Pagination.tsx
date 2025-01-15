@@ -11,7 +11,6 @@ export default function Pagination() {
 
   const initialPage = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
   
-  // State to manage the current page number
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(1); 
   const [loading, setLoading] = useState(false);   
@@ -50,7 +49,7 @@ export default function Pagination() {
     >
       {loading ? ( 
         <div className="flex justify-center items-center">
-          <div className="animate-spin rounded-full border-t-4 border-blue-500 border-solid w-8 h-8"></div>
+          <div className="loaderHast"></div>
         </div>
       ) : (
         <nav aria-label="Page navigation">
@@ -72,7 +71,7 @@ export default function Pagination() {
               <li key={index}>
                 <button
                   onClick={() => handlePageChange(index + 1)}
-                  className={`py-2 px-3 leading-tight bg-white border border-zinc-300 hover:bg-zinc-100 hover:text-zinc-700 ${currentPage === index + 1 ? "bg-orange-400 text-white" : "text-zinc-500"}`}
+                  className={`py-2 px-3 leading-tight border border-zinc-300 hover:bg-zinc-100 hover:text-zinc-700 ${currentPage === index + 1 ? "bg-orange-400 text-white" : "text-zinc-500"}`}
                 >
                   {index + 1}
                 </button>
