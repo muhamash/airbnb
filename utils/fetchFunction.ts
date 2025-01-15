@@ -73,11 +73,11 @@ export async function fetchHotels ( page: string )
     if (data?.success) {
       return data?.data;
     } else {
-      console.error("Failed to fetch dictionary", data.message);
+      console.error("Failed to fetch hotels", data.message);
       return null;
     }
   } catch (error) {
-    console.error("Error fetching dictionary", error);
+    console.error("Error fetching hotels", error);
     throw error;
   }
 }
