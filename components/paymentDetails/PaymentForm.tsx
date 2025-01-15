@@ -53,7 +53,7 @@ export default function PaymentForm({
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
     const rate = searchParams?.rate ? JSON.parse( searchParams?.rate ) : {};
-    // console.log( userId);
+    console.log( userId, isVerified, rate);
 
     const handleSubmit = (e:React.ChangeEvent<HTMLInputElement>) =>
     {
@@ -87,11 +87,6 @@ export default function PaymentForm({
             } );
         }
     }
-
-    if (!userId) {
-    router.push("/login");
-    return null;
-  }
 
   if (!isVerified) {
     router.push("/verify");
