@@ -17,10 +17,8 @@ interface PaymentProps {
 }
 
 export default async function Payment({ searchParams, params }: PaymentProps) {
-  const resolvedSearchParams = await searchParams;
-
+  const resolvedSearchParams = Object.fromEntries(searchParams.entries());
   const { lang, id } = await params;
-//   const hotelId = id;
 
   const checkIn = searchParams.get("checkIn") ?? '';
   const checkOut = searchParams.get("checkOut") ?? '';
@@ -28,19 +26,16 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
   const rateString = searchParams.get("rate");
 
   try {
-    const [dictionaryResponse, daysPromise, authPromise, hotelResponse] = await Promise.all([
+    const [dictionaryResponse, days, user, hotelResponse] = await Promise.all([
       fetchDictionary(lang),
       calculateDaysBetween(checkIn, checkOut),
       auth(),
       fetch(`${process.env.NEXT_PUBLIC_URL}/api/hotels/${id}`),
     ]);
 
-    const user = await authPromise;
     const responseData = await dictionaryResponse;
-    const days = await daysPromise;
     const hotel = await hotelResponse.json();
-      const rate = rateString ? JSON.parse( rateString ) : {};
-      console.log( rate );
+    const rate = rateString ? JSON.parse(rateString) : {};
 
     const rentedPricePerDay = Number(rate[selection] || 0);
     const selectedQuantity = Number(resolvedSearchParams[selection] || 1);
@@ -60,8 +55,8 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
             email={user?.user?.email || ''}
             calculateRentedPrice={totalPrice}
             imageUrl={hotel?.data?.thumbNailUrl}
-            searchParams={searchParams}
-            params={params}
+            searchParams={resolvedSearchParams}
+            params={{ lang, id }}
             languageData={responseData?.payment}
           />
           <div>
@@ -70,7 +65,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
               languageData={responseData?.payment}
               calculateRentedPrice={calculateRentedPrice}
               days={days}
-              searchParams={searchParams}
+              searchParams={resolvedSearchParams}
               imageUrl={hotel?.data?.thumbNailUrl}
             />
           </div>

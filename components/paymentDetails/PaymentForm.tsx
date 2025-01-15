@@ -1,57 +1,59 @@
-'use client'
+'use client';
 
 import { paymentForm } from "@/utils/serverActions";
-import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import toast, { Toaster } from 'react-hot-toast';
 import TripDetails from "./TripDetails";
 
 interface Buttons {
-    [key: string]: string;
+  [key: string]: string;
 }
-interface Placeholders
-{
-    [ key: string ]: string;
+
+interface Placeholders {
+  [key: string]: string;
 }
+
 interface PaymentFormProps {
-    searchParams: Promise<{ [key: string]: string | string[]  }>;
-    languageData: {
-        back: string;
-        trip: string;
-        dates: string;
-        rent: string;
-        paymentText: string;
-        billingText: string;
-        buttons: Buttons;
-        priceDetails: string;
-        cFee: string;
-        sFee: string;
-        total: string;
-        placeholders: Placeholders;
-    };
-    params: Params;
-    calculateRentedPrice: number;
-    email: string;
-    userId: string;
-    name: string;
-    imageUrl: string;
-    isVerified: boolean | undefined;
+  searchParams: { [key: string]: string | string[] };
+  languageData: {
+    back: string;
+    trip: string;
+    dates: string;
+    rent: string;
+    paymentText: string;
+    billingText: string;
+    buttons: Buttons;
+    priceDetails: string;
+    cFee: string;
+    sFee: string;
+    total: string;
+    placeholders: Placeholders;
+  };
+  params: { lang: string; id: string };
+  calculateRentedPrice: number;
+  email: string;
+  userId: string;
+  name: string;
+  imageUrl: string;
+  isVerified: boolean;
 }
 
-// interface FormData
-// {
-//     email: string;
-//     password: string;
-//     action: string;
-// }
-
-export default  function PaymentForm ( {isVerified, searchParams, languageData, params, calculateRentedPrice, userId, email, name, imageUrl }: PaymentFormProps )
-{
-    const [ isPending, startTransition ] = useTransition();
-    const router = useRouter();
+export default function PaymentForm({
+  isVerified,
+  searchParams,
+  languageData,
+  params,
+  calculateRentedPrice,
+  userId,
+  email,
+  name,
+  imageUrl,
+}: PaymentFormProps) {
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
     const rate = searchParams?.rate ? JSON.parse( searchParams?.rate ) : {};
-    console.log( userId);
+    // console.log( userId);
 
     const handleSubmit = (e:React.ChangeEvent<HTMLInputElement>) =>
     {
@@ -86,15 +88,15 @@ export default  function PaymentForm ( {isVerified, searchParams, languageData, 
         }
     }
 
-    if ( !userId )
-    {
-        router.push( "/login" );
-    }
+    if (!userId) {
+    router.push("/login");
+    return null;
+  }
 
-    if ( !isVerified )
-    {
-        router.push( "/verify" );
-    }
+  if (!isVerified) {
+    router.push("/verify");
+    return null;
+  }
 
     return (
         <div>
