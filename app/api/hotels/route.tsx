@@ -3,6 +3,7 @@ import { dbConnect } from "@/services/mongoDB";
 import { replaceMongoIdInArray } from "@/utils/mongoData";
 import { NextResponse } from "next/server";
 
+
 async function getAllHotels(skip = 0, limit = 8): Promise<{ hotels: IHotel[]; total: number }> {
     await dbConnect();
 
@@ -14,11 +15,11 @@ async function getAllHotels(skip = 0, limit = 8): Promise<{ hotels: IHotel[]; to
 
 export async function GET(request: Request): Promise<Response> {
     try {
-        const { searchParams } = new URL(request.url);
-        const page = parseInt(searchParams.get("page") || "1", 10);
-        const limit = 1;
+        const url = new URL(request.url);
+        const page = parseInt(url.searchParams.get("page") || "1", 10); 
+        
+        const limit = 1;  
         const skip = (page - 1) * limit;
-
         const { hotels, total } = await getAllHotels(skip, limit);
 
         const response = {
@@ -26,9 +27,9 @@ export async function GET(request: Request): Promise<Response> {
             pagination: {
                 total,
                 page,
-                pages: Math.ceil(total / limit),
+                pages: Math.ceil(total / limit), 
             },
-            limit: limit,
+            limit,
             status: 200
         };
 

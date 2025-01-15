@@ -61,17 +61,18 @@ export async function fetchUserBookings(userId: string) {
   }
 }
 
-export async function fetchHotels ( page: string )
+export async function fetchHotels ( page: number )
 {
   try {
-    const response = await fetch(`${ process.env.NEXT_PUBLIC_URL }/api/hotels/page/${page}`, {
+    const response = await fetch(`${ process.env.NEXT_PUBLIC_URL }/api/hotels?page=${page}`, {
       cache: "no-store",
     });
 
     const data = await response.json();
 
-    if (data?.success) {
-      return data?.data;
+    // console.log(data)
+    if (data?.status === 200) {
+      return data;
     } else {
       console.error("Failed to fetch hotels", data.message);
       return null;

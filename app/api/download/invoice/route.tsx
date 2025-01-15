@@ -1,87 +1,68 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { fetchBookingDetails, fetchDictionary } from '@/utils/fetchFunction';
 import { generateHtml } from '@/utils/utils';
-import chromium from 'chrome-aws-lambda';
-// import puppeteer from 'puppeteer-core';
-import puppeteer from 'puppeteer-core';
+import { chromium } from 'playwright';
 import QRCode from 'qrcode';
-// process.env.IS_AWS_LAMBDA ||
 
 export const dynamic = "force-dynamic";
-const isServerless =  true; 
 
 export async function POST(request: Request): Promise<Response> {
-    try
-    {
+    try {
         const url = new URL(request.url);
-        const bookingId : string = url.searchParams.get( "bookingId" );
-        const hotelId : string = url.searchParams.get( "hotelId" );
-        const lang : string = url.searchParams.get( "lang" );
-
-        // console.log( lang, hotelId, bookingId, url );
-        // console.log("URL params:", url.searchParams.toString());
+        const bookingId: string | null = url.searchParams.get("bookingId");
+        const hotelId: string | null = url.searchParams.get("hotelId");
+        const lang: string | null = url.searchParams.get("lang");
 
         if (!bookingId || !hotelId || !lang) {
             return new Response("Missing required parameters.", { status: 400 });
         }
 
-        const [ bookingDetails, language ] = await Promise.all( [
-            fetchBookingDetails( hotelId, bookingId ),
-            fetchDictionary( lang ),
-        ] );
+        const [bookingDetails, language] = await Promise.all([
+            fetchBookingDetails(hotelId, bookingId),
+            fetchDictionary(lang),
+        ]);
 
         const qrCodeData = await QRCode.toDataURL(
-            `${ process.env.NEXT_PUBLIC_URL }/bn/redirect?bookingId=${ bookingId }&hotelName=${ bookingDetails?.hotelName }&name=${ bookingDetails?.name }&hotelAddress=${ bookingDetails?.hotelAddress }&target=${ process.env.NEXT_PUBLIC_URL }/${ lang }/trip?bookingId=${ bookingId }&hotelId=${ hotelId }`
+            `${process.env.NEXT_PUBLIC_URL}/bn/redirect?bookingId=${bookingId}&hotelName=${bookingDetails?.hotelName}&name=${bookingDetails?.name}&hotelAddress=${bookingDetails?.hotelAddress}&target=${process.env.NEXT_PUBLIC_URL}/${lang}/trip?bookingId=${bookingId}&hotelId=${hotelId}`
         );
-        // console.log( qrCodeData );
-        // console.log( "from booking api", bookingDetails );
-        if (isServerless) {
-            console.log("Running on AWS Lambda");
-        } else {
-            console.log("Running locally or in another environment");
-        };
 
-        const executablePath = isServerless
-            ? await chromium.executablePath
-            : await puppeteer.executablePath() ;
-        if (!executablePath) {
-            throw new Error('Chromium not available in this environment.');
-        }
-
-        const browser = await puppeteer.launch({
-            executablePath,
-            args: isServerless ? chromium.args : [],
-            headless: isServerless ? chromium.headless : true,
-            defaultViewport: isServerless ? chromium.defaultViewport : null,
+        const browser = await chromium.launch({
+            headless: true, // Run in headless mode for serverless environments
         });
 
-        // invoice
-        const content = await generateHtml( bookingDetails, language, qrCodeData );
-        
-        try {
-            // const content = generateHTML(bookingDetails, language, qrCodeData);
-            const page = await browser.newPage();
-            await page.setContent(content);
-            const pdfBuffer = await page.pdf( { format: 'A4', printBackground: true } );
+        const context = await browser.newContext();
+        const page = await context.newPage();
 
-            return new Response(pdfBuffer, {
-                headers: {
-                    'Content-Type': 'application/pdf',
-                    'Content-Disposition': 'inline; filename="BookingConfirmation.pdf"',
-                },
-            });
-        } finally {
-            await browser.close();
-        }
+        // Generate HTML content
+        const content = await generateHtml(bookingDetails, language, qrCodeData);
+
+        // Load the content into the page
+        await page.setContent(content);
+
+        // Generate PDF
+        const pdfBuffer = await page.pdf({
+            format: 'A4',
+            printBackground: true,
+        });
+
+        // Close the browser
+        await browser.close();
+
+        return new Response(pdfBuffer, {
+            headers: {
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': 'inline; filename="BookingConfirmation.pdf"',
+            },
+        });
     } catch (error) {
         console.error('Failed to generate PDF:', error);
 
         return new Response(
-            JSON.stringify( {
+            JSON.stringify({
                 success: false,
                 message: 'Failed to generate PDF.',
-            } ),
+            }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
         );
-    };
+    }
 };

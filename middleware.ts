@@ -23,21 +23,21 @@ export default auth(async function middleware(request: NextRequest): Promise<Nex
   const { nextUrl } = request;
   const pathname = nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(pathname);
-  const isAuthenticated = !!request.auth; 
+  const isAuthenticated = !!request.auth;
 
-  // console.log(typeof request.auth, typeof isAuthenticated, typeof isProtectedRoute);
   // Skip API routes explicitly
   if (pathname.startsWith('/api')) {
     return;
   }
 
-  if (isProtectedRoute as boolean && !isAuthenticated as boolean) {
+  if (isProtectedRoute && !isAuthenticated) {
     return NextResponse.redirect(new URL('/login', request.nextUrl));
   }
 
-  if (pathname === ROOT) {
+  // Handle root URL redirection to /en?page=1 or /bn?page=1
+  if (pathname === ROOT || pathname === `/${defaultLocale}` || pathname === `/${locales[1]}`) {
     const locale = getLocale(request);
-    return NextResponse.redirect(new URL(`/${locale}${pathname}`, nextUrl.origin));
+    return NextResponse.redirect(new URL(`/${locale}?page=1`, nextUrl.origin));
   }
 
   const pathnameIsMissingLocale = locales.every(
@@ -47,6 +47,13 @@ export default auth(async function middleware(request: NextRequest): Promise<Nex
   if (pathnameIsMissingLocale) {
     const locale = getLocale(request);
     return NextResponse.redirect(new URL(`/${locale}${pathname}`, nextUrl.origin));
+  }
+
+  const urlSearchParams = new URLSearchParams(nextUrl.search);
+
+  if (!urlSearchParams.has('page')) {
+    urlSearchParams.set('page', '1');
+    return NextResponse.redirect(new URL(`${pathname}?${urlSearchParams.toString()}`, nextUrl.origin));
   }
 });
 

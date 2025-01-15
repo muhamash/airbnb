@@ -3,18 +3,19 @@ import { fetchDictionary } from "@/utils/fetchFunction";
 interface HomeProps
 {
   params: Promise<{ lang: string }>;
+  searchParams: URLSearchParams;
 }
 
-export default async function Home ( { params } : HomeProps )
+export default async function Home ( { params, searchParams } : HomeProps )
 {
   const { lang } = await params;
   const responseData = await fetchDictionary( lang );
-  // console.log( responseData, lang);
+  // console.log( searchParams.page );
 
   return (
     <div className="md:py-[100px] py-[130px]">
       <div className="px-6">
-        <CardContainer params={params}  languageData={responseData?.home} />
+        <CardContainer params={params} page={searchParams?.page}  languageData={responseData?.home} />
       </div>
     </div>
   );

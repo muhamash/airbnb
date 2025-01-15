@@ -20,14 +20,14 @@ export async function getAllStocks (): Promise<IStock[]>
 {
   await dbConnect();
   const stocks = await stockModel.find().lean();
-  return stocks;
+  return replaceMongoIdInArray(stocks);
 }
 
 export async function getAllReviews (): Promise<IReviews[]>
 {
   await dbConnect();
   const reviews = await reviewsModel.find().lean();
-  return reviews;
+  return replaceMongoIdInArray(reviews);
 }
 
 export async function getStockByHotelId(hotelId: string): Promise<IStock | null> {
