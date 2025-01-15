@@ -23,34 +23,28 @@ export const metadata: Metadata = {
 // }
 interface PaymentProps {
   params: Promise<{ lang: string, id: string }>;
-  searchParams: Promise<{ [key: string]: string | string[]  }>;
+  searchParams: URLSearchParams;
 }
 
 export default async function Payment({ searchParams, params }: PaymentProps) {
     const resolvedSearchParams = await searchParams;
 
-    const searchParamsObject = new URLSearchParams(
-        Object.entries(resolvedSearchParams).flatMap(([key, value]) =>
-            Array.isArray(value) ? value.map(val => [key, val]) : [[key, value]]
-        )
-    );
-
     const { lang, id } = await params;
     // const lang = lang;
     const hotelId = id;
 
-    const checkIn = searchParamsObject.get("checkIn") ?? '';
-    const checkOut = searchParamsObject.get("checkOut") ?? '';
-    const selection = searchParamsObject.get("selection") ?? '';
-    const rateString = searchParamsObject.get("rate");
+    const checkIn = searchParams.get("checkIn") ?? '';
+    const checkOut = searchParams.get("checkOut") ?? '';
+    const selection = searchParams.get("selection") ?? '';
+    const rateString = searchParams.get("rate");
 
     try {
-        const [dictionaryResponse, daysPromise, authPromise, hotelResponse] = await Promise.all([
-            fetchDictionary(lang),
-            calculateDaysBetween(checkIn, checkOut),
+        const [ dictionaryResponse, daysPromise, authPromise, hotelResponse ] = await Promise.all( [
+            fetchDictionary( lang ),
+            calculateDaysBetween( checkIn, checkOut ),
             auth(),
-            fetch(`${ process.env.NEXT_PUBLIC_URL }/api/hotels/${hotelId}`),
-        ]);
+            fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels/${ hotelId }` ),
+        ] );
 
         const user = await authPromise;
         const responseData = await dictionaryResponse;

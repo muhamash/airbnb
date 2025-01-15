@@ -95,8 +95,7 @@ export default  function PaymentForm ( {isVerified, searchParams, languageData, 
     {
         router.push( "/verify" );
     }
-    // console.log( userId );
-    // if (!session) return <div>Loading user data...</div>;
+
     return (
         <div>
             <Toaster

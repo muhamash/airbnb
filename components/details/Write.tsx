@@ -84,7 +84,7 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
     {
       try
       {
-        const response = await fetch( '${ process.env.NEXT_PUBLIC_URL }/api/review', {
+        const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/review`, {
           method: isEditing ? 'PATCH' : 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify( reviewData ),
