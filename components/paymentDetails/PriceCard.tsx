@@ -8,7 +8,7 @@ interface Placeholders
     [ key: string ]: string;
 }
 interface PriceCardProps {
-    searchParams: URLSearchParams;
+    searchParams: Promise<{ [key: string]: string | string[]  }>;
     languageData: {
         back: string;
         trip: string;
@@ -24,7 +24,6 @@ interface PriceCardProps {
         placeholders: Placeholders;
     };
     calculateRentedPrice: number;
-    ratings: number;
     days: number;
     imageUrl: string;
     hotelName: string;

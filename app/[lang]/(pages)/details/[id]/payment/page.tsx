@@ -65,17 +65,17 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
         const serviceFee = 51.31;
         const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;
 
-        const userInfo: User | undefined  = user?.user;
+        const userInfo = user?.user as User | undefined;
 
         return (
             <div className="max-w-7xl mx-auto px-6 py-[100px]">
                 <BackButton text={responseData?.payment?.back} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
                     <PaymentForm
-                        isVerified={userInfo?.emailVerified}
-                        name={userInfo?.name}
-                        userId={userInfo?._id}
-                        email={userInfo?.email}
+                        isVerified={userInfo?.emailVerified ? (userInfo?.emailVerified as boolean) : false}
+                        name={userInfo?.name as string as string}
+                        userId={userInfo?._id as string}
+                        email={userInfo?.email as string}
                         calculateRentedPrice={totalPrice}
                         imageUrl={hotel?.data?.thumbNailUrl}
                         searchParams={searchParams}
@@ -83,7 +83,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
                         languageData={responseData?.payment}
                     />
                     <div>
-                        <PriceCard hotelName={hotel?.data?.name} languageData={responseData?.payment} calculateRentedPrice={calculateRentedPrice} params={params} days={days} searchParams={searchParams} imageUrl={hotel?.data?.thumbNailUrl} />
+                        <PriceCard hotelName={hotel?.data?.name} languageData={responseData?.payment} calculateRentedPrice={calculateRentedPrice} days={days} searchParams={searchParams} imageUrl={hotel?.data?.thumbNailUrl} />
                     </div>
                 </div>
             </div>

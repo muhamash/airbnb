@@ -15,7 +15,7 @@ interface Placeholders
     [ key: string ]: string;
 }
 interface PaymentFormProps {
-    searchParams: URLSearchParams;
+    searchParams: Promise<{ [key: string]: string | string[]  }>;
     languageData: {
         back: string;
         trip: string;
@@ -31,13 +31,12 @@ interface PaymentFormProps {
         placeholders: Placeholders;
     };
     params: Params;
-    stocksPromise: Promise;
     calculateRentedPrice: number;
     email: string;
     userId: string;
     name: string;
     imageUrl: string;
-    isVerified: boolean;
+    isVerified: boolean | undefined;
 }
 
 // interface FormData
