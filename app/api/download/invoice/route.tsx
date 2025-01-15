@@ -8,7 +8,7 @@ import QRCode from 'qrcode';
 // process.env.IS_AWS_LAMBDA ||
 
 export const dynamic = "force-dynamic";
-const isServerless =  false; 
+const isServerless =  true; 
 
 export async function POST(request: Request): Promise<Response> {
     try
