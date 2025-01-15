@@ -29,7 +29,7 @@ export default function VerifyEmailPage() {
     const [loading, setLoading] = useState<boolean>(true);
     const [timer, setTimer] = useState<number | null>(null);
     const params = useParams();
-    const lang: string = Array.isArray(params?.lang) ? params.lang[0] : params?.lang || 'en';
+    const lang = params?.lang;
 
     async function fetchLanguage() {
         const response = await fetchDictionary(lang);
@@ -65,25 +65,53 @@ export default function VerifyEmailPage() {
         return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
     };
 
-    async function resendVerificationEmail() {
-        if (!email) {
-            toast.error("language?.verifyPage?.toastEr");
+    const resendVerificationEmail = async () =>
+    {
+        if ( !email )
+        {
+            toast.error( language?.verifyPage?.toastEr );
             return;
         }
 
-        const response = await fetch("/api/email/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, lang: params?.lang }),
-        });
+        try
+        {
+            const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }api/email/verify`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify( { email, lang } ),
+            } );
 
-        if (response.status === 200) {
-            toast.success( "oka");
-            setTimer(600);
-        } else {
-            toast.error("language?.verifyPage?.toastErrr");
+            console.log( email, lang );
+            if ( !response.ok )
+            {
+                const errorText = await response.text();
+                console.error( 'Error response from server:', errorText );
+                throw new Error( ` ${ response.status } ${ response.statusText }` );
+            }
+
+            const result = await response.json();
+            if ( result.status === 200 )
+            {
+                toast.success( language?.verifyPage?.toastSuccess );
+                setTimer( 600 );
+            } else
+            {
+                toast.error( language?.verifyPage?.toastErrr );
+            }
+        } catch ( error )
+        {
+            console.error( error );
+            toast.error( language?.verifyPage?.toastErrr );
         }
-    }
+    };
+
+    const handleSend = () =>
+    {
+        startTransition( async () =>
+        {
+            await resendVerificationEmail();
+        } );
+    };
 
     if (loading) {
         return (
@@ -126,9 +154,7 @@ export default function VerifyEmailPage() {
                     </div>
                 ) : (
                     <button
-                        onClick={() =>
-                            startTransition(async () => await resendVerificationEmail())
-                        }
+                        onClick={ handleSend}
                         className={`w-full py-3 ${
                             timer === null ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
                         } text-white rounded-lg text-lg font-semibold transition duration-300`}

@@ -52,7 +52,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
           <PaymentForm
             isVerified={user?.user?.emailVerified}
             name={user?.user?.name || ''}
-            userId={user?.user?._id || ''}
+            userId={user?.user?.id || ''}
             email={user?.user?.email || ''}
             calculateRentedPrice={totalPrice}
             imageUrl={hotel?.data?.thumbNailUrl}

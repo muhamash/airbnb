@@ -20,7 +20,7 @@ export default function UserActions({ session, logOut, list, create, login, reg 
     // console.log( session );
     const handleLogout = async () => {
         try {
-            await signOut({ callbackUrl: '${ process.env.NEXT_PUBLIC_URL }' });
+            await signOut({ callbackUrl: `${ process.env.NEXT_PUBLIC_URL }` });
         } catch (error) {
             console.error("Logout error:", error);
         }

@@ -27,7 +27,19 @@ async function sendVerificationEmail(email: string, token: string, lang: string)
 export async function POST(request: Request): Promise<Response> {
     try {
         const body = await request.json();
-        const {email, lang }= body;
+        const { email, lang } = body;
+        console.log( email, lang, body );
+        if (!email || !lang) {
+            return new Response(
+                JSON.stringify( {
+                    success: false,
+                    message: "Invalid email or language.",
+                    status: 400,
+                } ),
+                { status: 400, headers: { "Content-Type": "application/json" } }
+            );
+        };
+
         await dbConnect();
 
         const existingUser = await userModel.findOne({ email });
@@ -49,7 +61,7 @@ export async function POST(request: Request): Promise<Response> {
 
         existingUser.verificationToken = token;
         existingUser.tokenExpiration = tokenExpiration;
-        await existingUser.save();
+        await existingUser.save({ validateModifiedOnly: true });
         await sendVerificationEmail(email, token, lang);
 
         return new Response(
@@ -119,7 +131,7 @@ export async function GET(request: Request): Promise<Response> {
         user.emailVerified = true;
         user.verificationToken = null;
         user.tokenExpiration = null; 
-        await user.save();
+        await user.save( { validateModifiedOnly: true } );
 
         return new Response(
             JSON.stringify({
