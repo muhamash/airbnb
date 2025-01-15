@@ -3,22 +3,32 @@
 import { fetchDictionary } from '@/utils/fetchFunction';
 import { Skeleton } from 'antd';
 import { motion } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+interface EmailVerify {
+    [ key: string ]: string;
+}
+
+interface Language {
+    emailVerify: EmailVerify;
+}
 
 export default function VerificationSuccessPage() {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const params = useParams();
+    const lang: string = Array.isArray(params?.lang) ? params.lang[0] : params?.lang || 'en';
     const token = searchParams.get( 'token' );
     const email = searchParams.get( 'email' );
-    const [ language, setLanguage ] = useState( null );
+    const [language, setLanguage] = useState<Language | null>(null);
     const [ counter, setCounter ] = useState( 5 );
     const [ loading, setLoading ] = useState<boolean>( true );
     const [ verificationStatus, setVerificationStatus ] = useState<'pending' | 'success' | 'failed'>( 'pending' );
     
     async function fetchLanguage ()
             {
-                const response = await fetchDictionary( params?.lang );
+                const response = await fetchDictionary( lang );
                 if ( response )
                 {
                     setLanguage( response );

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import ActionButton from "@/components/success/ActionButton";
 import BookingCrad from "@/components/success/BookingCrad";
-import type { Metadata } from "next";
 import { fetchBookingDetails, fetchDictionary } from "@/utils/fetchFunction";
+import type { Metadata } from "next";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
 
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 interface SuccessProps
 {
     searchParams: URLSearchParams;
-    params: Params;
+    params: Params | never;
 }
 
 export default async function Success ({searchParams, params}: SuccessProps)
@@ -23,9 +23,12 @@ export default async function Success ({searchParams, params}: SuccessProps)
     // {
     //     redirect( "/login" );
     // }
+    const hotelId = searchParams.get('hotelId') as string;
+    const bookingId = searchParams.get( 'bookingId' ) as string;
+    
     const [ bookingPromise, languagePromise ] = await Promise.all(
         [
-            fetchBookingDetails( searchParams?.hotelId, searchParams?.bookingId ),
+            fetchBookingDetails( hotelId as string, bookingId as string ),
             fetchDictionary( params?.lang )
         ] );
     const language = await languagePromise;
@@ -91,7 +94,7 @@ export default async function Success ({searchParams, params}: SuccessProps)
 
             {/* <!-- Action Buttons --> */}
             <div className="flex flex-wrap-reverse gap-3 items-center justify-center">
-                <ActionButton bookingId={searchParams?.bookingId} hotelId={searchParams?.hotelId} lang={params?.lang} text={language?.success?.receipt} />
+                <ActionButton bookingId={bookingId} hotelId={hotelId} lang={params?.lang} text={language?.success?.receipt} />
                 <Link href={"/"} className="px-6 py-3 bg-cyan-700 text-white rounded-lg hover:brightness-90">
                     <i className="fas fa-home mr-2"></i>
                     {language?.success?.back}

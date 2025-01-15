@@ -6,16 +6,34 @@ import { useParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import toast, { Toaster } from 'react-hot-toast';
 
+// Define the structure of the language data
+interface VerifyPage {
+    title: string;
+    text: string;
+    em: string;
+    emailPlaceholder: string;
+    toastEr: string;
+    toastSuccess: string;
+    toastErrr: string;
+    resend: string;
+}
+
+interface Language {
+    verifyPage: VerifyPage;
+}
+
 export default function VerifyEmailPage() {
     const [email, setEmail] = useState("");
     const [isPending, startTransition] = useTransition();
-    const [language, setLanguage] = useState(null);
+    const [language, setLanguage] = useState<Language | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [timer, setTimer] = useState<number | null>(null);
     const params = useParams();
 
+    const lang: string = Array.isArray(params?.lang) ? params.lang[0] : params?.lang || 'en';
+
     async function fetchLanguage() {
-        const response = await fetchDictionary(params?.lang);
+        const response = await fetchDictionary(lang);
         if (response) {
             setLanguage(response);
             setLoading(false);
@@ -50,7 +68,7 @@ export default function VerifyEmailPage() {
 
     async function resendVerificationEmail() {
         if (!email) {
-            toast.error(language?.verifyPage?.toastEr);
+            toast.error("language?.verifyPage?.toastEr");
             return;
         }
 
@@ -61,10 +79,10 @@ export default function VerifyEmailPage() {
         });
 
         if (response.status === 200) {
-            toast.success(language?.verifyPage?.toastSuccess);
+            toast.success( "oka");
             setTimer(600);
         } else {
-            toast.error(language?.verifyPage?.toastErrr);
+            toast.error("language?.verifyPage?.toastErrr");
         }
     }
 
