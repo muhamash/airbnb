@@ -39,7 +39,13 @@ export default async function Nav ( { params }: NavProps )
 
             <div className="flex items-center space-x-4 relative justify-end">
                 <LanguageSwitch />
-                <UserActions session={session} />
+                <UserActions
+                    reg={responseData?.nav?.reg}
+                    login={responseData?.nav?.login}
+                    logOut={responseData?.nav?.logOut}
+                    create={responseData?.nav?.create}
+                    list={responseData?.nav?.list}
+                    session={session} />
             </div>
         </nav>
     );

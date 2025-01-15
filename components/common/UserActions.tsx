@@ -8,9 +8,14 @@ import { useParams } from 'next/navigation';
 import { useState } from 'react';
 interface UserActionsProps {
     session: Session | null;
+    logOut: string;
+    create: string;
+    list: string;
+    login: string;
+    reg: string;
 }
 
-export default function UserActions({ session }: UserActionsProps) {
+export default function UserActions({ session, logOut, list, create, login, reg }: UserActionsProps) {
     const [isHovered, setIsHovered] = useState(false);
     // console.log( session );
     const handleLogout = async () => {
@@ -64,12 +69,12 @@ export default function UserActions({ session }: UserActionsProps) {
                         <ul>
                             <Link href="/login" className="w-full">
                                 <li className="px-3 py-2 text-sm text-white transition-all hover:bg-white hover:text-green-800 hover:pl-4 rounded-md">
-                                    Login
+                                    {login}
                                 </li>
                             </Link>
                             <Link href="/registration" className="w-full">
                                 <li className="px-3 py-2 text-sm text-white transition-all hover:bg-white hover:text-green-800 hover:pl-4 rounded-md">
-                                    Signup
+                                    {reg}
                                 </li>
                             </Link>
                         </ul>
@@ -77,7 +82,7 @@ export default function UserActions({ session }: UserActionsProps) {
                         <ul className="flex items-start justify-start flex-col text-left">
                             <button onClick={handleLogout} className="w-full">
                                 <li className="px-3 py-2 text-sm text-white transition-all hover:bg-white hover:text-green-800 hover:pl-4 rounded-md text-left">
-                                    Log out
+                                    {logOut}
                                 </li>
                             </button>
                             <p className="w-full">
@@ -92,12 +97,12 @@ export default function UserActions({ session }: UserActionsProps) {
                             </p>
                             <Link href={`http://localhost:3000/${ params?.lang }/bookings`} className="w-full bg-gradient-to-t from-sky-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md my-1">
                                 <li className="px-2 py-2 text-sm text-white transition-all duration-200 hover:bg-pink-600 font-mono rounded-md text-[12px] text-center">
-                                    Booking list
+                                    {list}
                                 </li>
                             </Link>
                             <Link href={`http://localhost:3000/${ params?.lang }/create`} className="w-full bg-gradient-to-t from-blue-500 to-transparent px-[0.3px] shadow-md border-[0.5px] border-slate-300 rounded-md">
                                 <li className="px-2 py-2 text-sm text-white transition-all duration-200 hover:bg-green-600 font-mono rounded-md text-[12px] text-center">
-                                    Start your business
+                                    {create}
                                 </li>
                             </Link>
                         </ul>

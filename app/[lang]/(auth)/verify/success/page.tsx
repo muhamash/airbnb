@@ -1,16 +1,30 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { fetchDictionary } from '@/utils/fetchFunction';
+import { Skeleton } from 'antd';
 import { motion } from 'framer-motion';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function VerificationSuccessPage() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const token = searchParams.get('token');
-  const email = searchParams.get('email');
-  const [counter, setCounter] = useState(5);
-  const [verificationStatus, setVerificationStatus] = useState<'pending' | 'success' | 'failed'>('pending');
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const token = searchParams.get( 'token' );
+    const email = searchParams.get( 'email' );
+    const [ language, setLanguage ] = useState( null );
+    const [ counter, setCounter ] = useState( 5 );
+    const [ loading, setLoading ] = useState<boolean>( true );
+    const [ verificationStatus, setVerificationStatus ] = useState<'pending' | 'success' | 'failed'>( 'pending' );
+    
+    async function fetchLanguage ()
+            {
+                const response = await fetchDictionary( params?.lang );
+                if ( response )
+                {
+                    setLanguage( response );
+                    setLoading(false)
+                }
+        }
 
     useEffect( () =>
     {
@@ -56,6 +70,16 @@ export default function VerificationSuccessPage() {
         verifyEmail();
     }, [ token, email, router ] );
 
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen bg-gradient-to-br from-cyan-600 via-purple-500 to-sky-400">
+                <div className="w-[300px]">
+                    <Skeleton active paragraph={{ rows: 4 }} />
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="flex items-center justify-center h-screen bg-gradient-to-br from-cyan-600 via-purple-500 to-sky-400">
             <motion.div
@@ -72,9 +96,9 @@ export default function VerificationSuccessPage() {
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.4, ease: 'easeOut' }}
                         >
-                            Verifying your email...
+                            {language?.emailVerify?.working}
                         </motion.h1>
-                        <p className="mt-4 text-gray-600">Please wait while we verify your email.</p>
+                        <p className="mt-4 text-gray-600">{language?.emailVerify?.wait}</p>
                     </div>
                 )}
 
@@ -107,10 +131,10 @@ export default function VerificationSuccessPage() {
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.4, ease: 'easeOut' }}
                         >
-                            Email Verified Successfully!
+                            {language?.emailVerify?.textSuccess}
                         </motion.h1>
                         <p className="mt-4 text-gray-600">
-                            Redirecting to the login page in <strong>{counter}</strong> seconds...
+                            {language?.emailVerify?.lastText} <strong>{counter}</strong> {language?.emailVerify?.seconds}...
                         </p>
                     </div>
                 )}
@@ -123,10 +147,10 @@ export default function VerificationSuccessPage() {
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.4, ease: 'easeOut' }}
                         >
-                            Verification Failed
+                           {language?.emailVerify?.textEr}
                         </motion.h1>
                         <p className="mt-4 text-gray-600">
-                            The verification link is invalid or expired. Please try again.
+                            {language?.emailVerify?.text}
                         </p>
                         <motion.button
                             className="mt-6 px-6 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -134,11 +158,11 @@ export default function VerificationSuccessPage() {
                             whileTap={{ scale: 0.95 }}
                             onClick={() => router.push( '/auth/signin' )}
                         >
-                            Go to Login
+                            {language?.emailVerify?.gL}
                         </motion.button>
                     </div>
                 )}
             </motion.div>
         </div>
     );
-}
+};
