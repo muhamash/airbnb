@@ -68,6 +68,7 @@ export default function VerificationSuccessPage() {
         }
 
         verifyEmail();
+        fetchLanguage();
     }, [ token, email, router ] );
 
     if (loading) {
