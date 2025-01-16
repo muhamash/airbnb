@@ -77,7 +77,7 @@ export async function POST(request: Request): Promise<Response> {
             status: 200,
             headers: {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename=${resumeTitle}.pdf`,
+                'Content-Disposition': `attachment; filename=bookingConfirmation.pdf`,
             },
         });
 
