@@ -8,8 +8,8 @@ interface ActionButtonProps
 export default async function ActionButton ( { hotelId, lang, bookingId, text }: ActionButtonProps )
 {
     // console.log( lang, hotelId, bookingId );
-    const actionUrl = `/api/download/invoice?hotelId=${hotelId}&bookingId=${bookingId}&lang=${lang}`;
-    console.log( "Constructed action URL:", actionUrl );
+    const actionUrl = `${ process.env.NEXT_PUBLIC_URL }/api/download/invoice?hotelId=${hotelId}&bookingId=${bookingId}&lang=${lang}`;
+    // console.log( "Constructed action URL:", actionUrl );
     return (
         <form
             action={actionUrl}

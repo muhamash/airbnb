@@ -1,6 +1,5 @@
 import Footer from "@/components/common/Footer";
 import Nav from "@/components/common/Nav";
-import { dbConnect } from "@/services/mongoDB";
 import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import "../../globals.css";
 
@@ -18,7 +17,7 @@ export default async function RootLayout({
 }> )
 {
   // console.log(params)
-  await dbConnect();
+  // await dbConnect();
   // console.log(connection.name)
   
   return (

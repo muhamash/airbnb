@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { IBooking } from "@/models/bookings";
 import { getBookingByHotelId } from "@/queries";
+import { dbConnect } from "@/services/mongoDB";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request): Promise<Response> {
     try {
         const url = new URL(request.url);
         const id = url.pathname.split("/").pop();
-        const bookingId = url.searchParams.get("bookingId");
-
+        const bookingId = url.searchParams.get( "bookingId" );
+        
+        await dbConnect();
         const bookingsData = await getBookingByHotelId(id as string);
 
         if (!bookingsData || !Array.isArray(bookingsData)) {

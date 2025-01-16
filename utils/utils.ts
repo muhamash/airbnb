@@ -48,15 +48,18 @@ export const updateSearchParams = async ( updates: Record<string, string | null>
     router.replace( `?${ currentParams.toString() }` );
 };
 
-export async function generateHtml ( content: never, language:never, qrCodeData: string ) : Promise<string>
+export async function generateHtml (content: { checkIn: string; checkOut: string; rate: number; rentCount: number },
+  language: string,
+  qrCodeData: string ) : Promise<string>
 {
   // console.log( language, content );
-  const days: number = await calculateDaysBetween( content?.checkIn, content?.checkOut );
-  const calculatePrice: number = ( content?.rate * content?.rentCount ) * days;
-  const total: number = calculatePrice + 17.50 + 51.31;
+  const days: number = await calculateDaysBetween(content.checkIn, content.checkOut);
+  const calculatePrice: number = content.rate * content.rentCount * days;
+  const total: number = calculatePrice + 17.5 + 51.31;
   
   return `<html>
 <head>
+// internationalization the title
     <title>Booking Confirmation</title>
     <style>
         body {

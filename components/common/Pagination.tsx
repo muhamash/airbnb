@@ -3,7 +3,7 @@
 import { fetchHotels } from "@/utils/fetchFunction";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 export default function Pagination() {
   const searchParams = useSearchParams();
@@ -13,18 +13,18 @@ export default function Pagination() {
   
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [totalPages, setTotalPages] = useState(1); 
-  const [loading, setLoading] = useState(false);   
+  const [ isPending, startTransition ] = useTransition();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true); 
-      const data = await fetchHotels(currentPage);
-      setTotalPages(data.pagination.pages); 
-      setLoading(false);  
+  useEffect( () =>
+  {
+    const fetchData = async () =>
+    {
+      const data = await fetchHotels( currentPage );
+      setTotalPages( data.pagination.pages );
     };
 
     fetchData();
-  }, [currentPage]);
+  }, [ currentPage ] );
 
   // Handle page change and update the URL with the new page number
   const handlePageChange = (page: number) => {
@@ -47,7 +47,7 @@ export default function Pagination() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }} 
     >
-      {loading ? ( 
+      {isPending ? ( 
         <div className="flex justify-center items-center">
           <div className="loaderHast"></div>
         </div>
@@ -57,7 +57,7 @@ export default function Pagination() {
             {/* Previous Button */}
             <li>
               <button
-                onClick={() => handlePageChange(currentPage - 1)}
+                onClick={() => startTransition(()=> handlePageChange(currentPage - 1))}
                 disabled={currentPage === 1}
                 className="block py-2 px-3 ml-0 leading-tight text-zinc-500 bg-white rounded-l-lg border border-zinc-300 hover:bg-zinc-100 hover:text-zinc-700"
               >
@@ -70,7 +70,7 @@ export default function Pagination() {
             {Array.from({ length: totalPages }, (_, index) => (
               <li key={index}>
                 <button
-                  onClick={() => handlePageChange(index + 1)}
+                  onClick={() => startTransition(()=> handlePageChange(index + 1))}
                   className={`py-2 px-3 leading-tight border border-zinc-300 hover:bg-zinc-100 hover:text-zinc-700 ${currentPage === index + 1 ? "bg-orange-400 text-white" : "text-zinc-500"}`}
                 >
                   {index + 1}
@@ -81,7 +81,7 @@ export default function Pagination() {
             {/* Next Button */}
             <li>
               <button
-                onClick={() => handlePageChange(currentPage + 1)}
+                onClick={() => startTransition(()=> handlePageChange(currentPage + 1))}
                 disabled={currentPage === totalPages}
                 className="block py-2 px-3 leading-tight text-zinc-500 bg-white rounded-r-lg border border-zinc-300 hover:bg-zinc-100 hover:text-zinc-700"
               >

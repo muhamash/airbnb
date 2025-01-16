@@ -23,7 +23,7 @@ export default async function CardContainer ( { params,page, languageData }: Con
   const hotels = await hotelsPromise;
   const { lang } = await params;
   // const lang = lang;
-  console.log( page, hotels?.pagination );
+  // console.log( page, hotels?.pagination );
 
   return (
     <>

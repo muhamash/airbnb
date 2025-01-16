@@ -1,5 +1,4 @@
 import { kanit, playfairDisplay, rubik, ubuntu } from "@/components/fonts/font";
-import { dbConnect } from "@/services/mongoDB";
 import type { Metadata } from "next";
 import type { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Image from "next/image";
@@ -19,7 +18,7 @@ export default async function RootLayout({
 }> )
 {
   // console.log(params)
-  await dbConnect();
+  // await dbConnect();
   // console.log(connection.name)
   
   return (

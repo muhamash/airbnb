@@ -19,7 +19,7 @@ export default async function BookingListCard ({title,hotelImage, hotelId, booki
     // console.log( lang, hotelId, bookingId );
     return (
         <div
-            className="bg-white shadow-md rounded-lg p-4 flex items-center justify-between hover:shadow-lg transition-shadow"
+            className="bg-white shadow-md rounded-lg p-4 flex flex-wrap gap-2 items-center justify-between hover:shadow-lg transition-shadow"
         >
             <div className="flex items-center space-x-4">
                 <Image
@@ -37,7 +37,7 @@ export default async function BookingListCard ({title,hotelImage, hotelId, booki
                     <p className="text-zinc-500 text-sm">Booking Code: #{bookingId}</p>
                 </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex gap-4 justify-center">
                 <Link
                     href={`${ process.env.NEXT_PUBLIC_URL }/${lang}/trip?bookingId=${bookingId}&hotelId=${hotelId}&scan=false`}
                     className="px-3 py-2 text-sm bg-teal-600 text-white rounded-lg flex items-center justify-center hover:brightness-90"
