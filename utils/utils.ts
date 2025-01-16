@@ -1,5 +1,5 @@
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import crypto from 'crypto';
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export async function formatDate ( dateString: string ): Promise<string>
 {
@@ -59,8 +59,7 @@ export async function generateHtml (content: { checkIn: string; checkOut: string
   
   return `<html>
 <head>
-// internationalization the title
-    <title>Booking Confirmation</title>
+    <title>${language?.invoice?.head}</title>
     <style>
         body {
             background-color: #A0A0A0;

@@ -63,12 +63,12 @@ export async function POST(request: Request): Promise<Response> {
         const pdf = await page.pdf({
             format: 'A4',
             printBackground: true,
-            margin: {
-                top: '10px',
-                right: '10px',
-                bottom: '10px',
-                left: '10px'
-            }
+            // margin: {
+            //     top: '10px',
+            //     right: '10px',
+            //     bottom: '10px',
+            //     left: '10px'
+            // }
         });
 
         await browser.close();
