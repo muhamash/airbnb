@@ -13,7 +13,8 @@ export const metadata: Metadata = {
 };
 interface TripProps
 {
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+    searchParams: URLSearchParams;
+    // searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
     params: Promise<{ lang: string }>;
 }
 
@@ -24,6 +25,8 @@ export default async function TripDetails ({searchParams, params}: TripProps)
     const bookingId = searchParams.bookingId;
     const scan = searchParams?.scan === 'true' ? true : false;
     const { lang } = await params;
+    const { checkIn, checkOut } = await searchParams;
+    // console.log( searchParams.checkIn, checkOut );
     // const lang = lang;
 
     const [ bookingPromise, languagePromise ] = await Promise.all(
@@ -33,7 +36,8 @@ export default async function TripDetails ({searchParams, params}: TripProps)
         ] );
     const language = await languagePromise;
     const bookings = await bookingPromise;
-    console.log( searchParams.scan , bookings );
+    const days = await calculateDaysBetween( bookings.checkIn, bookings.checkOut );
+    // console.log( bookings?.paymentDetails );
     
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -109,7 +113,7 @@ export default async function TripDetails ({searchParams, params}: TripProps)
                         {/* Total Dates */}
                         <div className="flex flex-col bg-orange-50 p-4 rounded-md shadow">
                             <span className="text-gray-500 text-sm"> {language?.trip?.toD}</span>
-                            <span className="text-gray-900 font-medium">{ await calculateDaysBetween( bookings?.checkIn, bookings?.checkOut) }</span>
+                            <span className="text-gray-900 font-medium">{ days }</span>
                         </div>
 
                         {/* Total Amount */}
