@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect } from "react";
 import { paymentForm } from "@/utils/serverActions";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import TripDetails from "./TripDetails";
 
@@ -24,11 +23,18 @@ export default function PaymentForm({
   console.log(userId, isVerified, rate);
 
   // Handle redirection if the user is not verified
-  useEffect(() => {
-    if (!isVerified) {
-      router.push("/verify");
+  useEffect( () =>
+  {
+    if ( !userId )
+    {
+      router.push( "/login" );
     }
-  }, [isVerified, router]);
+
+    if ( !isVerified )
+    {
+      router.push( "/verify" );
+    }
+  }, [] );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,7 +68,7 @@ export default function PaymentForm({
     }
   };
 
-  if (!isVerified) return null;
+  if ( !isVerified || !userId ) return null;
 
   return (
     <div>

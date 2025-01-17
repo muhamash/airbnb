@@ -128,6 +128,18 @@ export async function GET(request: Request): Promise<Response> {
             );
         }
 
+        if ( user?.emailVerified === true )
+        {
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    message: 'User already verified!!',
+                    status: 400,
+                }),
+                { status: 400, headers: { 'Content-Type': 'application/json' } }
+            );
+        }
+
         user.emailVerified = true;
         user.verificationToken = null;
         user.tokenExpiration = null; 

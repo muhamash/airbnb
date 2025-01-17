@@ -36,7 +36,7 @@ export default async function PriceCard({ languageData,days, calculateRentedPric
         const serviceFee = 51.31;
         const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;
         const rate = JSON.parse( searchParams.rate );
-        // console.log(languageData);
+        // console.log(totalPrice, calculateRentedPrice);
 
         return (
             <div className="bg-white p-6 rounded-lg mb-8 sticky top-0 shadow-sm shadow-orange-300 border-[0.4px] border-orange-300 hover:shadow-md transition-all duration-200">

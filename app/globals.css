@@ -316,3 +316,18 @@
    50% {clip-path: inset(0 0 0 0)     }
    83% {clip-path: inset(0 -100px 0 0)}
 }
+
+/* HTML: <div class="loader"></div> */
+.loaderNotFound {
+  width: 150px;
+  aspect-ratio: 1;
+  background:
+    radial-gradient(farthest-side,#000000 90%,#0000) 50%/8px 8px no-repeat,
+    conic-gradient(from -90deg at 15px 15px,#0000 90deg,#a8a8a2 0) 0 0/25px 25px;
+  animation: l7loaderNotFound 1s infinite;
+}
+@keyframes l7loaderNotFound {
+  0%   {background-position:50%,0 0}
+  50%  {background-position:50%,25px 0}
+  100% {background-position:50%,25px 25px}
+}

@@ -22,7 +22,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
 
   const checkIn = searchParams.checkIn;
   const checkOut = searchParams.checkOut;
-  const selection = searchParams.checkOut;
+  const selection = searchParams.selection;
 //   const rateString = searchParams.checkOut;
 
   try {
@@ -41,6 +41,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
     const rentedPricePerDay = Number(rate[selection] || 0);
     const selectedQuantity = Number(searchParams[selection] || 1);
     const calculateRentedPrice = rentedPricePerDay * days * selectedQuantity;
+    // console.log( calculateRentedPrice, rentedPricePerDay, rate, selection );
     const cleaningFee = 17.50;
     const serviceFee = 51.31;
     const totalPrice = calculateRentedPrice + cleaningFee + serviceFee;

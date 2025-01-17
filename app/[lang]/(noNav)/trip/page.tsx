@@ -2,7 +2,7 @@
 import CardContainer from "@/components/home/CardContainer";
 import BackButton from "@/components/paymentDetails/BackButton";
 import { fetchBookingDetails, fetchDictionary } from "@/utils/fetchFunction";
-import { formatDate } from "@/utils/utils";
+import { calculateDaysBetween, formatDate } from "@/utils/utils";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,10 +19,10 @@ interface TripProps
 
 export default async function TripDetails ({searchParams, params}: TripProps)
 {
-    const resolvedSearchParams = await searchParams;
-    const hotelId = resolvedSearchParams['hotelId'] as string;
-    const bookingId = resolvedSearchParams[ 'bookingId' ] as string;
-    const scan = resolvedSearchParams?.scan === 'true';
+    // const resolvedSearchParams = await searchParams;
+    const hotelId = searchParams.hotelId;
+    const bookingId = searchParams.bookingId;
+    const scan = searchParams?.scan === 'true' ? true : false;
     const { lang } = await params;
     // const lang = lang;
 
@@ -33,7 +33,7 @@ export default async function TripDetails ({searchParams, params}: TripProps)
         ] );
     const language = await languagePromise;
     const bookings = await bookingPromise;
-    // console.log(searchParams.scan)
+    console.log( searchParams.scan , bookings );
     
     return (
         <div className="bg-gray-100 min-h-screen">
@@ -109,13 +109,13 @@ export default async function TripDetails ({searchParams, params}: TripProps)
                         {/* Total Dates */}
                         <div className="flex flex-col bg-orange-50 p-4 rounded-md shadow">
                             <span className="text-gray-500 text-sm"> {language?.trip?.toD}</span>
-                            <span className="text-gray-900 font-medium">5</span>
+                            <span className="text-gray-900 font-medium">{ await calculateDaysBetween( bookings?.checkIn, bookings?.checkOut) }</span>
                         </div>
 
                         {/* Total Amount */}
                         <div className="flex flex-col bg-orange-50 p-4 rounded-md shadow">
                             <span className="text-gray-500 text-sm"> {language?.trip?.toAm}</span>
-                            <span className="text-gray-900 font-medium">$1,800.00</span>
+                            <span className="text-gray-900 font-medium">{bookings?.paymentDetails?.total}</span>
                         </div>
                         <div className="flex flex-col bg-orange-50 p-4 rounded-md shadow">
                             <span className="text-gray-500 text-sm"> {language?.trip?.bookedBy}</span>

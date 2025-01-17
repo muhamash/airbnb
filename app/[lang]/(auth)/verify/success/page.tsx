@@ -34,7 +34,7 @@ export default function VerificationSuccessPage() {
                     setLanguage( response );
                     setLoading(false)
                 }
-        }
+    };
 
     useEffect( () =>
     {
