@@ -1,4 +1,7 @@
-export async function fetchDictionary(locale: string) {
+// 'use server'
+
+export async function fetchDictionary ( locale: string )
+{
   try {
     const response = await fetch(`${ process.env.NEXT_PUBLIC_URL }/api/language?locale=${locale}`, {
       cache: "no-store",
@@ -72,6 +75,7 @@ export async function fetchHotels ( page: number )
 
     // console.log(data)
     if (data?.status === 200) {
+      // console.log(data)
       return data;
     } else {
       console.error("Failed to fetch hotels", data.message);
@@ -80,5 +84,32 @@ export async function fetchHotels ( page: number )
   } catch (error) {
     console.error("Error fetching hotels", error);
     throw error;
+  }
+}
+
+export async function searchHotels(query: string) {
+  try {
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/search?query=${ query }`, {
+      cache: "no-store",
+    } );
+
+    const data = await response.json();
+
+    // console.log( data );
+    if (data?.status === 400) {
+      return [];
+    }
+
+    if ( data?.status === 200 )
+    {
+      // console.log(data)
+      return data?.data?.hotels || {};
+    } else {
+      console.error("Failed to fetch hotels", data?.message);
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching hotels", error);
+     return []; 
   }
 }

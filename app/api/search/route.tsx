@@ -35,6 +35,7 @@ export async function GET(request: Request): Promise<Response> {
       );
     }
 
+    console.log( hotels.length );
     return NextResponse.json(
       {
         status: 200,

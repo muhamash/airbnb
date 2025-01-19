@@ -245,3 +245,11 @@ export async function generateHtml (content: { checkIn: string; checkOut: string
 export async function generateVerificationToken() : Promise<number> {
     return crypto.randomBytes(32).toString('hex');
 }
+
+export function debounce<T extends (...args: never[]) => void>(func: T, delay: number): (...args: Parameters<T>) => void {
+    let timer: NodeJS.Timeout;
+    return (...args: Parameters<T>) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => func(...args), delay);
+    };
+}

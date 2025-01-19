@@ -10,9 +10,10 @@ interface ContainerProps {
   params: Promise<{ lang: string }>;
   languageData: Language;
   page: number;
+  query?: string;
 }
 
-export default async function CardContainer ( { params,page, languageData }: ContainerProps )
+export default async function CardContainer ( { params,page, languageData, query }: ContainerProps )
 {
   const [ hotelsPromise, stockPromise, reviewPromise ] = await Promise.all( [
     fetchHotels(page),
