@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import CardContainer from "@/components/home/CardContainer";
 import BackButton from "@/components/paymentDetails/BackButton";
 import { fetchBookingDetails, fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween, formatDate } from "@/utils/utils";
@@ -25,7 +24,6 @@ export default async function TripDetails ({searchParams, params}: TripProps)
     const bookingId = searchParams.bookingId;
     const scan = searchParams?.scan === 'true' ? true : false;
     const { lang } = await params;
-    const { checkIn, checkOut } = await searchParams;
     // console.log( searchParams.checkIn, checkOut );
     // const lang = lang;
 
@@ -36,7 +34,7 @@ export default async function TripDetails ({searchParams, params}: TripProps)
         ] );
     const language = await languagePromise;
     const bookings = await bookingPromise;
-    const days = await calculateDaysBetween( bookings.checkIn, bookings.checkOut );
+    const days = await calculateDaysBetween( bookings?.checkIn, bookings?.checkOut );
     // console.log( bookings?.paymentDetails );
     
     return (
@@ -163,7 +161,7 @@ export default async function TripDetails ({searchParams, params}: TripProps)
                 {/* Highlights */}
                 <section className="bg-white p-6 rounded-lg shadow-md shadow-orange-200 mb-6">
                     <h2 className="text-2xl font-semibold mb-4"> {language?.trip?.like}</h2>
-                    <CardContainer params={params}  languageData={language?.home} />
+                    
                 </section>
             </div>
         </div>

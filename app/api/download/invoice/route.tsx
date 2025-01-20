@@ -30,6 +30,7 @@ export async function POST(request: Request): Promise<Response> {
         const qrCodeData = await QRCode.toDataURL(
             `${process.env.NEXT_PUBLIC_URL}/${lang}/redirection?bookingId=${bookingId}&hotelName=${bookingDetails?.hotelName}&name=${bookingDetails?.name}&hotelAddress=${bookingDetails?.hotelAddress}&target=${process.env.NEXT_PUBLIC_URL}/${lang}/trip?bookingId=${bookingId}&hotelId=${hotelId}&scan=true`
         );
+        
         const content = await generateHtml(bookingDetails, language, qrCodeData);
 
         let browser: Browser | BrowserCore;

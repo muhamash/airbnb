@@ -26,20 +26,25 @@ export default function RedirectionPage() {
     const [langData, setLangData] = useState<Language | null>(null);
     const params = useParams();
 
-    useEffect(() => {
-        const fetchLang = async () => {
-            try {
-                const data = await fetchDictionary(params?.lang as string);
-                setLangData(data);
-            } catch (error) {
-                console.error("Error fetching language data:", error);
+    useEffect( () =>
+    {
+        const fetchLang = async () =>
+        {
+            try
+            {
+                const data = await fetchDictionary( params?.lang as string );
+                setLangData( data );
+            } catch ( error )
+            {
+                console.error( "Error fetching language data:", error );
             }
         };
 
-        if (params?.lang) {
+        if ( params?.lang )
+        {
             fetchLang();
         }
-    }, [params?.lang]);
+    }, [ params?.lang ] );
 
     useEffect(() => {
         if (target) {
