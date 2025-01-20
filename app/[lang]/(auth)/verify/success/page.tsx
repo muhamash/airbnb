@@ -4,7 +4,6 @@
 import { fetchDictionary } from '@/utils/fetchFunction';
 import { Skeleton } from 'antd';
 import { motion } from 'framer-motion';
-import { cookies } from 'next/headers';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -53,10 +52,11 @@ export default function VerificationSuccessPage() {
 
     useEffect( () =>
     {
-        const leftUrlCookie = document.cookie.split( '; ' ).find( row => row.startsWith( 'leftUrl=' ) );
-        if (leftUrlCookie) {
-            setLeftUrl(decodeURIComponent(leftUrlCookie.split('=')[1]));
-        }
+        // const leftUrlCookie = document.cookie.split( '; ' ).find( row => row.startsWith( 'leftUrl=' ) );
+        // console.log(leftUrlCookie, leftUrl);
+        // if (leftUrlCookie) {
+        //     setLeftUrl(decodeURIComponent(leftUrlCookie.split('=')[1]));
+        // }
 
         async function verifyEmail ()
         {
@@ -84,7 +84,7 @@ export default function VerificationSuccessPage() {
                             if ( prev <= 1 )
                             {
                                 clearInterval( timer );
-                                router.push( leftUrl );
+                                router.push( '/login' );
                             }
                             return prev - 1;
                         } );
