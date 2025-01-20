@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { fetchDictionary } from '@/utils/fetchFunction';
 import { Skeleton } from 'antd';
 import { motion } from 'framer-motion';
+import { cookies } from 'next/headers';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -14,6 +16,18 @@ interface Language {
     emailVerify: EmailVerify;
 }
 
+// export async function getServerSideProps(context) {
+//   // Get the cookies from the request headers
+//     const cookieStore = cookies();
+//     console.log( cookieStore, context );
+//     const leftUrl = cookieStore.get( 'leftUrl' )?.value || null;
+//     return {
+//         props: {
+//             leftUrl,
+//         },
+//     };
+// };
+
 export default function VerificationSuccessPage() {
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -24,6 +38,7 @@ export default function VerificationSuccessPage() {
     const [language, setLanguage] = useState<Language | null>(null);
     const [ counter, setCounter ] = useState( 5 );
     const [ loading, setLoading ] = useState<boolean>( true );
+    const [ leftUrl, setLeftUrl ] = useState<string | null>( null );
     const [ verificationStatus, setVerificationStatus ] = useState<'pending' | 'success' | 'failed'>( 'pending' );
     
     async function fetchLanguage ()
@@ -38,6 +53,11 @@ export default function VerificationSuccessPage() {
 
     useEffect( () =>
     {
+        const leftUrlCookie = document.cookie.split( '; ' ).find( row => row.startsWith( 'leftUrl=' ) );
+        if (leftUrlCookie) {
+            setLeftUrl(decodeURIComponent(leftUrlCookie.split('=')[1]));
+        }
+
         async function verifyEmail ()
         {
             if ( !token || !email )
@@ -64,7 +84,7 @@ export default function VerificationSuccessPage() {
                             if ( prev <= 1 )
                             {
                                 clearInterval( timer );
-                                router.push( '/login' );
+                                router.push( leftUrl );
                             }
                             return prev - 1;
                         } );

@@ -33,7 +33,7 @@ export default async function Review ( {languagePromise, reviewPromise, searchPa
         </div>
 
         {
-          !isUserHasReview && !session?.user?.id && (
+          !isUserHasReview && session?.user?.id && (
             <ReviewButton text={responseData?.details?.writeReview} />
           )
         }

@@ -19,8 +19,9 @@ export default function PaymentForm({
 }: PaymentFormProps) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const rate = searchParams?.rate ? JSON.parse(searchParams?.rate) : {};
-  console.log(userId, isVerified, rate);
+  const rate = searchParams?.rate ? JSON.parse( searchParams?.rate ) : {};
+  // const pathname = usePathname();
+  console.log(window.location.href);
 
   // Handle redirection if the user is not verified
   useEffect( () =>
@@ -32,6 +33,9 @@ export default function PaymentForm({
 
     if ( userId && !isVerified )
     {
+      const currentUrl = `${ window.location.href }`;
+      document.cookie = `leftUrl=${ encodeURIComponent( currentUrl ) }; path=/;`;
+
       router.push( "/verify" );
     }
   }, [] );
