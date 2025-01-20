@@ -9,7 +9,7 @@ export async function GET(request: Request): Promise<Response> {
     const url = new URL(request.url);
     const value: string = url.searchParams.get("query") || "";
     const page: number = parseInt(url.searchParams.get("page") || "1", 10);
-    const limit: number = parseInt(url.searchParams.get("limit") || "8", 10);
+    const limit: number = 8;
 
     await dbConnect();
 

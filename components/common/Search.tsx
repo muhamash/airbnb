@@ -2,7 +2,7 @@
 'use client';
 
 import { initialState, searchReducer } from "@/reducers/searchReducer";
-import { searchHotels } from "@/utils/serverActions";
+import { searchHotel } from "@/utils/serverActions";
 import { debounce } from "@/utils/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -14,7 +14,7 @@ interface SearchProps {
 }
 
 export default function Search({ placeholder }: SearchProps) {
-    const [state, dispatch] = useReducer(searchReducer, initialState);
+  const [ state, dispatch ] = useReducer( searchReducer, initialState );
   const { query, results, error, isDropdownVisible, isLoading } = state;
   const [ isPending, startTransition ] = useTransition();
   // console.log(state);
@@ -24,7 +24,7 @@ export default function Search({ placeholder }: SearchProps) {
   const page = searchPrams?.get( "page" );
   // console.log( params, searchPrams );
 
-  const fetchSearchResults = useCallback( async ( query: string ) =>
+  const fetchSearchResults = useCallback( async ( query: string) =>
   {
     try
     {
@@ -34,13 +34,13 @@ export default function Search({ placeholder }: SearchProps) {
         dispatch( { type: "SEARCH_SUCCESS", payload: [] } );
         return;
       }
-
-      const result = await searchHotels( query );
+      const page = 1;
+      const result = await searchHotel(query, page);
       console.log( result );
-      dispatch( { type: "SEARCH_SUCCESS", payload: result } );
+      dispatch( { type: "SEARCH_SUCCESS", payload: result?.data?.hotels } );
     } catch ( error )
     {
-      console.error(error)
+      console.error( error )
       dispatch( {
         type: "SEARCH_ERROR",
         payload: error,
@@ -65,15 +65,27 @@ export default function Search({ placeholder }: SearchProps) {
   {
     const parseData = { query: query };
     const queryString = new URLSearchParams( parseData ).toString();
-    router.replace( `/${params?.lang}?page=${page}&${queryString}` );
+    router.replace( `/${ params?.lang }?page=${ page }&${ queryString }` );
+    dispatch( { type: "TOGGLE_DROPDOWN", payload: false } );
   };
 
+  const handleKeyDown = ( e: React.ChangeEvent<HTMLInputElement> ) =>
+  {
+    if ( e.key === "Enter" && query.trim() )
+    {
+      const parseData = { query: query };
+      const queryString = new URLSearchParams( parseData ).toString();
+      router.replace( `/${ params?.lang }?page=${ page }&${ queryString }` );
+      dispatch( { type: "TOGGLE_DROPDOWN", payload: false } );
+    }
+  };
 
   return (
     <div className="row-start-2 col-span-2 border-[0.3px] border-slate-100 md:border flex shadow-md hover:shadow-sm transition-all md:rounded-full items-center px-2">
       <div className="grid md:grid-cols-3 lg:grid-cols-7 gap-4 divide-x py-2 md:px-2 flex-grow">
         <input
           type="text"
+          onKeyDown={handleKeyDown}
           placeholder={placeholder}
           className="px-3 bg-transparent focus:outline-none lg:col-span-3 text-violet-500 placeholder:text-sm"
           value={query}

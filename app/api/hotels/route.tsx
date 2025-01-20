@@ -10,7 +10,7 @@ async function getAllHotels(skip = 0, limit = 8): Promise<{ hotels: IHotel[]; to
     const total = await hotelModel.countDocuments();
     const hotels = await hotelModel.find().skip(skip).limit(limit).lean();
 
-    return { hotels: replaceMongoIdInArray(hotels) as IHotel[], total };
+    return { hotels: replaceMongoIdInArray( hotels ) as IHotel[], total };
 }
 
 export async function GET(request: Request): Promise<Response> {
@@ -18,7 +18,7 @@ export async function GET(request: Request): Promise<Response> {
         const url = new URL(request.url);
         const page = parseInt(url.searchParams.get("page") || "1", 10); 
         
-        const limit = 1;  
+        const limit = 8;  
         const skip = (page - 1) * limit;
         const { hotels, total } = await getAllHotels(skip, limit);
 
@@ -27,9 +27,9 @@ export async function GET(request: Request): Promise<Response> {
             pagination: {
                 total,
                 page,
-                pages: Math.ceil(total / limit), 
+                totalPages: Math.ceil( total / limit ), 
+                limit,
             },
-            limit,
             status: 200
         };
 

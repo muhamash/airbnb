@@ -29,20 +29,22 @@ interface CardProps {
     };
     stockPromise: Promise;
     reviewPromise: Promise;
+    query?: string | undefined;
 };
 
-export default async function Card ( {  hotel, lang, languageData, stockPromise, reviewPromise  }: CardProps )
+export default async function Card ( {  hotel, lang, languageData,query, stockPromise, reviewPromise  }: CardProps )
 {
     // const responseData = await fetchDictionary( params?.lang );
     const stocksPromise = await stockPromise;
-    const getStock = stocksPromise?.find( stock => hotel?.id === stock?.hotelId.toString() );
+    const hotelId = query ? hotel?._id : hotel?.id;
+    const getStock = stocksPromise?.find( stock => hotelId  === stock?.hotelId.toString() );
     const ratings = await reviewPromise;
-    const rating = ratings?.find( rating => hotel?.id === rating?.hotelId.toString() )?.reviews ?? 0;
-    const avgRatings = rating?.reduce( ( sum, review ) => sum + review?.ratings, 0 ) / rating?.length;
+    const rating = ratings?.find( rating => hotelId === rating?.hotelId.toString() )?.reviews ?? 0;
+    // const avgRatings = rating?.reduce( ( sum, review ) => sum + review?.ratings, 0 ) / rating?.length;
     // console.log( getStock );
 
     const parseData = {
-        ratings : rating?.length > 0 ? avgRatings : 0,
+        // ratings : rating?.length > 0 ? avgRatings : 0,
         ratingsLength: rating?.length,
         personMax: getStock?.personMax,
         roomMax: getStock?.roomMax,
@@ -97,7 +99,7 @@ export default async function Card ( {  hotel, lang, languageData, stockPromise,
                                 d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.462a1 1 0 00.95-.69l1.07-3.292z"
                             />
                         </svg>
-                        <span className="ml-1 text-zinc-600">{ rating?.length > 0 ? avgRatings : 0 }</span>
+                        {/* <span className="ml-1 text-zinc-600">{ rating?.length > 0 ? avgRatings.toFixed(1) : 0 }</span> */}
                     </div>
                 </div>
                 <p className="text-zinc-500 text-sm mt-1 font-kanit">{hotel?.address}</p>

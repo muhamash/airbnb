@@ -20,7 +20,7 @@ export default function Pagination() {
     const fetchData = async () =>
     {
       const data = await fetchHotels( currentPage );
-      setTotalPages( data.pagination.pages );
+      setTotalPages( data?.pagination?.totalPages );
     };
 
     fetchData();

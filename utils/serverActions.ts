@@ -155,26 +155,53 @@ export const getReviewById = async (hotelId: string) =>
     }
 }
 
-export async function searchHotels(query: string) {
+export async function searchHotel(query: string, page: number ) {
   try {
-    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/search?query=${ query }`, {
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/search?query=${ query }&page=${ page }`, {
+      cache: "no-store",
+    } );
+
+    const data = await response.json();
+    // console.log( response );
+    if (data?.status === 404 || data?.status === 400) {
+      return [];
+    }
+
+    if ( data?.status === 200 )
+    {
+      // console.log(data)
+      return data;
+    } else {
+      console.error("Failed to search hotels", data?.message);
+      return [];
+    }
+  }
+  catch ( error )
+  {
+    console.error( "Error searching hotels", error );
+    return [];
+  }
+};
+
+export async function fetchHotels ( page: number )
+{
+  try {
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels?page=${ page }`, {
       cache: "no-store",
     } );
 
     const data = await response.json();
 
-    if (data?.status === 400) {
-      return [];
-    }
-
+    // console.log(data)
     if (data?.status === 200) {
-      return data?.data?.hotels || [];
+      return data;
     } else {
-      console.error("Failed to fetch hotels", data?.message);
-      return [];
+      console.error("Failed to fetch hotels", data.message);
+      return null;
     }
   } catch (error) {
     console.error("Error fetching hotels", error);
-     return []; 
+    // throw error;
+    return null;
   }
 }
