@@ -10,7 +10,7 @@ export default async function Home ( { params, searchParams } : HomeProps )
 {
   const { lang } = await params;
   const responseData = await fetchDictionary( lang );
-  console.log( searchParams.query );
+  // console.log( searchParams.query );
 
   return (
     <div className="md:py-[100px] py-[130px]">
