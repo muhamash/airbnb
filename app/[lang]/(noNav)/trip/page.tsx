@@ -35,14 +35,14 @@ export default async function TripDetails ({searchParams, params}: TripProps)
     const language = await languagePromise;
     const bookings = await bookingPromise;
     const days = await calculateDaysBetween( bookings?.checkIn, bookings?.checkOut );
-    // console.log( bookings?.paymentDetails );
+    // console.log( bookings );
     
     return (
         <div className="bg-gray-100 min-h-screen">
             {/* Header Section */}
             <div className="relative">
                 <Image
-                    src={bookings?.thumbnail}
+                    src={bookings?.thumbnail || '/ko.jpg'}
                     alt="Trip Banner"
                     width={700}
                     height={200}
