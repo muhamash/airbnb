@@ -1,7 +1,7 @@
 'use server'
 
 import { signIn } from "@/auth";
-import { getReviewsByHotelId } from "@/queries";
+import { getAllReviews, getAllStocks, getReviewsByHotelId } from "@/queries";
 interface FormData
 {
     email: string;
@@ -205,3 +205,35 @@ export async function fetchHotels ( page: number )
     return null;
   }
 }
+
+export async function redirectToCard (hotelId: string)
+{
+  try
+  {
+    const [ stocks, ratings ] = await Promise.all( [ getAllStocks(), getAllReviews() ] );
+    // console.log( stocks, ratings );
+    const stock = stocks?.find( ( stock ) => stock?.hotelId.toString() === hotelId );
+    const rating = ratings?.find( ( rating ) => rating?.hotelId?.toString() === hotelId )?.reviews;
+
+    const avgRatings = rating?.reduce( ( sum, review ) => sum + review?.ratings, 0 ) / ( rating?.length || 1 );
+
+    // console.log( hotelId, avgRatings, stock, rating );
+    const queryString = new URLSearchParams( {
+      ratings: avgRatings?.toFixed( 1 ) || 0,
+      ratingsLength: rating?.length || 0,
+      personMax: stock?.personMax || 0,
+      roomMax: stock?.roomMax || 0,
+      bedMax: stock?.bedMax || 0,
+      available: stock?.available || 0,
+    } ).toString();
+
+    // const url = `/details/${ hotelId }?${ queryString }`;
+  // console.log( url );
+    return { queryString };
+  }
+  catch ( error )
+  {
+    console.error( error );
+    return null;
+  }
+};

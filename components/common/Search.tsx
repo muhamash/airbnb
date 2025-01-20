@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-'use client';
+'use client'
 
 import { initialState, searchReducer } from "@/reducers/searchReducer";
-import { searchHotel } from "@/utils/serverActions";
+import { redirectToCard, searchHotel } from "@/utils/serverActions";
 import { debounce } from "@/utils/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -10,79 +9,102 @@ import { useCallback, useReducer, useTransition } from "react";
 import SearchedCard from "./SearchedCard";
 
 interface SearchProps {
-    placeholder: string;
+  placeholder: string;
 }
 
 export default function Search({ placeholder }: SearchProps) {
-  const [ state, dispatch ] = useReducer( searchReducer, initialState );
-  const { query, results, error, isDropdownVisible, isLoading } = state;
-  const [ isPending, startTransition ] = useTransition();
-  // console.log(state);
+  const [state, dispatch] = useReducer(searchReducer, initialState);
+  const { query, results, error, isDropdownVisible } = state;
+  const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const params = useParams();
-  const searchPrams = useSearchParams();
-  const page = searchPrams?.get( "page" );
-  // console.log( params, searchPrams );
+  const searchParams = useSearchParams();
+  const page = searchParams?.get("page");
 
-  const fetchSearchResults = useCallback( async ( query: string) =>
-  {
-    try
-    {
-      dispatch( { type: "START_SEARCH" } );
-      if ( !query.trim() )
-      {
-        dispatch( { type: "SEARCH_SUCCESS", payload: [] } );
-        return;
-      }
-      const page = 1;
-      const result = await searchHotel(query, page);
-      console.log( result );
-      dispatch( { type: "SEARCH_SUCCESS", payload: result?.data?.hotels } );
-    } catch ( error )
-    {
-      console.error( error )
-      dispatch( {
-        type: "SEARCH_ERROR",
-        payload: error,
-      } );
-    }
-  }, [] );
+  const fetchSearchResults = useCallback(
+    debounce((query: string) => {
+      startTransition(() => {
+        dispatch({ type: "START_SEARCH" });
+        if (!query.trim()) {
+          dispatch({ type: "SEARCH_SUCCESS", payload: [] });
+          return;
+        }
 
-  const debouncedFetchSearchResults = useCallback(
-    debounce( ( query: string ) => fetchSearchResults( query ), 500 ),
-    [ fetchSearchResults ]
+        const fetchResults = async () => {
+          try {
+            const result = await searchHotel(query, 1);
+            dispatch({ type: "SEARCH_SUCCESS", payload: result?.data?.hotels });
+          } catch (error) {
+            console.error(error);
+            dispatch({ type: "SEARCH_ERROR", payload: error });
+          }
+        };
+
+        fetchResults();
+      });
+    }, 500),
+    []
   );
 
-  const handleInputChange = ( e: React.ChangeEvent<HTMLInputElement> ) =>
-  {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
-    debouncedFetchSearchResults( query );
-    dispatch( { type: "SET_QUERY", payload: query } );
-    dispatch( { type: "TOGGLE_DROPDOWN", payload: true } );
+    dispatch({ type: "SET_QUERY", payload: query });
+    dispatch({ type: "TOGGLE_DROPDOWN", payload: true });
+    fetchSearchResults(query);
   };
 
-  const handleButton = () =>
-  {
-    const parseData = { query: query };
-    const queryString = new URLSearchParams( parseData ).toString();
-    router.replace( `/${ params?.lang }?page=${ page }&${ queryString }` );
-    dispatch( { type: "TOGGLE_DROPDOWN", payload: false } );
-  };
-
-  const handleKeyDown = ( e: React.ChangeEvent<HTMLInputElement> ) =>
-  {
-    if ( e.key === "Enter" && query.trim() )
+  const handleButton = () => {
+    startTransition( () =>
     {
-      const parseData = { query: query };
+      const parseData = { query };
       const queryString = new URLSearchParams( parseData ).toString();
       router.replace( `/${ params?.lang }?page=${ page }&${ queryString }` );
       dispatch( { type: "TOGGLE_DROPDOWN", payload: false } );
+    } );
+  };
+
+  const handleKeyDown = ( e: React.KeyboardEvent<HTMLInputElement> ) =>
+  {
+    if ( e.key === "Enter" && query.trim() )
+    {
+      startTransition( () =>
+      {
+        const parseData = { query };
+        const queryString = new URLSearchParams( parseData ).toString();
+        router.replace( `/${ params?.lang }?page=${ page }&${ queryString }` );
+        dispatch( { type: "TOGGLE_DROPDOWN", payload: false } );
+      } );
+    }
+  };
+
+  const handleClickSubmit = async ( event: React.FormEvent<HTMLFormElement> ) =>
+  {
+    event.preventDefault(); 
+    try
+    {
+      const formData = new FormData( event.currentTarget );
+      const hotelId = formData.get( "hotelId" );
+
+      // console.log(hotelId)
+      if ( !hotelId ) return;
+
+      const { queryString } = await redirectToCard( hotelId as string );
+      console.log( queryString );
+
+      if ( queryString )
+      {
+        router.push( `/${ params?.lang}/details/${ hotelId }?page=1&${ queryString }` );
+      }
+    } catch ( error )
+    {
+      console.error( error );
     }
   };
 
   return (
     <div className="row-start-2 col-span-2 border-[0.3px] border-slate-100 md:border flex shadow-md hover:shadow-sm transition-all md:rounded-full items-center px-2">
-      <div className="grid md:grid-cols-3 lg:grid-cols-7 gap-4 divide-x py-2 md:px-2 flex-grow">
+      <form
+        className="grid md:grid-cols-3 lg:grid-cols-7 gap-4 divide-x py-2 md:px-2 flex-grow">
         <input
           type="text"
           onKeyDown={handleKeyDown}
@@ -91,13 +113,16 @@ export default function Search({ placeholder }: SearchProps) {
           value={query}
           onChange={handleInputChange}
         />
-      </div>
-      <button className="bg-cyan-600 w-9 h-9 rounded-full grid place-items-center text-sm text-center transition-all hover:brightness-90 shrink-0">
+      </form>
+      <button
+        className="bg-cyan-600 w-9 h-9 rounded-full grid place-items-center text-sm text-center transition-all hover:brightness-90 shrink-0"
+        onClick={handleButton}
+      >
         <i className="fas fa-search text-slate-200" />
       </button>
 
       <AnimatePresence>
-        {isLoading && (
+        {isPending && (
           <motion.div
             className="absolute top-full right-4 left-4 mt-5"
             initial={{ opacity: 0 }}
@@ -108,10 +133,10 @@ export default function Search({ placeholder }: SearchProps) {
             <span className="loaderSearch"></span>
           </motion.div>
         )}
-        {results && !error && !isLoading && isDropdownVisible && (
+        {results && !error && !isPending && isDropdownVisible && (
           <motion.div
             id="searchResults"
-            className="absolute w-[250px] md:top-20 top-24 bg-black/30 bg-opacity-90 rounded-lg backdrop-blur-lg z-50"
+            className="absolute w-[250px] md:top-20 top-24 bg-white backdrop-blur-md bg-opacity-60 rounded-lg z-50 border border-white/30 shadow-xl"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -119,8 +144,14 @@ export default function Search({ placeholder }: SearchProps) {
           >
             <ul className="max-h-[350px] w-fit overflow-y-auto">
               {results?.map( ( result ) => (
-                // <p key={result?._id}>{result?.name}</p>
-                <SearchedCard key={result?._id} name={result?.name} src={result?.thumbNailUrl} address={ result?.address } />
+                <form key={result?._id} onSubmit={handleClickSubmit}>
+                  <input name="hotelId" type="hidden" value={result?._id} />
+                  <SearchedCard
+                    name={result?.name}
+                    src={result?.thumbNailUrl}
+                    address={result?.address}
+                  />
+                </form>
               ) )}
               {query && results.length === 0 && (
                 <motion.li
@@ -137,7 +168,7 @@ export default function Search({ placeholder }: SearchProps) {
             {results.length > 0 && (
               <button
                 onClick={handleButton}
-                className="text-green-700 font-semibold px-4 py-2 w-full text-center border-t border-gray-800 hover:bg-teal-600 hover:text-white font-manrope"
+                className="text-green-700 font-semibold px-4 py-2 w-full text-center border-t border-gray-800 hover:bg-teal-600 hover:text-white font-manrope hover:rounded-lg"
               >
                 See All Results
               </button>

@@ -18,7 +18,7 @@ export default async function Nav ( { params }: NavProps )
     const session: Session | null = await auth();
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-30 grid grid-cols-2 gap-2 md:flex justify-between items-center py-3 bg-white backdrop-blur-md bg-opacity-60 border-b mb-6 md:gap-8 px-4 md:px-8 lg:px-20">
+        <nav className="fixed top-0 left-0 right-0 z-30 grid grid-cols-2 gap-2 md:flex justify-between items-center py-3 bg-white backdrop-blur-md bg-opacity-60 border-b border-cyan-400 mb-6 md:gap-8 px-4 md:px-8 lg:px-20">
             <div className="flex items-center">
                 <Link href={`${ process.env.NEXT_PUBLIC_URL }/${params?.lang}`}>
                     <Image src="/assets/logo.svg" alt="Hotel Logo" className="h-8 w-auto" width={50} height={50}/>

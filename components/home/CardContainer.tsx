@@ -25,7 +25,7 @@ export default async function CardContainer ( { params,page, languageData, query
   const hotels = query ? hotelsPromise?.data : hotelsPromise; 
   const { lang } = await params;
   // const lang = lang;
-  console.log(query)
+  // console.log(query)
   // console.log( hotels );
 
   return (

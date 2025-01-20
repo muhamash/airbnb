@@ -25,12 +25,12 @@ export default function PaymentForm({
   // Handle redirection if the user is not verified
   useEffect( () =>
   {
-    if ( !userId )
+    if ( !userId && !isVerified || !userId)
     {
       router.push( "/login" );
     }
 
-    if ( !isVerified )
+    if ( userId && !isVerified )
     {
       router.push( "/verify" );
     }
