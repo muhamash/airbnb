@@ -35,6 +35,8 @@ export default async function TripDetails ({searchParams, params}: TripProps)
     const language = await languagePromise;
     const bookings = await bookingPromise;
     const days = await calculateDaysBetween( bookings?.checkIn, bookings?.checkOut );
+    const calculatePrice: number = bookings?.rate * bookings?.rentCount * days;
+    const total: number = calculatePrice + 17.5 + 51.31;
     // console.log( bookings );
     
     return (
@@ -117,7 +119,7 @@ export default async function TripDetails ({searchParams, params}: TripProps)
                         {/* Total Amount */}
                         <div className="flex flex-col bg-orange-50 p-4 rounded-md shadow">
                             <span className="text-gray-500 text-sm"> {language?.trip?.toAm}</span>
-                            <span className="text-gray-900 font-medium">{bookings?.paymentDetails?.total}</span>
+                            <span className="text-gray-900 font-medium">{total}</span>
                         </div>
                         <div className="flex flex-col bg-orange-50 p-4 rounded-md shadow">
                             <span className="text-gray-500 text-sm"> {language?.trip?.bookedBy}</span>
