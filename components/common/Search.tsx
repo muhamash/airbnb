@@ -48,7 +48,7 @@ export default function Search({ placeholder }: SearchProps) {
     []
   );
 
-  console.log( results );
+  // console.log( results );
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     dispatch({ type: "SET_QUERY", payload: query });

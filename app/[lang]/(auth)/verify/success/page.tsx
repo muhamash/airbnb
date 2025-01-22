@@ -6,6 +6,7 @@ import { Skeleton } from 'antd';
 import { motion } from 'framer-motion';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface EmailVerify {
     [ key: string ]: string;
@@ -74,9 +75,18 @@ export default function VerificationSuccessPage() {
                 } );
                 const result = await response.json();
 
+                // console.log( result );
+                
+                if ( result?.status === 400 || result?.status === 404 )
+                {
+                    toast.error( 'Errors occurred while verifying email! either token expired or user not found' );
+                    router.push( '/bookings' );
+                }
+
                 if ( result?.status === 200 )
                 {
                     setVerificationStatus( 'success' );
+                    toast.success('Successfully verified!')
                     const timer = setInterval( () =>
                     {
                         setCounter( ( prev ) =>
@@ -119,6 +129,7 @@ export default function VerificationSuccessPage() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.5, ease: 'easeInOut' }}
             >
+                <Toaster />
                 {verificationStatus === 'pending' && (
                     <div>
                         <motion.h1

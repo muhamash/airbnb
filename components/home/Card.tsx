@@ -45,7 +45,7 @@ export default async function Card ( {  hotel, lang, languageData,query, stockPr
 
     const parseData = {
         ratings : rating?.length > 0 ? avgRatings.toFixed(1) : "0",
-        ratingsLength: rating?.length,
+        ratingsLength: rating?.length ?? 0,
         personMax: getStock?.personMax,
         roomMax: getStock?.roomMax,
         bedMax: getStock?.bedMax,

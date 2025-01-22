@@ -54,13 +54,13 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
             {
                 console.error( 'Error deleting review:', error );
             }
-            finally
-            {
-                setTimeout( () =>
-                {
-                    window.location.reload();
-                }, 500 );
-            }
+            // finally
+            // {
+            //     setTimeout( () =>
+            //     {
+            //         window.location.reload();
+            //     }, 500 );
+            // }
         } );
     };
 

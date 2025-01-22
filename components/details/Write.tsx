@@ -91,7 +91,7 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
         } );
 
         const result = await response.json();
-        console.log( 'API response:', result );
+        // console.log( 'API response:', result );
 
         if ( result.status === 200 )
         {
@@ -101,13 +101,13 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
           if ( isEditing )
           {
             const newRatingValue = ( ( currentRatings * currentRatingsLength - ratings ) + data?.rating ) / currentRatingsLength;
-            // console.log( 'New rating value after edit:', newRatingValue );
-            await updateSearchParams( { ratings: newRatingValue.toString() }, searchParams, router );
+            // console.log( 'New rating value after edit:', newRatingValue.toFixed(1) );
+            await updateSearchParams( { ratings: newRatingValue.toFixed(1).toString() }, searchParams, router );
           } else
           {
             const newRatingsLength = currentRatingsLength + 1;
-            const newRatingValue = ( currentRatings + data.rating ) / newRatingsLength;
-            // console.log( 'New rating value and length after new submission:', newRatingValue, newRatingsLength );
+            const newRatingValue = ( currentRatings + data?.rating ) / newRatingsLength;
+            // console.log( 'New rating value and length after new submission:', newRatingValue, newRatingsLength, currentRatings, data?.rating, currentRatingsLength  );
             await updateSearchParams( {
               ratings: newRatingValue.toString(),
               ratingsLength: newRatingsLength.toString(),
@@ -126,13 +126,13 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
         console.error( 'Failed to submit review:', error );
         toast.error( 'An unexpected error occurred.' );
       }
-      finally
-      {
-        setTimeout( () =>
-        {
-          window.location.reload();
-        }, 500 );
-      }
+      // finally
+      // {
+      //   setTimeout( () =>
+      //   {
+      //     window.location.reload();
+      //   }, 500 );
+      // }
     } );
   };
 
