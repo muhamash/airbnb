@@ -33,10 +33,12 @@ export default function Search({ placeholder }: SearchProps) {
         const fetchResults = async () => {
           try {
             const result = await searchHotel(query, 1);
-            dispatch({ type: "SEARCH_SUCCESS", payload: result?.data?.hotels });
+            dispatch( { type: "SEARCH_SUCCESS", payload: result?.data?.hotels } );
+            // console.log( result );
           } catch (error) {
             console.error(error);
-            dispatch({ type: "SEARCH_ERROR", payload: error });
+            dispatch( { type: "SEARCH_ERROR", payload: error } );
+            dispatch( { type: "SEARCH_SUCCESS", payload: [] } );
           }
         };
 
@@ -46,6 +48,7 @@ export default function Search({ placeholder }: SearchProps) {
     []
   );
 
+  console.log( results );
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
     dispatch({ type: "SET_QUERY", payload: query });
@@ -130,27 +133,16 @@ export default function Search({ placeholder }: SearchProps) {
             <span className="loaderSearch"></span>
           </motion.div>
         )}
-        {results && !error && !isPending && isDropdownVisible && (
+        {!error && isDropdownVisible && (
           <motion.div
             id="searchResults"
-            className="absolute w-[250px] md:top-20 top-24 bg-white backdrop-blur-md bg-opacity-60 rounded-lg z-50 border border-white/30 shadow-xl"
+            className="absolute w-[250px] md:top-20 top-24 bg-slate-900 backdrop-blur-lg bg-opacity-70 rounded-lg z-50 border border-white/30 shadow-xl"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <ul className="max-h-[350px] w-fit overflow-y-auto">
-              {results?.map( ( result ) => (
-                <form key={result?._id} onSubmit={handleClickSubmit}>
-                  <input name="hotelId" type="hidden" value={result?._id} />
-                  <SearchedCard
-                    name={result?.name}
-                    src={result?.thumbNailUrl}
-                    address={result?.address}
-                  />
-                </form>
-              ) )}
-              {query && results.length === 0 && (
+            {results?.length === 0 || results === undefined  && query.trim() && !isPending && (
                 <motion.li
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -161,15 +153,31 @@ export default function Search({ placeholder }: SearchProps) {
                   No match found
                 </motion.li>
               )}
+            <ul className="max-h-[350px] w-fit overflow-y-auto relative">
+              {results && results?.map( ( result ) => (
+                <form key={result?._id} onSubmit={handleClickSubmit}>
+                  <input name="hotelId" type="hidden" value={result?._id} />
+                  <SearchedCard
+                    name={result?.name}
+                    src={result?.thumbNailUrl}
+                    address={result?.address}
+                  />
+                </form>
+              ) )}
+              {isPending && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-50">
+                  <span className="loaderSearch"></span>
+                </div>
+              )}
             </ul>
-            {results.length > 0 && (
-              <button
-                onClick={handleButton}
-                className="text-green-700 font-semibold px-4 py-2 w-full text-center border-t border-gray-800 hover:bg-teal-600 hover:text-white font-manrope hover:rounded-lg"
-              >
-                See All Results
-              </button>
-            )}
+            {results && results.length > 0 && (
+                <button
+                  onClick={handleButton}
+                  className="text-green-700 font-semibold px-4 py-2 w-full text-center border-t border-gray-800 hover:bg-teal-600 hover:text-white font-manrope hover:rounded-lg"
+                >
+                  See All Results
+                </button>
+              )}
           </motion.div>
         )}
         {error && (
@@ -185,6 +193,7 @@ export default function Search({ placeholder }: SearchProps) {
           </motion.div>
         )}
       </AnimatePresence>
+
     </div>
   );
 }

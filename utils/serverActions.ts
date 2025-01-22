@@ -161,15 +161,16 @@ export async function searchHotel(query: string, page: number ) {
       cache: "no-store",
     } );
 
-    const data = await response.json();
     // console.log( response );
-    if (data?.status === 404 || data?.status === 400) {
+    const data = await response.json();
+    // console.log( data );
+    if (!data?.success) {
       return [];
     }
 
-    if ( data?.status === 200 )
+    if ( data?.success )
     {
-      // console.log(data)
+      // console.log( data );
       return data;
     } else {
       console.error("Failed to search hotels", data?.message);
