@@ -26,7 +26,7 @@ export default async function CardContainer ( { params,page, languageData, query
   const { lang } = await params;
   // const lang = lang;
   // console.log(query)
-  // console.log( hotels );
+  // console.log( hotels?.pagination );
 
   return (
     <>
@@ -39,7 +39,7 @@ export default async function CardContainer ( { params,page, languageData, query
           <p className="text-lg font-thin text-red-700">No more hotels!!</p>
         )}
       </div>
-      <Pagination />
+      <Pagination totalPages={  hotels?.pagination?.totalPages} />
     </>
   );
 }

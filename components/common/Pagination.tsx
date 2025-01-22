@@ -1,30 +1,18 @@
 'use client';
 
-import { fetchHotels } from "@/utils/fetchFunction";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 
-export default function Pagination() {
+export default function Pagination({totalPages}:number) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
   const initialPage = searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1;
   
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [totalPages, setTotalPages] = useState(1); 
   const [ isPending, startTransition ] = useTransition();
-
-  useEffect( () =>
-  {
-    const fetchData = async () =>
-    {
-      const data = await fetchHotels( currentPage );
-      setTotalPages( data?.pagination?.totalPages );
-    };
-
-    fetchData();
-  }, [ currentPage ] );
+  // console.log( totalPages );
 
   // Handle page change and update the URL with the new page number
   const handlePageChange = (page: number) => {
@@ -34,7 +22,7 @@ export default function Pagination() {
     const newUrl = new URL(window.location.href);
     newUrl.searchParams.set('page', page.toString());
 
-    router.push(newUrl.toString());
+    router.push(newUrl?.toString());
 
     setCurrentPage(page);
   };

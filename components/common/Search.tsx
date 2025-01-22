@@ -67,13 +67,10 @@ export default function Search({ placeholder }: SearchProps) {
   {
     if ( e.key === "Enter" && query.trim() )
     {
-      startTransition( () =>
-      {
-        const parseData = { query };
-        const queryString = new URLSearchParams( parseData ).toString();
-        router.replace( `/${ params?.lang }?page=${ page }&${ queryString }` );
-        dispatch( { type: "TOGGLE_DROPDOWN", payload: false } );
-      } );
+      const parseData = { query };
+      const queryString = new URLSearchParams( parseData ).toString();
+      router.replace( `/${ params?.lang }?page=${ page }&${ queryString }` );
+      dispatch( { type: "TOGGLE_DROPDOWN", payload: false } );
     }
   };
 

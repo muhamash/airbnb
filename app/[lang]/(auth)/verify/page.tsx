@@ -39,9 +39,10 @@ export default function VerifyEmailPage() {
         }
     }
 
-    useEffect(() => {
+    useEffect( () =>
+    {
         fetchLanguage();
-    }, []);
+    }, [] );
 
     useEffect(() => {
         if (timer === null) return;
