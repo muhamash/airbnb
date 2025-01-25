@@ -49,10 +49,10 @@ export const updateSearchParams = async ( updates: Record<string, string | null>
 };
 
 export async function generateHtml (content: { checkIn: string; checkOut: string; rate: number; rentCount: number },
-  language: string,
+  language: {[key: string]: string} | undefined,
   qrCodeData: string ) : Promise<string>
 {
-  // console.log( language, content );
+//   console.log( language, content );
   const days: number = await calculateDaysBetween(content.checkIn, content.checkOut);
   const calculatePrice: number = content.rate * content.rentCount * days;
   const total: number = calculatePrice + 17.5 + 51.31;
@@ -61,7 +61,12 @@ export async function generateHtml (content: { checkIn: string; checkOut: string
 <head>
     <title>${ language?.invoice?.head }</title>
     <style>
+        @font-face {
+            font-family: 'NotoSansBengali';
+            src: url('https://raw.githack.com/googlefonts/noto-fonts/main/hinted/ttf/NotoSansBengali/NotoSansBengali-Regular.ttf') format('truetype');
+        }
         body {
+            font-family: 'NotoSansBengali', sans-serif;
             background-color: #A0A0A0;
             font-family: Helvetica, Arial, sans-serif;
             color: #333;

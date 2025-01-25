@@ -35,6 +35,7 @@ export default function PaymentForm({
   const rate = searchParams?.rate ? JSON.parse( searchParams?.rate ) : {};
   // const isVerified = await isVerified;
   // const pathname = usePathname();
+  console.log( isVerified, userId );
     
   if ( !userId )
   {
@@ -46,7 +47,7 @@ export default function PaymentForm({
     e.preventDefault();
     const formData = new FormData( e.target as HTMLFormElement );
 
-    if ( formData && isVerified === true )
+    if ( formData && isVerified )
     {
       startTransition( async () =>
       {

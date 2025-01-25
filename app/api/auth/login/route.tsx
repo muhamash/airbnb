@@ -19,7 +19,10 @@ export async function POST(request: NextRequest) {
 
         if (response) {
             return NextResponse.json({ success: true, message: "Login successful." });
-        } else {
+        }
+
+        if(!response)
+        {
             return NextResponse.json(
                 { success: false, error: response?.error || "Login failed." },
                 { status: 401 }
@@ -28,7 +31,7 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         // console.error("Error during login:", error);
         return NextResponse.json(
-            { success: false, error: "An unexpected error occurred." },
+            { success: false, error: "user not found for something else!!" },
             { status: 500 }
         );
     }

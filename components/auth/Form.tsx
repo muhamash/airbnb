@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast, { Toaster } from 'react-hot-toast';
 import SocialLogins from './SocialLogins';
 
 interface FormProps {
@@ -21,7 +22,7 @@ interface FormFields {
 
 export default function Form({ isLogIn }: FormProps) {
     const { register, watch, handleSubmit, formState: { errors } } = useForm<FormFields>();
-    const [error, setError] = useState<string | null>(null);
+    // const [error, setError] = useState<string | null>(null);
     const router = useRouter();
     const [ language, setLanguage ] = useState( null );
     const [ loading, setLoading ] = useState<boolean>( true );
@@ -73,14 +74,17 @@ export default function Form({ isLogIn }: FormProps) {
             } );
 
             const result = await res.json();
-            // console.log( result );
-            if (result.success) {
+            console.log( result );
+            if ( result.success )
+            {
+                toast.success( result?.message );
                 router.push("/bookings");
             } else {
-                setError(result.message);
+                // setError( result?.error );
+                toast.error( result?.error );
             }
         } catch (err) {
-            setError((err as Error).message || "An unknown error occurred.");
+            toast.error((err as Error).message || "An unknown error occurred.");
         }
     };
 
@@ -95,14 +99,17 @@ export default function Form({ isLogIn }: FormProps) {
                 body: JSON.stringify(Object.fromEntries(formData.entries())),
             });
 
-            if (res.status === 201) {
+             const result = await res.json();
+            if ( result.status === 201 )
+            {
+                toast.success( result?.message );
                 router.push( "/bookings" );
             } else {
-                const result = await res.json();
-                setError(result.message || language?.login?.error?.regFail);
+                toast.error(result.message || language?.login?.error?.regFail );
+                // setError(result.message || language?.login?.error?.regFail);
             }
         } catch (err) {
-            setError((err as Error).message || "An unknown error occurred.");
+            toast.error((err as Error).message || "An unknown error occurred.");
         }
     };
 
@@ -130,9 +137,10 @@ export default function Form({ isLogIn }: FormProps) {
     // console.log( language );
     return (
         <>
-            {error && (
+            <Toaster />
+            {/* {error && (
                 <div className="text-xl p-3 m-2 bg-white rounded-lg text-red-500 text-center">{error}</div>
-            )}
+            )} */}
             <div className="bg-white rounded-xl shadow-2xl w-96 p-6 relative shadow-black/50">
                 {/* Modal Header */}
                 <div className="text-center mb-6">

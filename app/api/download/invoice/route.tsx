@@ -31,6 +31,7 @@ export async function POST(request: Request): Promise<Response> {
             `${ process.env.NEXT_PUBLIC_URL }/${ lang }/redirection?bookingId=${ encodeURIComponent( bookingId ) }&hotelName=${ encodeURIComponent( bookingDetails?.hotelName ) }&name=${ encodeURIComponent( bookingDetails?.name ) }&hotelAddress=${ encodeURIComponent( bookingDetails?.hotelAddress ) }&target=${ encodeURIComponent( `${ process.env.NEXT_PUBLIC_URL }/${ lang }/trip?bookingId=${ bookingId }&hotelId=${ hotelId }&scan=true` ) }`
         );
 
+        // console.log( language?.invoice );
         const content = await generateHtml(bookingDetails, language, qrCodeData);
 
         let browser: Browser | BrowserCore;
@@ -57,9 +58,11 @@ export async function POST(request: Request): Promise<Response> {
         
         const page = await browser.newPage();
 
-        await page.setContent(content, {
+        await page.setContent( content, {
             waitUntil: 'networkidle0'
-        });
+        },
+            { encoding: 'utf-8' }
+        );
 
         const pdf = await page.pdf({
             format: 'A4',
