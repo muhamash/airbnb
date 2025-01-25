@@ -35,8 +35,11 @@ export async function POST(request: Request): Promise<Response> {
         const content = await generateHtml(bookingDetails, language, qrCodeData);
 
         let browser: Browser | BrowserCore;
+        // await chromium.font(
+        //     "https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf"
+        // );
         await chromium.font(
-            "https://raw.githack.com/googlei18n/noto-emoji/master/fonts/NotoColorEmoji.ttf"
+            "https://raw.githack.com/googlefonts/noto-fonts/main/hinted/ttf/NotoSansBengali/NotoSansBengali-Regular.ttf"
         );
 
         if ( isServer )

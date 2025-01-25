@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import BookingListCard from "@/components/bookings/BookingListCard";
 import Empty from "@/components/bookings/Empty";
+import Pagination from "@/components/common/Pagination";
 import { fetchDictionary, fetchUserBookings } from "@/utils/fetchFunction";
 import type { Metadata } from "next";
 import { Session } from "next-auth";
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 interface BookingsProps
 {
   params: Promise<{ lang: string }>;
+  searchParams: URLSearchParams;
 }
 
 interface Booking {
@@ -23,7 +25,7 @@ interface Booking {
   createdAt: string;
 }
 
-export default async function Bookings ({params}: BookingsProps)
+export default async function Bookings ({params, searchParams}: BookingsProps)
 {
   const session: Session | null = await auth();
   const userId = session?.user?._id ||session?.user?.id;
@@ -35,13 +37,14 @@ export default async function Bookings ({params}: BookingsProps)
   //   redirect( `${ process.env.NEXT_PUBLIC_URL }/${ lang }/login` );
   // }
 
-  const usersBookings = await fetchUserBookings( userId );
+  const page = Number( searchParams?.page );
+  const usersBookings = await fetchUserBookings( userId, page);
   const language = await fetchDictionary( lang );
-  // console.log( session );
+  // console.log( page );
   const text = language?.booking?.text as string;
   const no = language?.booking?.no as string;
   const ex = language?.booking?.ex as string;
-  // console.log( usersBookings, userId, lang );
+  // console.log( usersBookings.pagination, userId, lang );
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-[130px] md:py-[100px]">
@@ -54,6 +57,12 @@ export default async function Bookings ({params}: BookingsProps)
             ) )
           ) : (
               <Empty text={text} no={no} ex={ex} />
+          )
+        }
+
+        {
+          usersBookings?.bookings && usersBookings?.pagination?.totalPages > 1 && (
+            <Pagination totalPages={  usersBookings?.pagination?.totalPages}/>
           )
         }
       </div>

@@ -39,7 +39,11 @@ export default async function CardContainer ( { params,page, languageData, query
           <p className="text-lg font-thin text-red-700">No more hotels!!</p>
         )}
       </div>
-      <Pagination totalPages={  hotels?.pagination?.totalPages} />
+      {
+        hotels?.pagination?.totalPages > 1 && (
+          <Pagination totalPages={hotels?.pagination?.totalPages} />
+        )
+      }
     </>
   );
 }

@@ -40,10 +40,10 @@ export async function fetchBookingDetails(hotelId: string, bookingId: string) {
   }
 }
 
-export async function fetchUserBookings(userId: string) {
+export async function fetchUserBookings(userId: string, page:number) {
   try {
     const response = await fetch(
-      `${ process.env.NEXT_PUBLIC_URL }/api/booking?userId=${userId}`,
+      `${ process.env.NEXT_PUBLIC_URL }/api/booking?userId=${userId}&page=${page}`,
       {
         method: "GET",
       }

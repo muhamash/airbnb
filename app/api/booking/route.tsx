@@ -220,7 +220,7 @@ export async function GET(request) {
       pagination: {
         total,
         page,
-        pages: Math.ceil(total / limit),
+        totalPages: Math.ceil(total / limit),
       },
       status: 200
     });
