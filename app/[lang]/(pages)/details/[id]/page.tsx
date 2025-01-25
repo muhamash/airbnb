@@ -23,6 +23,7 @@ export default async function Details({ params, searchParams }: DetailsProps) {
     // const lang = lang;
     const hotelId = id;
 
+    // console.log(hotelId, id);
     if (!hotelId) {
         return notFound();
     }
@@ -33,10 +34,8 @@ export default async function Details({ params, searchParams }: DetailsProps) {
             getReviewsByHotelId( hotelId ),
             fetchDictionary(lang),
         ] );
-
         const hotel: { data: Hotel, status: number } = await hotelResponse.json();
 
-        // console.log(hotel.status)
         if (hotel?.status !== 200) {
             return notFound();
         }

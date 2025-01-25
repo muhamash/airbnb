@@ -11,32 +11,47 @@ interface UserRequestData {
 
 export const POST = async ( request: NextRequest ): Promise<NextResponse> =>
 {
-    const { name, email, password }: UserRequestData = await request.json();
-
-    console.log( name, email, password );
-
-    await dbConnect();
-
-    const hashedPassword = await bcrypt.hash( password, 5 );
-
-    const newUser = {
-        name,
-        email,
-        password: hashedPassword,
-    };
-
-    console.log( newUser );
-
     try
     {
-        await userModel.create( newUser );
-        return new NextResponse( "User has been created", {
-            status: 201,
+        const { name, email, password }: UserRequestData = await request.json();
+
+        if ( !name || !email || !password )
+        {
+            return NextResponse.json(
+                { message: "Name, email, and password are required." },
+                { status: 400 }
+            );
+        }
+
+        await dbConnect();
+
+        const existingUser = await userModel.findOne( { email } );
+        if ( existingUser )
+        {
+            return NextResponse.json(
+                { message: "User already exists. Please login or use a different email." },
+                { status: 409 }
+            );
+        }
+
+        const hashedPassword = await bcrypt.hash( password, 10 );
+
+        const newUser = await userModel.create( {
+            name,
+            email,
+            password: hashedPassword,
         } );
+
+        return NextResponse.json(
+            { message: "User has been created successfully.", userId: newUser._id },
+            { status: 201 }
+        );
     } catch ( err )
     {
-        return new NextResponse( err instanceof Error ? err.message : "Internal server error", {
-            status: 500,
-        } );
+        console.error( "Error creating user:", err );
+        return NextResponse.json(
+            { message: err instanceof Error ? err.message : "Internal server error" },
+            { status: 500 }
+        );
     }
 };

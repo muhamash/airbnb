@@ -27,6 +27,8 @@ export default function Pagination({totalPages}:number) {
     setCurrentPage(page);
   };
 
+  if ( totalPages === 1 ) return null;
+  
   return (
     <motion.div 
       className="mt-8 flex justify-center"

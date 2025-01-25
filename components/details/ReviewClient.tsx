@@ -42,7 +42,7 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
                         : 0;
 
                     await updateSearchParams( {
-                        ratings: newRatings.toString(),
+                        ratings: newRatings.toFixed(1).toString(),
                         ratingsLength: newRatingsLength.toString(),
                     }, searchParams, router );
                 }

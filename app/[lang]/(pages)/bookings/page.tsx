@@ -26,14 +26,14 @@ interface Booking {
 export default async function Bookings ({params}: BookingsProps)
 {
   const session: Session | null = await auth();
-  const userId = session?.user?.id;
+  const userId = session?.user?._id ||session?.user?.id;
   const { lang } = await params;
   // const lang = lang;
+  // console.log( userId, lang );
+  // if (!userId) {
 
-  if (!userId) {
-
-    return <div>Error: User not authenticated or session expired</div>;
-  }
+  //   redirect( `${ process.env.NEXT_PUBLIC_URL }/${ lang }/login` );
+  // }
 
   const usersBookings = await fetchUserBookings( userId );
   const language = await fetchDictionary( lang );
@@ -41,6 +41,7 @@ export default async function Bookings ({params}: BookingsProps)
   const text = language?.booking?.text as string;
   const no = language?.booking?.no as string;
   const ex = language?.booking?.ex as string;
+  // console.log( usersBookings, userId, lang );
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-[130px] md:py-[100px]">

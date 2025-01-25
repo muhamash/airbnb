@@ -51,7 +51,7 @@ interface MySession {
 
 // Helper function to check if the token is valid
 function isTokenValid(token: MyToken): boolean {
-    return Date.now() < (token.accessTokenExpires || 0);
+    return Date.now() < ( token.accessTokenExpires || 0 );
 }
 
 // Function to refresh the access token

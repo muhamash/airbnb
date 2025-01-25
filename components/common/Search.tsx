@@ -154,8 +154,8 @@ export default function Search({ placeholder }: SearchProps) {
                 </motion.li>
               )}
             <ul className="max-h-[350px] w-fit overflow-y-auto relative">
-              {results && results?.map( ( result ) => (
-                <form key={result?._id} onSubmit={handleClickSubmit}>
+              {results && results?.map( ( result, index ) => (
+                <form key={index} onSubmit={handleClickSubmit}>
                   <input name="hotelId" type="hidden" value={result?._id} />
                   <SearchedCard
                     name={result?.name}

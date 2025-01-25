@@ -2,9 +2,22 @@
 
 import { paymentForm } from "@/utils/serverActions";
 import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import TripDetails from "./TripDetails";
+
+interface paymentFormProps
+{ 
+  isVerified: boolean;
+  searchParams: { [ key: string ]: string };
+  languageData: { [ key: string ]: string };
+  params: { lang: string, id: string };
+  calculateRentedPrice: number;
+  userId: string;
+  email: string;
+  name: string;
+  imageUrl: string;
+}
 
 export default function PaymentForm({
   isVerified,
@@ -16,63 +29,67 @@ export default function PaymentForm({
   email,
   name,
   imageUrl,
-}: PaymentFormProps) {
-  const [isPending, startTransition] = useTransition();
+}: paymentFormProps) {
+  const [ isPending, startTransition ] = useTransition();
   const router = useRouter();
   const rate = searchParams?.rate ? JSON.parse( searchParams?.rate ) : {};
+  // const isVerified = await isVerified;
   // const pathname = usePathname();
-  console.log(window.location.href);
-
-  // Handle redirection if the user is not verified
-  useEffect( () =>
+    
+  if ( !userId )
   {
-    if ( !userId && !isVerified || !userId)
-    {
-      router.push( "/login" );
-    }
+    router.push( "/login" );
+  }
 
-    if ( userId && !isVerified )
-    {
-      const currentUrl = `${ window.location.href }`;
-      document.cookie = `leftUrl=${ encodeURIComponent( currentUrl ) }; path=/;`;
-
-      router.push( "/verify" );
-    }
-  }, [] );
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = ( e: React.FormEvent<HTMLFormElement> ) =>
+  {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
+    const formData = new FormData( e.target as HTMLFormElement );
 
-    if (formData) {
-      startTransition(async () => {
-        try {
-          const response = await paymentForm(formData);
-          console.log(response);
+    if ( formData && isVerified === true )
+    {
+      startTransition( async () =>
+      {
+        try
+        {
+          const response = await paymentForm( formData );
+          // console.log(response);
           const { formObject, bookingId } = response;
-          if (bookingId) {
-            toast.success("Payment successful!");
+          if ( bookingId )
+          {
+            toast.success( "Payment successful!" );
             router.push(
-              `${process.env.NEXT_PUBLIC_URL}/${formObject?.lang}/redirection?hotelName=${encodeURIComponent(
+              `${ process.env.NEXT_PUBLIC_URL }/${ formObject?.lang }/redirection?hotelName=${ encodeURIComponent(
                 formObject?.hotelName
-              )}&name=${encodeURIComponent(formObject?.name)}&hotelAddress=${encodeURIComponent(
+              ) }&name=${ encodeURIComponent( formObject?.name ) }&hotelAddress=${ encodeURIComponent(
                 formObject?.hotelAddress
-              )}&bookingId=${encodeURIComponent(bookingId)}&target=${encodeURIComponent(
-                `${process.env.NEXT_PUBLIC_URL}/${formObject?.lang}/success?bookingId=${encodeURIComponent(
+              ) }&bookingId=${ encodeURIComponent( bookingId ) }&target=${ encodeURIComponent(
+                `${ process.env.NEXT_PUBLIC_URL }/${ formObject?.lang }/success?bookingId=${ encodeURIComponent(
                   bookingId
-                )}&hotelId=${encodeURIComponent(formObject?.hotelId)}`
-              )}&user=${encodeURIComponent(formObject?.name)}`
+                ) }&hotelId=${ encodeURIComponent( formObject?.hotelId ) }`
+              ) }&user=${ encodeURIComponent( formObject?.name ) }`
             );
           }
-        } catch (error) {
-          toast.error("Payment failed!");
-          console.error("Payment submission failed:", error);
+        } catch ( error )
+        {
+          toast.error( "Payment failed!" );
+          console.error( "Payment submission failed:", error );
         }
-      });
+      } );
     }
+    else
+    {
+      if ( typeof window !== "undefined" )
+      {
+        const currentUrl = `${ window.location.href }`;
+        document.cookie = `leftUrl=${ encodeURIComponent( currentUrl ) }; path=/;`;
+        console.log( currentUrl );
+        router.push( "/verify" );
+      }
+    };
   };
 
-  if ( !isVerified || !userId ) return null;
+  if ( !userId ) return null;
 
   return (
     <div>

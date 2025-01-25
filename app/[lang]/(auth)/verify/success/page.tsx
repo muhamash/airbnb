@@ -5,62 +5,53 @@ import { fetchDictionary } from '@/utils/fetchFunction';
 import { Skeleton } from 'antd';
 import { motion } from 'framer-motion';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 
 interface EmailVerify {
-    [ key: string ]: string;
+    [key: string]: string;
 }
 
 interface Language {
     emailVerify: EmailVerify;
 }
 
-// export async function getServerSideProps(context) {
-//   // Get the cookies from the request headers
-//     const cookieStore = cookies();
-//     console.log( cookieStore, context );
-//     const leftUrl = cookieStore.get( 'leftUrl' )?.value || null;
-//     return {
-//         props: {
-//             leftUrl,
-//         },
-//     };
-// };
-
 export default function VerificationSuccessPage() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const params = useParams();
+
     const lang: string = Array.isArray(params?.lang) ? params.lang[0] : params?.lang || 'en';
-    const token = searchParams.get( 'token' );
-    const email = searchParams.get( 'email' );
+    const token = searchParams.get('token');
+    const email = searchParams.get('email');
+
     const [language, setLanguage] = useState<Language | null>(null);
-    const [ counter, setCounter ] = useState( 5 );
-    const [ loading, setLoading ] = useState<boolean>( true );
-    const [ leftUrl, setLeftUrl ] = useState<string | null>( null );
-    const [ verificationStatus, setVerificationStatus ] = useState<'pending' | 'success' | 'failed'>( 'pending' );
-    
-    async function fetchLanguage ()
-            {
-                const response = await fetchDictionary( lang );
-                if ( response )
-                {
-                    setLanguage( response );
-                    setLoading(false)
-                }
-    };
+    const [counter, setCounter] = useState(5);
+    const [loading, setLoading] = useState(true);
+    const [verificationStatus, setVerificationStatus] = useState<'pending' | 'success' | 'failed'>('pending');
+    const isVerified = useRef(false);
 
     useEffect( () =>
     {
-        // const leftUrlCookie = document.cookie.split( '; ' ).find( row => row.startsWith( 'leftUrl=' ) );
-        // console.log(leftUrlCookie, leftUrl);
-        // if (leftUrlCookie) {
-        //     setLeftUrl(decodeURIComponent(leftUrlCookie.split('=')[1]));
-        // }
+        async function fetchLanguage ()
+        {
+            try
+            {
+                const response = await fetchDictionary( lang );
+                setLanguage( response || null );
+                setLoading( false );
+            } catch ( error )
+            {
+                console.error( 'Error fetching language:', error );
+                setLoading( false );
+            }
+        }
 
         async function verifyEmail ()
         {
+            if ( isVerified.current ) return;
+            isVerified.current = true;
+
             if ( !token || !email )
             {
                 router.push( '/login' );
@@ -69,24 +60,23 @@ export default function VerificationSuccessPage() {
 
             try
             {
-                const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/email/verify?token=${ token }`, {
-                    method: "GET",
-                    headers: { 'Content-Type': 'application/json' }
-                } );
+                const response = await fetch(
+                    `${ process.env.NEXT_PUBLIC_URL }/api/email/verify?token=${ token }`,
+                    {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' },
+                    }
+                );
+
                 const result = await response.json();
 
-                // console.log( result );
-                
-                if ( result?.status === 400 || result?.status === 404 )
-                {
-                    toast.error( 'Errors occurred while verifying email! either token expired or user not found' );
-                    router.push( '/bookings' );
-                }
+                console.log( result );
 
-                if ( result?.status === 200 )
+                if ( result?.success )
                 {
                     setVerificationStatus( 'success' );
-                    toast.success('Successfully verified!')
+                    toast.success( 'Successfully verified!' );
+
                     const timer = setInterval( () =>
                     {
                         setCounter( ( prev ) =>
@@ -94,11 +84,38 @@ export default function VerificationSuccessPage() {
                             if ( prev <= 1 )
                             {
                                 clearInterval( timer );
-                                router.push( '/login' );
+
+                                const cookies = document.cookie.split( '; ' );
+                                const gotCookie = cookies.find( ( c ) =>
+                                    c.startsWith( 'leftUrl=' )
+                                );
+
+                                if ( gotCookie )
+                                {
+                                    const leftUrl = decodeURIComponent(
+                                        gotCookie.split( '=' )[ 1 ]
+                                    );
+                                    console.log( 'Redirecting to:', leftUrl );
+                                    setTimeout( () =>
+                                    {
+                                        router.push( leftUrl );
+                                        document.cookie =
+                                            'leftUrl=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                                    }, 100 );
+                                } else
+                                {
+                                    router.push( '/bookings' );
+                                }
                             }
                             return prev - 1;
                         } );
                     }, 1000 );
+                } else
+                {
+                    toast.error(
+                        'Errors occurred while verifying email! Either token expired or user not found.'
+                    );
+                    router.push( '/login' );
                 }
             } catch ( error )
             {
@@ -107,9 +124,9 @@ export default function VerificationSuccessPage() {
             }
         }
 
-        verifyEmail();
         fetchLanguage();
-    }, [ token, email, router ] );
+        verifyEmail();
+    }, [ lang, token, email ] );
 
     if (loading) {
         return (
@@ -121,17 +138,11 @@ export default function VerificationSuccessPage() {
         );
     }
 
-    return (
-        <div className="flex items-center justify-center h-screen bg-gradient-to-br from-cyan-600 via-purple-500 to-sky-400">
-            <motion.div
-                className="bg-white rounded-lg shadow-lg p-8 max-w-lg text-center"
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5, ease: 'easeInOut' }}
-            >
-                <Toaster />
-                {verificationStatus === 'pending' && (
-                    <div>
+    const renderContent = () => {
+        switch (verificationStatus) {
+            case 'pending':
+                return (
+                    <>
                         <motion.h1
                             className="text-2xl font-semibold text-gray-800"
                             initial={{ y: -20, opacity: 0 }}
@@ -140,33 +151,15 @@ export default function VerificationSuccessPage() {
                         >
                             {language?.emailVerify?.working}
                         </motion.h1>
-                        <p className="mt-4 text-gray-600">{language?.emailVerify?.wait}</p>
-                    </div>
-                )}
+                        <p className="mt-4 text-gray-600">
+                            {language?.emailVerify?.wait}
+                        </p>
+                    </>
+                );
 
-                {verificationStatus === 'success' && (
-                    <div>
-                        <motion.div
-                            initial={{ rotate: -15, scale: 0.9 }}
-                            animate={{ rotate: 0, scale: 1 }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 10 }}
-                            className="mx-auto mb-4"
-                        >
-                            {/* <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-16 w-16 text-green-500"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M9 12l2 2 4-4M7 12a5 5 0 10-5-5 5 5 0 005 5z"
-                                />
-                            </svg> */}
-                        </motion.div>
+            case 'success':
+                return (
+                    <>
                         <motion.h1
                             className="text-2xl font-semibold text-gray-800"
                             initial={{ y: -20, opacity: 0 }}
@@ -178,18 +171,19 @@ export default function VerificationSuccessPage() {
                         <p className="mt-4 text-gray-600">
                             {language?.emailVerify?.lastText} <strong>{counter}</strong> {language?.emailVerify?.seconds}...
                         </p>
-                    </div>
-                )}
+                    </>
+                );
 
-                {verificationStatus === 'failed' && (
-                    <div>
+            case 'failed':
+                return (
+                    <>
                         <motion.h1
                             className="text-2xl font-semibold text-red-600"
                             initial={{ y: -20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             transition={{ duration: 0.4, ease: 'easeOut' }}
                         >
-                           {language?.emailVerify?.textEr}
+                            {language?.emailVerify?.textEr}
                         </motion.h1>
                         <p className="mt-4 text-gray-600">
                             {language?.emailVerify?.text}
@@ -198,13 +192,29 @@ export default function VerificationSuccessPage() {
                             className="mt-6 px-6 py-2 bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => router.push( '/auth/signin' )}
+                            onClick={() => router.push('/auth/signin')}
                         >
                             {language?.emailVerify?.gL}
                         </motion.button>
-                    </div>
-                )}
+                    </>
+                );
+
+            default:
+                return null;
+        }
+    };
+
+    return (
+        <div className="flex items-center justify-center h-screen bg-gradient-to-br from-cyan-600 via-purple-500 to-sky-400">
+            <motion.div
+                className="bg-white rounded-lg shadow-lg p-8 max-w-lg text-center"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.5, ease: 'easeInOut' }}
+            >
+                <Toaster />
+                {renderContent()}
             </motion.div>
         </div>
     );
-};
+}

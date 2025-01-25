@@ -15,8 +15,9 @@ export default async function Review ( {languagePromise, reviewPromise, searchPa
   const responseData = await languagePromise;
   const reviews = await reviewPromise;
   const session: Session | null = await auth();
-  const isUserHasReview = reviews?.some( review => review.userId.toString() === session?.user?.id );
-  // console.log( "reviews:", reviews );
+  const userId = session?.user?._id ?? session?.user?.id;
+  const isUserHasReview = reviews?.some( review => review.userId.toString() === userId );
+  // console.log( isUserHasReview );
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 border-t border-orange-500">
@@ -33,7 +34,7 @@ export default async function Review ( {languagePromise, reviewPromise, searchPa
         </div>
 
         {
-          !isUserHasReview && session?.user?.id && (
+          !isUserHasReview && userId && (
             <ReviewButton text={responseData?.details?.writeReview} />
           )
         }
@@ -46,7 +47,7 @@ export default async function Review ( {languagePromise, reviewPromise, searchPa
           {
             reviews?.length > 0 ? (
               reviews.map( ( review ) => (
-                <ReviewCard key={review?.userId} review={review} isUserHasReview={review.userId.toString() === session?.user?.id} />
+                <ReviewCard key={review?.userId} review={review} isUserHasReview={review.userId.toString() === userId} />
               ) )
             ) : ( <p>no reviews</p> )
           }

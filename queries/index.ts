@@ -6,6 +6,7 @@ import { replaceMongoIdInArray } from "@/utils/mongoData";
 import { ObjectId } from "bson";
 // import mongoose from "mongoose";
 import { bookingsModel, IBooking } from "@/models/bookings";
+import { userModel } from "@/models/users";
 import { IReviews, reviewsModel } from '../models/reviews';
 // const { ObjectId } = mongoose.Types;
 
@@ -87,6 +88,28 @@ export async function getBookingByHotelId(hotelId: string): Promise<IBooking[] |
     return null;
   } catch (error) {
     console.error("Error fetching bookings:", error);
+    return null;
+  }
+}
+
+export async function isUserVerified ( email: string )
+{
+  try
+  {
+    const findVerifiedUser = await userModel.findOne( { email } );
+    // console.log( "findVerifiedUser:", findVerifiedUser?.emailVerified, email );
+    if ( findVerifiedUser?.emailVerified )
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+  catch ( error )
+  {
+    console.error( "Error verifying user:", error );
     return null;
   }
 }

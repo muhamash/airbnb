@@ -96,7 +96,7 @@ export default function Form({ isLogIn }: FormProps) {
             });
 
             if (res.status === 201) {
-                router.push( "/verify" );
+                router.push( "/bookings" );
             } else {
                 const result = await res.json();
                 setError(result.message || language?.login?.error?.regFail);

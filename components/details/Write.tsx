@@ -27,7 +27,8 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
   const [rating, setRating] = useState<number>(0);
   interface User {
     name: string;
-    id: string;
+    id?: string;
+    _id?: string;
     image?: string;
   }
 
@@ -74,7 +75,7 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
     const reviewData = {
       ...data,
       name: user?.name,
-      userId: user?.id,
+      userId: user?._id || user?.id,
       hotelId: params.id,
       reviewId: reviewId,
       image: user?.image || 'undefined',
@@ -106,10 +107,10 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
           } else
           {
             const newRatingsLength = currentRatingsLength + 1;
-            const newRatingValue = ( currentRatings + data?.rating ) / newRatingsLength;
+            const newRatingValue = ( ( currentRatings * currentRatingsLength ) + data?.rating ) / newRatingsLength;
             // console.log( 'New rating value and length after new submission:', newRatingValue, newRatingsLength, currentRatings, data?.rating, currentRatingsLength  );
             await updateSearchParams( {
-              ratings: newRatingValue.toString(),
+              ratings: newRatingValue.toFixed(1).toString(),
               ratingsLength: newRatingsLength.toString(),
             }, searchParams, router );
           }

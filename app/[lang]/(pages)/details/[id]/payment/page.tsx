@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import BackButton from "@/components/paymentDetails/BackButton";
 import PaymentForm from "@/components/paymentDetails/PaymentForm";
 import PriceCard from "@/components/paymentDetails/PriceCard";
+import { isUserVerified } from "@/queries";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween } from "@/utils/utils";
 import { Metadata } from "next";
@@ -33,9 +34,10 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
       fetch(`${process.env.NEXT_PUBLIC_URL}/api/hotels/${id}`),
     ]);
 
+    const isVerified = await isUserVerified(user?.user?.email);
     const responseData = await dictionaryResponse;
-      const hotel = await hotelResponse.json();
-      console.log( user );
+    const hotel = await hotelResponse.json();
+    // console.log(isVerified );
     const rate = JSON.parse(searchParams?.rate)
 
     const rentedPricePerDay = Number(rate[selection] || 0);
@@ -51,9 +53,9 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
         <BackButton text={responseData?.payment?.back} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
           <PaymentForm
-            isVerified={user?.user?.emailVerified}
+            isVerified={isVerified}
             name={user?.user?.name || ''}
-            userId={user?.user?.id || ''}
+            userId={user?.user?._id || user?.user?.id}
             email={user?.user?.email || ''}
             calculateRentedPrice={totalPrice}
             imageUrl={hotel?.data?.thumbNailUrl}

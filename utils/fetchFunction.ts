@@ -55,6 +55,7 @@ export async function fetchUserBookings(userId: string) {
     }
 
     const data = await response.json();
+    // console.log( data, response );
     return data; 
   } catch (error) {
     console.error("Error while fetching user bookings:", error);

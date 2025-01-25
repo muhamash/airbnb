@@ -82,7 +82,7 @@ export default function VerifyEmailPage() {
                 body: JSON.stringify( { email, lang } ),
             } );
 
-            console.log( email, lang );
+            // console.log( email, lang );
             if ( !response.ok )
             {
                 const errorText = await response.text();
