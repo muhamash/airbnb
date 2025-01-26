@@ -32,7 +32,7 @@ const responsive = {
 const CustomRightArrow = ({ onClick }) => {
   return (
     <button
-      className="absolute top-[220px] right-[50px] bg-pink-600 bg-opacity-90 text-white backdrop-blur-sm px-4 py-[1px] rounded-md cursor-pointer hover:shadow-md hover:shadow-black transition duration-200 hover:scale-110"
+      className="absolute top-[240px] md:top-[220px] right-[50px] bg-pink-600 bg-opacity-90 text-white backdrop-blur-sm px-4 py-[1px] rounded-md cursor-pointer hover:shadow-md hover:shadow-black transition duration-200 hover:scale-110"
       onClick={onClick}
     >
       &#10095;
@@ -43,7 +43,7 @@ const CustomRightArrow = ({ onClick }) => {
 const CustomLeftArrow = ({ onClick }) => {
   return (
     <button
-      className="absolute top-[220px] right-0 bg-green-600 bg-opacity-90 text-white backdrop-blur-sm px-4 py-[1px] rounded-md cursor-pointer hover:shadow-md hover:scale-110 hover:shadow-black transition duration-200"
+      className="absolute top-[240px] md:top-[220px] right-1 bg-green-600 bg-opacity-90 text-white backdrop-blur-sm px-4 py-[1px] rounded-md cursor-pointer hover:shadow-md hover:scale-110 hover:shadow-black transition duration-200"
       onClick={onClick}
     >
       &#10094;
@@ -119,7 +119,7 @@ const CarouselComponent: React.FC<CarouselProps> = ( {
           customTransition="transform 500ms ease-in-out"
           transitionDuration={500}
           containerClass="carousel-container"
-          removeArrowOnDeviceType={[ "tablet", "mobile" ]}
+          removeArrowOnDeviceType={[]}
           dotListClass="custom-dot-list-style"
           itemClass="carousel-item-padding-40-px"
           customRightArrow={<CustomRightArrow />}
@@ -127,7 +127,7 @@ const CarouselComponent: React.FC<CarouselProps> = ( {
           customDot={<CustomDot />}
         >
           {data.map( ( review, index ) => (
-            <div key={index} className="flex-shrink-0 w-full h-full p-1 mb-10">
+            <div key={index} className="flex-shrink-0 w-full h-full p-1 md:mb-10 mb-16">
               <ReviewCard
                  sliding={true}         
                 review={review}
