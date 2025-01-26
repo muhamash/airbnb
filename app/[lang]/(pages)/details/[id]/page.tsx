@@ -1,7 +1,6 @@
 import Property from "@/components/details/Property";
 import Review from "@/components/details/Review";
-import { getReviewsByHotelId } from "@/queries";
-import { fetchDictionary } from "@/utils/fetchFunction";
+import { fetchDictionary, fetchReviews } from "@/utils/fetchFunction";
 import { notFound } from "next/navigation";
 
 interface Hotel {
@@ -24,17 +23,16 @@ export default async function Details({ params, searchParams }: DetailsProps) {
     const hotelId = id;
 
     // console.log(hotelId, id);
-    if (!hotelId) {
-        return notFound();
-    }
 
     try {
         const [ hotelResponse, reviews, languagePromise ] = await Promise.all( [
             fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels/${ hotelId }` ),
-            getReviewsByHotelId( hotelId ),
-            fetchDictionary(lang),
+            fetchReviews( hotelId, searchParams?.page ),
+            fetchDictionary( lang ),
         ] );
+
         const hotel: { data: Hotel, status: number } = await hotelResponse.json();
+        console.log(hotelId, id);
 
         if (hotel?.status !== 200) {
             return notFound();
@@ -48,7 +46,7 @@ export default async function Details({ params, searchParams }: DetailsProps) {
         return (
             <div className="md:py-[80px] py-[110px]">
                 <Property languagePromise={languagePromise} searchParams={searchParams} hotel={plainHotel} />
-                <Review languagePromise={languagePromise} searchParams={searchParams} reviewPromise={reviews} />
+                <Review languagePromise={languagePromise} searchParams={searchParams} reviewPromise={reviews} lang={params?.lang} hotelId={ hotelId } />
             </div>
         );
     }

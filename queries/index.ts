@@ -65,7 +65,9 @@ export async function getReviewsByHotelId ( hotelId: string ): Promise<IReviews[
     } );
     // console.log( "reviews:",reviews );
     return reviews?.reviews;
-  } catch ( error ) {
+  }
+  catch ( error )
+  {
     console.error( "Error fetching reviews by hotelId:", error );
     throw error;
     return null;

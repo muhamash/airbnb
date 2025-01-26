@@ -115,3 +115,38 @@ export async function DELETE(request: Request) : Promise<Response> {
         return NextResponse.json({ message: 'Error while deleting review', error }, { status: 500 });
     }
 }
+
+export async function GET(request: Request): Promise<Response> {
+    try {
+        const url = new URL(request.url);
+        const hotelId = url.searchParams.get('hotelId');
+        const page = parseInt(url.searchParams.get('page') || '1', 10);
+        const limit = 8;
+
+        if (!hotelId) {
+            return NextResponse.json({ message: 'Hotel ID is required' }, { status: 400 });
+        }
+
+        await dbConnect();
+        const hotelReviews = await reviewsModel.findOne({ hotelId: new ObjectId(hotelId) });
+
+        if (!hotelReviews) {
+            return NextResponse.json({ message: 'No reviews found' }, { status: 404 });
+        }
+
+        const sortedReviews = hotelReviews.reviews.sort((a: never, b: never) => b.ratings - a.ratings);
+        const startIndex = (page - 1) * limit;
+        const paginatedReviews = sortedReviews.slice(startIndex, startIndex + limit);
+
+        return NextResponse.json({
+            reviews: paginatedReviews,
+            currentPage: page,
+            totalReviews: sortedReviews.length,
+            totalPages: Math.ceil(sortedReviews.length / limit),
+            status: 200,
+        });
+    } catch (error) {
+        console.error('Error while fetching reviews:', error);
+        return NextResponse.json({ message: 'Error while fetching reviews', error }, { status: 500 });
+    }
+}

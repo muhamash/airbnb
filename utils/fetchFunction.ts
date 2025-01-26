@@ -85,3 +85,25 @@ export async function fetchHotels ( page: number )
     return null;
   }
 }
+
+export async function fetchReviews ( hotelId: string, page:number )
+{
+  try {
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/review?hotelId=${ hotelId }&page=${page}`, {
+      cache: "no-store",
+    } );
+
+    const data = await response.json();
+
+    // console.log( data );
+    if (data?.status === 200) {
+      return data;
+    } else {
+      console.error("Failed to fetch reviews", data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching reviews", error);
+    throw error;
+  }
+}
