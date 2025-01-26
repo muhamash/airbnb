@@ -6,7 +6,6 @@ import { isUserVerified } from "@/queries";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween } from "@/utils/utils";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Airbnb || Payment",

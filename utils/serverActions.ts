@@ -191,8 +191,8 @@ export async function fetchHotels ( page: number )
       cache: "no-store",
     } );
 
-    const data = await response.json();
-
+    const text = await response.text(); 
+    const data = JSON.parse(text);
     // console.log(data)
     if (data?.status === 200) {
       return data;
