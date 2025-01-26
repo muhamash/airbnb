@@ -2,7 +2,7 @@
 
 import { paymentForm } from "@/utils/serverActions";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import TripDetails from "./TripDetails";
 
@@ -35,7 +35,15 @@ export default function PaymentForm({
   const rate = searchParams?.rate ? JSON.parse( searchParams?.rate ) : {};
   // const isVerified = await isVerified;
   // const pathname = usePathname();
-  console.log( isVerified, userId );
+  // console.log( isVerified, userId );
+    
+  useEffect( () =>
+  {
+    if ( !userId )
+    {
+      router.push( "/login" );
+    }
+  }, [] );
 
   const handleSubmit = ( e: React.FormEvent<HTMLFormElement> ) =>
   {

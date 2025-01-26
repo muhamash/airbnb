@@ -36,11 +36,6 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
     ] );
 
     const userId = user?.user?._id || user?.user?.id;
-
-    if (!userId) {
-      redirect("/login");
-    }
-    
     const isVerified = await isUserVerified(user?.user?.email);
     const responseData = await responseDataDictionary;
     const hotel = await hotelResponse.json();
