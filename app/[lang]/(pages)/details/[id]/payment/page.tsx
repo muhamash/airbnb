@@ -6,6 +6,7 @@ import { isUserVerified } from "@/queries";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween } from "@/utils/utils";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Airbnb || Payment",
@@ -20,7 +21,7 @@ interface PaymentProps {
 export default async function Payment({ searchParams, params }: PaymentProps) {
 //   const resolvedSearchParams = Object.fromEntries(searchParams.entries());
   const { lang, id } = await params;
-
+  // const router = useRouter();
   const checkIn = searchParams.checkIn;
   const checkOut = searchParams.checkOut;
   const selection = searchParams.selection;
@@ -38,7 +39,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
 
     if ( userId === undefined )
     {
-      router.push( "/login" );
+      redirect( "/login" );
     }
     
     const isVerified = await isUserVerified(user?.user?.email);
