@@ -104,7 +104,7 @@ export default function Form({ isLogIn }: FormProps) {
             if ( result.status === 201 )
             {
                 toast.success( result?.message );
-                router.push( "/bookings" );
+                router.push( "/login" );
             } else {
                 toast.error(result.message || language?.login?.error?.regFail );
                 // setError(result.message || language?.login?.error?.regFail);
