@@ -2,7 +2,7 @@ export async function fetchDictionary ( locale: string )
 {
   try {
     const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/language?locale=${ locale }`, {
-      cache: "no-store",
+      // cache: "no-store",
     } );
 
     const data = await response.json();
@@ -13,7 +13,8 @@ export async function fetchDictionary ( locale: string )
       console.error("Failed to fetch dictionary", data.message);
       return null;
     }
-  } catch (error) {
+  } catch ( error )
+  {
     console.error("Error fetching dictionary", error);
     throw error;
   }

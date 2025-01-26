@@ -107,7 +107,7 @@ export const {
     signOut,
 } = NextAuth( {
     adapter: MongoDBAdapter( mongoClientPromise, { databaseName: "airbnb" } ),
-    secret: process.env.NEXTAUTH_SECRET,
+    secret: process.env.AUTH_SECRET,
     ...authConfig,
     providers: [
         CredentialsProvider( {

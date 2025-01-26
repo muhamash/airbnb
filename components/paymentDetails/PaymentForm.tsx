@@ -90,8 +90,6 @@ export default function PaymentForm({
     };
   };
 
-  if ( !userId ) return null;
-
   return (
     <div>
       <Toaster position="top-center" reverseOrder={false} />

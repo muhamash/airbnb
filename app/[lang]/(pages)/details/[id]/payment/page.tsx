@@ -35,7 +35,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
     ]);
 
     const isVerified = await isUserVerified(user?.user?.email);
-    const responseData = await dictionaryResponse;
+    // const responseData = await dictionaryResponse;
     const hotel = await hotelResponse.json();
     // console.log(isVerified );
     const rate = JSON.parse(searchParams?.rate)
@@ -50,7 +50,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
 
     return (
       <div className="max-w-7xl mx-auto px-6 py-[100px]">
-        <BackButton text={responseData?.payment?.back} />
+        <BackButton text={dictionaryResponse?.payment?.back} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
           <PaymentForm
             isVerified={isVerified}
@@ -61,12 +61,12 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
             imageUrl={hotel?.data?.thumbNailUrl}
             searchParams={searchParams}
             params={{ lang, id }}
-            languageData={responseData?.payment}
+            languageData={dictionaryResponse?.payment}
           />
           <div>
             <PriceCard
               hotelName={hotel?.data?.name}
-              languageData={responseData?.payment}
+              languageData={dictionaryResponse?.payment}
               calculateRentedPrice={calculateRentedPrice}
               days={days}
               searchParams={searchParams}
