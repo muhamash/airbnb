@@ -99,7 +99,8 @@ export default function Form({ isLogIn }: FormProps) {
                 body: JSON.stringify(Object.fromEntries(formData.entries())),
             });
 
-             const result = await res.json();
+            const result = await res.json();
+            console.log( result );
             if ( result.status === 201 )
             {
                 toast.success( result?.message );

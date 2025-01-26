@@ -138,13 +138,15 @@ export async function GET(request: Request): Promise<Response> {
         const startIndex = (page - 1) * limit;
         const paginatedReviews = sortedReviews.slice(startIndex, startIndex + limit);
 
-        return NextResponse.json({
+        return NextResponse.json( {
             reviews: paginatedReviews,
-            currentPage: page,
-            totalReviews: sortedReviews.length,
-            totalPages: Math.ceil(sortedReviews.length / limit),
+            pagination: {
+                currentPage: page,
+                totalReviews: sortedReviews.length,
+                totalPages: Math.ceil( sortedReviews.length / limit ),
+            },
             status: 200,
-        });
+        } );
     } catch (error) {
         console.error('Error while fetching reviews:', error);
         return NextResponse.json({ message: 'Error while fetching reviews', error }, { status: 500 });

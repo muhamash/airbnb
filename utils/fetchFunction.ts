@@ -107,3 +107,23 @@ export async function fetchReviews ( hotelId: string, page:number )
     throw error;
   }
 }
+
+export async function fetchHotelDetails(hotelId: string) {
+  try {
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels/${ hotelId }`, {
+      cache: "no-store",
+    } );
+
+    const data = await response.json();
+    // console.log(data)
+    if (data?.status === 200) {
+      return data?.data;
+    } else {
+      console.error("Failed to fetch hotel", data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching hotel", error);
+    throw error;
+  }
+}

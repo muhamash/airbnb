@@ -43,7 +43,7 @@ export const POST = async ( request: NextRequest ): Promise<NextResponse> =>
         } );
 
         return NextResponse.json(
-            { message: "User has been created successfully.", userId: newUser._id },
+            { message: "User has been created successfully.", userId: newUser._id, status: 201 },
             { status: 201 }
         );
     } catch ( err )

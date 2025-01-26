@@ -54,9 +54,9 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
           <PaymentForm
             isVerified={isVerified}
-            name={user?.user?.name || ''}
-            userId={user?.user?._id || user?.user?.id}
-            email={user?.user?.email || ''}
+            name={user?.user?.name}
+            userId={user?.user?._id ?? user?.user?.id}
+            email={user?.user?.email}
             calculateRentedPrice={totalPrice}
             imageUrl={hotel?.data?.thumbNailUrl}
             searchParams={searchParams}
