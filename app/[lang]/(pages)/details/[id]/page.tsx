@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Property from "@/components/details/Property";
 import Review from "@/components/details/Review";
 import { fetchDictionary, fetchHotelDetails, fetchReviews } from "@/utils/fetchFunction";

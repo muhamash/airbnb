@@ -1,6 +1,6 @@
 import { reviewsModel } from '@/models/reviews';
 import { dbConnect } from '@/services/mongoDB';
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "bson";
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) : Promise<Response> {
