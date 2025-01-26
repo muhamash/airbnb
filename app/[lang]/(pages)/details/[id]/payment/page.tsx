@@ -27,18 +27,31 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
 //   const rateString = searchParams.checkOut;
 
   try {
-    const [dictionaryResponse, days, user, hotelResponse] = await Promise.all([
-      fetchDictionary(lang),
-      calculateDaysBetween(checkIn, checkOut),
+    const [ responseDataDictionary, days, user, hotelResponse ] = await Promise.all( [
+      fetchDictionary( lang ),
+      calculateDaysBetween( checkIn, checkOut ),
       auth(),
-      fetch(`${process.env.NEXT_PUBLIC_URL}/api/hotels/${id}`),
-    ]);
+      fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels/${ id }` ),
+    ] );
 
+    const userId = user?.user?._id || user?.user?.id;
+
+    if ( userId === undefined )
+    {
+      router.push( "/login" );
+    }
+    
     const isVerified = await isUserVerified(user?.user?.email);
-    // const responseData = await dictionaryResponse;
+    const responseData = await responseDataDictionary;
     const hotel = await hotelResponse.json();
     // console.log(isVerified );
-    const rate = JSON.parse(searchParams?.rate)
+    let rate = {};
+    try {
+      rate = JSON.parse(searchParams?.rate || "{}");
+    } catch (err) {
+      console.error("Invalid rate JSON:", err.message);
+      throw new Error("Invalid rate parameter.");
+    }
 
     const rentedPricePerDay = Number(rate[selection] || 0);
     const selectedQuantity = Number(searchParams[selection] || 1);
@@ -50,23 +63,23 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
 
     return (
       <div className="max-w-7xl mx-auto px-6 py-[100px]">
-        <BackButton text={dictionaryResponse?.payment?.back} />
+        <BackButton text={responseData?.payment?.back} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
           <PaymentForm
             isVerified={isVerified}
             name={user?.user?.name}
-            userId={user?.user?._id ?? user?.user?.id}
+            userId={userId}
             email={user?.user?.email}
             calculateRentedPrice={totalPrice}
             imageUrl={hotel?.data?.thumbNailUrl}
             searchParams={searchParams}
             params={{ lang, id }}
-            languageData={dictionaryResponse?.payment}
+            languageData={responseData?.payment}
           />
           <div>
             <PriceCard
               hotelName={hotel?.data?.name}
-              languageData={dictionaryResponse?.payment}
+              languageData={responseData?.payment}
               calculateRentedPrice={calculateRentedPrice}
               days={days}
               searchParams={searchParams}

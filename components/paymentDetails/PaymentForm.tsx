@@ -36,11 +36,6 @@ export default function PaymentForm({
   // const isVerified = await isVerified;
   // const pathname = usePathname();
   console.log( isVerified, userId );
-    
-  if ( !userId )
-  {
-    router.push( "/login" );
-  }
 
   const handleSubmit = ( e: React.FormEvent<HTMLFormElement> ) =>
   {
