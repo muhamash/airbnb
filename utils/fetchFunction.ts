@@ -87,10 +87,10 @@ export async function fetchHotels ( page: number )
   }
 }
 
-export async function fetchReviews ( hotelId: string, page:number )
+export async function fetchReviews ( hotelId: string, page:number, userId: string )
 {
   try {
-    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/review?hotelId=${ hotelId }&page=${page}`, {
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/review?hotelId=${ hotelId }&userId=${ userId }&page=${ page }`, {
       cache: "no-store",
     } );
 

@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { auth } from "@/auth";
 import Property from "@/components/details/Property";
 import Review from "@/components/details/Review";
 import { fetchDictionary, fetchHotelDetails, fetchReviews } from "@/utils/fetchFunction";
+import { Session } from "next-auth";
 import { notFound } from "next/navigation";
 
 interface Hotel {
@@ -27,11 +29,13 @@ export default async function Details({ params, searchParams }: DetailsProps) {
     {
         notFound();
     }
-
+    const session: Session = await auth();
+    const userId = session?.user?._id ?? session?.user?.id;
+        //   console.log( "reviews:", session );
     try {
         const [ hotelResponse, reviews, languagePromise ] = await Promise.all( [
             fetchHotelDetails( hotelId ),
-            fetchReviews( hotelId, searchParams?.page ),
+            fetchReviews( hotelId, searchParams?.page, userId ),
             fetchDictionary( lang ),
         ] );
 

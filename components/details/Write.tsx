@@ -141,13 +141,13 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
     <>
       <Toaster position="top-right" reverseOrder={false} />
       <motion.div
-        className="fixed inset-0 bg-black bg-opacity-50 z-50 backdrop-blur-sm flex items-center justify-center"
+        className={`${ isEditing ? 'fixed  overflow-y-scroll' : 'fixed' } inset-0 bg-black bg-opacity-50 flex justify-center items-center backdrop-blur-sm rounded-md`}
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 100 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        <div className="bg-white rounded-2xl w-full max-w-xl mx-4 overflow-hidden">
+        <div className={`${isEditing ? "bg-white rounded-2xl h-[250px] w-fit mx-4 overflow-y-scroll" : "bg-white rounded-2xl w-full max-w-xl mx-4 overflow-hidden"}`}>
           <div className="border-b p-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{isEditing ? 'Edit Review' : 'Write a Review'}</h3>
