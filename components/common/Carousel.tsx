@@ -127,7 +127,7 @@ const CarouselComponent: React.FC<CarouselProps> = ( {
           customDot={<CustomDot />}
         >
           {data.map( ( review, index ) => (
-            <div key={index} className="flex-shrink-0 w-full h-full p-1 md:mb-10 mb-16">
+            <div key={index} className="flex-shrink-0 w-full h-full p-1 md:mb-10 mb-16 -z-10 -inset-0">
               <ReviewCard
                  sliding={true}         
                 review={review}
