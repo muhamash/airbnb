@@ -82,9 +82,12 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
 
         // console.log( "response data: ", refreshedTokens );
         if (!response.ok) {
-            throw refreshedTokens;
+            // If unauthorized, clear credentials
+            if (response.status === 401) {
+                await signOut({ callbackUrl: `${ process.env.NEXT_PUBLIC_URL }` });
+            }
+            throw new Error("Refresh failed");
         }
-
         return {
             ...token,
             accessToken: refreshedTokens.access_token,
@@ -93,6 +96,7 @@ async function refreshAccessToken(token: MyToken): Promise<MyToken> {
         };
     } catch (error) {
         console.error("Error refreshing access token:", error);
+        
         return {
             ...token,
             error: "RefreshAccessTokenError"
@@ -179,10 +183,28 @@ export const {
                 return token;
             }
             // console.log( "going to refresh token:--->>>>", token );
-            return refreshAccessToken( token );
+            try
+            {
+                const refreshedToken = await refreshAccessToken( token );
+                return refreshedToken;
+            } catch ( error )
+            {
+                console.error( "Error refreshing token:", error );
+                // Clear token and force logout
+                return null;
+            }
         },
         async session ( { session, token }: { session: MySession; token: MyToken } ): Promise<MySession>
         {
+            // Invalidate session if no valid token
+            if ( !token )
+            {
+                session.user = null;
+                session.accessToken = "";
+                session.error = "TokenRevoked";
+                return session;
+            }
+
             session.user = token.user;
             session.accessToken = token.accessToken;
             session.error = token.error;

@@ -141,7 +141,7 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
     <>
       <Toaster position="top-right" reverseOrder={false} />
       <motion.div
-        className={`${ isEditing ? 'fixed  overflow-y-scroll' : 'fixed' } inset-0 bg-black bg-opacity-50 flex justify-center items-center backdrop-blur-sm rounded-md z-20`}
+        className={`${ isEditing ? 'fixed  overflow-y-scroll' : 'fixed' } inset-0 bg-black bg-opacity-50 flex justify-center items-center backdrop-blur-sm rounded-md z-50`}
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 100 }}

@@ -146,7 +146,7 @@ export const getReviewById = async (hotelId: string) =>
             _id: review._id.toString(),
         } ) );
 
-          console.log( plainReviews );
+          // console.log( plainReviews );
         return plainReviews;
     } catch ( error )
     {
