@@ -25,7 +25,7 @@ export default async function Review ( {languagePromise,lang, hotelId, reviewPro
   return (
     <div className="max-w-7xl mx-auto px-6 py-12 border-t border-orange-500">
       {/* <!-- Reviews Header with Average Rating --> */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-wrap space-y-1 items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <h2 className="text-2xl font-semibold">Top {responseData?.details?.reviews}</h2>
           <Link
@@ -41,7 +41,7 @@ export default async function Review ( {languagePromise,lang, hotelId, reviewPro
             <i className="fas fa-star text-yellow-500 mr-2"></i>
             <span className="text-xl font-semibold">{searchParams?.ratings}</span>
             <span className="mx-2">·</span>
-            <span className="text-gray-600 font-ubuntu">{searchParams?.ratingsLength} {responseData?.details?.reviews}</span>
+            <span className="text-gray-600 font-ubuntu text-nowrap">{searchParams?.ratingsLength} {responseData?.details?.reviews}</span>
           </div>
         </div>
 

@@ -147,7 +147,7 @@ export default function Write({ closeModal, isEditing = false, reviewId, ratings
         exit={{ opacity: 0, y: 100 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       >
-        <div className={`${isEditing ? "bg-white rounded-2xl h-[250px] w-fit mx-4 overflow-y-scroll" : "bg-white rounded-2xl w-full max-w-xl mx-4 overflow-hidden"}`}>
+        <div className={`${ "bg-white rounded-2xl w-full max-w-xl mx-4 overflow-hidden"}`}>
           <div className="border-b p-4">
             <div className="flex justify-between items-center">
               <h3 className="text-xl font-semibold">{isEditing ? 'Edit Review' : 'Write a Review'}</h3>

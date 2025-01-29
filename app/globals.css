@@ -17,6 +17,36 @@
   }
 }
 
+/* globals.css */
+#modal-root {
+  position: relative;
+  z-index: 9999;
+}
+
+/* Ensure your Write modal has proper positioning */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal-content {
+  position: relative;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
 .loaderLoading {
   width: 100px;
   height: 100px;

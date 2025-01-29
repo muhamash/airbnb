@@ -3,6 +3,7 @@
 import { updateSearchParams } from '@/utils/utils';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useTransition } from 'react';
+import Portal from '../common/Portal';
 import Write from "./Write";
 interface ReviewClientProps {
     reviewId: string;
@@ -67,7 +68,7 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
     return (
         <div className="flex md:flex-col flex-row gap-2">
             <button
-                onClick={()=> setIsModalOpen(!isModalOpen)}
+                onClick={() => setIsModalOpen( !isModalOpen )}
                 className="flex items-center justify-center px-2 py-1 bg-violet-500 text-white rounded-lg hover:bg-amber-600 transition-all"
             >
                 <i className="fas fa-edit mr-2"></i>
@@ -88,7 +89,9 @@ export default function ReviewClient ( { reviewId, ratings }: ReviewClientProps 
                     </button> )
             }
             {
-                isModalOpen && <Write ratings={ratings} reviewId={reviewId} closeModal={closeModal} isEditing={true} />
+                isModalOpen && <Portal>
+                    <Write ratings={ratings} reviewId={reviewId} closeModal={closeModal} isEditing={true} />
+                </Portal>
             }
         </div>
     );

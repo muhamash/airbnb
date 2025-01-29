@@ -97,7 +97,7 @@ const CarouselComponent: React.FC<CarouselProps> = ( {
     );
 
   return (
-    <div className="relative w-full h-72 overflow-hidden">
+    <div className="relative w-full h-72 overflow-hidden ">
       {loading ? (
         <div className="flex justify-between w-full items-center overflow-y-auto gap-5">
           <SkeletonLoader />
@@ -107,6 +107,8 @@ const CarouselComponent: React.FC<CarouselProps> = ( {
         </div>
       ) : (
         <Carousel
+          shouldResetAutoplay={false}
+          partialVisbile={false}
           swipeable={true}
           draggable={true}
           showDots={true}
@@ -129,7 +131,7 @@ const CarouselComponent: React.FC<CarouselProps> = ( {
           {data.map( ( review, index ) => (
             <div key={index} className="flex-shrink-0 w-full h-full p-1 md:mb-10 mb-16 -z-10 -inset-0">
               <ReviewCard
-                 sliding={true}         
+                sliding={true}
                 review={review}
                 isUserHasReview={review.userId === userId}
               />

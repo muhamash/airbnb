@@ -46,9 +46,10 @@ export async function generateMetadata({ params }: { params: Params }) {
 export default function layout({children}:Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <>
-      {children}
-    </>
-  )
+    return (
+        <>
+            {children}
+            <div id="modal-root"></div>
+        </>
+    );
 }

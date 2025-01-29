@@ -30,7 +30,7 @@ export async function fetchBookingDetails(hotelId: string, bookingId: string) {
 
     if (data?.success) {
       return data?.data;
-      console.log(data)
+      // console.log(data)
     } else {
       console.error("Failed to fetch booking", data.message);
       return null;
