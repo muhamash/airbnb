@@ -52,7 +52,7 @@ export default function UserActions({ session, logOut, list, create, login, reg 
                                 className="rounded-full"
                             />
                         ) : (
-                            <i className="fas fa-user text-white" />
+                            <i className="fas fa-user text-yellow-400" />
                         )}
                     </span>
                 )}
