@@ -97,7 +97,7 @@
             "ccv": "সিসিভি"
         }
     },
-    "footer": "© ২০২৪, লার্ন উইথ সুমিত • টার্মস • প্রাইভেসি • আপনার পছন্দমত পলিসি",
+    "footer": "© ২০২৪, github.com/muhamash এবং এল ডাব্লিউ এস • টার্মস • প্রাইভেসি • আপনার পছন্দমত পলিসি",
     "redirect": {
         "salam": "আসসালামু আলাইকুম",
         "text": "আপনার বুকিং করেছেন",
@@ -247,7 +247,7 @@
         "emailPlaceholder": "আপনার ইমেইল টাইপ করুন",
         "resend": "যাচাইকরণ ইমেইল পাঠান"
     },
-    "emailVerify":{
+    "emailVerify": {
         "gL": "Go to Login",
         "text": "The verification link is invalid or expired. Please try again.",
         "textEr": " Verification Failed",
