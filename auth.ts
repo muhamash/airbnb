@@ -163,6 +163,7 @@ export const {
                     response_type: "code",
                 },
             },
+            allowDangerousEmailAccountLinking: true,
         } ),
     ],
     callbacks: {
@@ -231,8 +232,18 @@ export const {
                 if ( user?.email )
                 {
                     const dbUser = await userModel.findOne( { email: user.email } );
-          
-                    if ( !dbUser ) return;
+        
+                    if (!dbUser && account?.provider !== 'credentials') {
+                        const newUser = await userModel.create( {
+                            email: user.email,
+                            name: user.name,
+                            image: user.image,
+                            emailVerified: true,
+                            firstLogin: false
+                        } );
+                        await sendGreetMail(newUser.email, newUser.name);
+                        return;
+                    };
 
                     const updates: Record<string, never> = {};
 
