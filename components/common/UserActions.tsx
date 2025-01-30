@@ -37,12 +37,12 @@ export default function UserActions({ session, logOut, list, create, login, reg 
         >
             <button className="bg-white border border-zinc-300 text-zinc-800 px-4 py-2 rounded-full hover:shadow-md flex gap-3 items-center justify-center">
                 <motion.i
-                    className="fas fa-bars"
+                    className="fas fa-cog text-teal-700"
                     animate={{ rotate: isHovered ? 270 : 0 }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                 />
                 {session?.user && (
-                    <span className="bg-zinc-600 w-6 h-6 rounded-full flex items-center justify-center text-xs text-white">
+                    <span className="bg-slate-100 w-6 h-6 rounded-full flex items-center justify-center text-xs text-white">
                         {session.user.image ? (
                             <Image
                                 src={session.user.image}
@@ -52,7 +52,7 @@ export default function UserActions({ session, logOut, list, create, login, reg 
                                 className="rounded-full"
                             />
                         ) : (
-                            <i className="fas fa-user text-yellow-400" />
+                            <i className="fas fa-user text-cyan-600" />
                         )}
                     </span>
                 )}
