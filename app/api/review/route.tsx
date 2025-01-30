@@ -139,17 +139,17 @@ export async function GET(request: Request): Promise<Response> {
         // Find the user's review if userId is provided
         let findUserReview = null;
         if (userId) {
-            findUserReview = hotelReviews.reviews.find((review: any) => review.userId.toString() === userId);
+            findUserReview = hotelReviews.reviews.find((review: never) => review.userId.toString() === userId);
         }
 
         // Remove the user's review from the list (if present) for sorting
         let reviewsWithoutUser = hotelReviews.reviews;
         if (userId && findUserReview) {
-            reviewsWithoutUser = hotelReviews.reviews.filter((review: any) => review.userId.toString() !== userId);
+            reviewsWithoutUser = hotelReviews.reviews.filter((review: never) => review.userId.toString() !== userId);
         }
 
         // Sort remaining reviews by ratings (descending order)
-        const sortedReviews = reviewsWithoutUser.sort((a: any, b: any) => (b.ratings || 0) - (a.ratings || 0));
+        const sortedReviews = reviewsWithoutUser.sort((a: never, b: never) => (b.ratings || 0) - (a.ratings || 0));
 
         // Prepare the reviews for the current page
         const startIndex = (page - 1) * limit;

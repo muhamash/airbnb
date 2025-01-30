@@ -28,6 +28,7 @@ export async function getAllReviews (): Promise<IReviews[]>
 {
   await dbConnect();
   const reviews = await reviewsModel.find().lean();
+  // console.log( "reviews:", JSON.stringify( reviews ) );
   return replaceMongoIdInArray(reviews);
 }
 

@@ -128,3 +128,27 @@ export async function fetchHotelDetails(hotelId: string) {
     throw error;
   }
 }
+
+export async function fetchTopTenHotels ()
+{
+  try
+  {
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels/top` );
+    const data = await response.json();
+    // console.log(data)
+    if (data?.status === 200)
+    {
+      return data?.hotels;
+    }
+    else
+    {
+      console.error("Failed to fetch top hotels", data.message);
+      return null;
+    }
+  }
+  catch (error)
+  {
+    console.error("Error fetching top hotels", error);
+    return null;
+  }
+}

@@ -29,7 +29,7 @@ interface CardProps {
     };
     stockPromise: Promise;
     reviewPromise: Promise;
-    query?: string | undefined;
+    query?: string;
 };
 
 export default async function Card ( {  hotel, lang, languageData,query, stockPromise, reviewPromise  }: CardProps )
@@ -41,7 +41,7 @@ export default async function Card ( {  hotel, lang, languageData,query, stockPr
     const ratings = await reviewPromise;
     const rating = ratings?.find( rating => hotelId === rating?.hotelId?.toString() )?.reviews;
     const avgRatings = rating?.reduce( ( sum, review ) => sum + review?.ratings, 0 ) / rating?.length;
-    // console.log( hotelId, avgRatings.toFixed( 1 ) );
+    console.log( hotelId, avgRatings.toFixed( 1 ) );
 
     const parseData = {
         ratings : rating?.length > 0 ? avgRatings.toFixed(1) : "0",
