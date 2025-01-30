@@ -50,9 +50,10 @@ export default function Create() {
         toast.success( 'Form submitted successfully!' );
     };
 
-  const handleInputChange = (field: string, value: string) => {
-    dispatch({ type: 'UPDATE_FIELD', field, value });
-  };
+    const handleInputChange = ( field: string, value: string ) =>
+    {
+        dispatch( { type: 'UPDATE_FIELD', field, value } );
+    };
 
     const handleStockChange = ( index: number, field: keyof Stock, value: string ) =>
     {
@@ -63,17 +64,20 @@ export default function Create() {
         } );
     };
 
-  const toggleEdit = (field: string) => {
-    dispatch({ type: 'TOGGLE_EDIT', field });
-  };
+    const toggleEdit = ( field: string ) =>
+    {
+        dispatch( { type: 'TOGGLE_EDIT', field } );
+    };
 
-  const handleCancel = (field: string) => {
-    dispatch({ type: 'RESET_FIELD', field });
-  };
+    const handleCancel = ( field: string ) =>
+    {
+        dispatch( { type: 'RESET_FIELD', field } );
+    };
 
-  const toggleAmenity = (amenity: string) => {
-    dispatch({ type: 'TOGGLE_AMENITY', amenity });
-  };
+    const toggleAmenity = ( amenity: string ) =>
+    {
+        dispatch( { type: 'TOGGLE_AMENITY', amenity } );
+    };
 
     return (
         <>
