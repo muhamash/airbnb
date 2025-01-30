@@ -7,6 +7,7 @@ import { authConfig } from "./auth.config";
 import { userModel } from "./models/users";
 import { dbConnect } from "./services/mongoDB";
 import mongoClientPromise from "./services/monoClientPromise";
+import { sendGreetMail } from "./utils/serverActions";
 
 // Types for account and user
 interface GoogleAccount {
@@ -167,6 +168,13 @@ export const {
     callbacks: {
         async jwt ( { token, user, account }: { token: MyToken; user?: User; account?: GoogleAccount } ): Promise<MyToken>
         {
+            // const existingUser = await userModel.findOne({ email: user.email });
+
+            // if (!existingUser) {
+            //     await userModel.create(user); 
+            //     await sendGreetMail(user.email, user.name);
+            // }
+
             if ( account && user )
             {
                 return {
@@ -212,5 +220,46 @@ export const {
             // console.log( "sessions auth--->>>>", session );
             return session;
         },
+    },
+    events: {
+        async signIn ( { user, account } )
+        {
+            try
+            {
+                await dbConnect();
+        
+                if ( user?.email )
+                {
+                    const dbUser = await userModel.findOne( { email: user.email } );
+          
+                    if ( !dbUser ) return;
+
+                    const updates: Record<string, never> = {};
+
+                    if ( account?.provider !== 'credentials' )
+                    {
+                        updates.emailVerified = true;
+                    }
+
+                    if ( dbUser.firstLogin )
+                    {
+                        await sendGreetMail( user?.email, user?.name );
+                        updates.firstLogin = false;
+                    }
+
+                    if ( Object.keys( updates ).length > 0 )
+                    {
+                        await userModel.updateOne(
+                            { _id: dbUser._id },
+                            { $set: updates }
+                        );
+                    }
+                }
+            }
+            catch ( error )
+            {
+                console.error( "Error handling signIn event:", error );
+            }
+        }
     },
 } );

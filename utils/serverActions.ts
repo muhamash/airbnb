@@ -301,14 +301,16 @@ export async function sendGreetMail ( email: string, name: string )
     <div class="container">
         <h2 class="header">Welcome to Our Platform!</h2>
         <div class="content">
-            <p>Hi <strong>${ name }</strong>,</p>
+            <p style="color: violet; font-size: large; text-transform: uppercase;">
+            Hi, <strong>${ name }</strong>
+            </p>
             <p>Thank you for registering with us. We are excited to have you on board!</p>
             <p>Get started by exploring your dashboard and making the most of our services.</p>
-            <a href="https://airbnb-smoky-theta.vercel.app/en/login" class="button">Go to Dashboard</a>
+            <a href="https://airbnb-smoky-theta.vercel.app/en/login" class="button">Login Now!!</a>
         </div>
         <div class="footer">
             <p>If you did not sign up for this account, please ignore this email.</p>
-            <p>&copy; 2025 Our Platform. All rights reserved.</p>
+            <p>&copy; 2025 github.com/muhamash. All rights reserved.</p>
         </div>
     </div>
 </body>
@@ -317,7 +319,7 @@ export async function sendGreetMail ( email: string, name: string )
     const mailOptions = {
       from: process.env.GMAIL_ADDRESS_HOST,
       to: email,
-      subject: subject,
+      subject: "Glad to find you!",
       html: emailTemplate,
     };
 

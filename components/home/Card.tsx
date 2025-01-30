@@ -33,7 +33,7 @@ interface CardProps {
     query?: string;
 };
 
-export default  function Card ( {  hotel, lang, languageData,query, stockPromise, reviewPromise  }: CardProps )
+export default function Card ( {  hotel, lang, languageData,query, stockPromise, reviewPromise  }: CardProps )
 {
     // const responseData = await fetchDictionary( params?.lang );
     const stocksPromise =  stockPromise;

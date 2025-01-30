@@ -9,6 +9,7 @@ export interface IUser extends Document {
     // verified: boolean;
     verificationToken: string | null;
     tokenExpiration: Date;
+    firstLogin: boolean;
 };
 
 const userSchema: Schema<IUser> = new Schema( {
@@ -33,9 +34,13 @@ const userSchema: Schema<IUser> = new Schema( {
         default: false,
         type: Boolean,
     },
+    firstLogin: {
+        type: Boolean,
+        default: true
+    },
     verificationToken: { type: String, default: null },
     tokenExpiration: { type: Date, default: null },
 } );
 
 export const userModel: Model<IUser> =
-    mongoose.models.users || mongoose.model<IUser>( "users", userSchema );
+    mongoose?.models?.users || mongoose.model<IUser>( "users", userSchema );

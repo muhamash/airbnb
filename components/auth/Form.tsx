@@ -1,5 +1,7 @@
 "use client"
 
+import { userModel } from '@/models/users';
+import { dbConnect } from '@/services/mongoDB';
 import { fetchDictionary } from '@/utils/fetchFunction';
 import { sendGreetMail } from '@/utils/serverActions';
 import { Skeleton } from 'antd';
@@ -90,15 +92,17 @@ export default function Form({ isLogIn }: FormProps) {
     };
 
     // Registration handling
-    const handleRegistration = async (formData: FormData) => {
-        try {
-            const res = await fetch(`${ process.env.NEXT_PUBLIC_URL }/api/auth/register`, {
+    const handleRegistration = async ( formData: FormData ) =>
+    {
+        try
+        {
+            const res = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/auth/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(Object.fromEntries(formData.entries())),
-            });
+                body: JSON.stringify( Object.fromEntries( formData.entries() ) ),
+            } );
 
             const result = await res.json();
             console.log( result );
@@ -108,14 +112,34 @@ export default function Form({ isLogIn }: FormProps) {
                 const name = formData.get( "name" );
 
                 toast.success( result?.message );
-                await sendGreetMail( email, name );
+                try
+                {
+                    await dbConnect();
+                    const dbUser = await userModel.findOne( { email: user.email } );
+                    const updates: Record<string, never> = {};
+                    updates.firstLogin = false;
+                    if ( Object.keys( updates ).length > 0 )
+                    {
+                        await userModel.updateOne(
+                            { _id: dbUser._id },
+                            { $set: updates }
+                        );
+                    }
+                    await sendGreetMail( email, name );
+                }
+                catch ( error )
+                {
+                    console.error( error );
+                }
                 router.push( "/login" );
-            } else {
-                toast.error(result.message || language?.login?.error?.regFail );
+            } else
+            {
+                toast.error( result.message || language?.login?.error?.regFail );
                 // setError(result.message || language?.login?.error?.regFail);
             }
-        } catch (err) {
-            toast.error((err as Error).message || "An unknown error occurred.");
+        } catch ( err )
+        {
+            toast.error( ( err as Error ).message || "An unknown error occurred." );
         }
     };
 
