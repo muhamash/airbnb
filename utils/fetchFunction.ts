@@ -71,7 +71,8 @@ export async function fetchHotels ( page: number )
       cache: "no-store",
     } );
 
-    const data = await response.json();
+    const fetchData = await response.text();
+    const data = await JSON.parse( fetchData );
 
     // console.log(data)
     if (data?.status === 200) {
@@ -94,9 +95,8 @@ export async function fetchReviews ( hotelId: string, page:number, userId: strin
       cache: "no-store",
     } );
 
-    const data = await response.json();
-
-    // console.log( data );
+    const fetchData = await response.text();
+    const data = await JSON.parse( fetchData );
     if (data?.status === 200) {
       return data;
     } else {
@@ -115,7 +115,8 @@ export async function fetchHotelDetails(hotelId: string) {
       cache: "no-store",
     } );
 
-    const data = await response.json();
+    const fetchData = await response.text();
+    const data = await JSON.parse( fetchData );
     // console.log(data)
     if (data?.status === 200) {
       return data?.data;
@@ -134,7 +135,8 @@ export async function fetchTopTenHotels ()
   try
   {
     const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels/top` );
-    const data = await response.json();
+    const fetchData = await response.text();
+    const data = await JSON.parse( fetchData );
     // console.log(data)
     if (data?.status === 200)
     {

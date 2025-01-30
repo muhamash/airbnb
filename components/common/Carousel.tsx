@@ -166,7 +166,7 @@ const CarouselComponent: React.FC<CarouselProps> = ( {
             <div key={index} className="flex-shrink-0 w-full h-full p-1 md:mb-10 mb-16 -z-10 -inset-0">
               {
                 hotelCard ? (
-                  <Card key={index} languageData={languageData} lang={lang} hotel={review} stockPromise={stockPromise} reviewPromise={reviewPromise} query={ query }/>
+                  <Card key={index} languageData={languageData.details} lang={lang} hotel={review} stockPromise={stockPromise} reviewPromise={reviewPromise} query={ query }/>
                 ) : (
                   <ReviewCard
                     sliding={true}

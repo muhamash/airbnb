@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -27,21 +28,22 @@ interface CardProps {
         location: string;
         ratings: string;
     };
-    stockPromise: Promise;
-    reviewPromise: Promise;
+    stockPromise: { [key: string]: string | never};
+    reviewPromise: { [key: string]: string | never };
     query?: string;
 };
 
-export default async function Card ( {  hotel, lang, languageData,query, stockPromise, reviewPromise  }: CardProps )
+export default  function Card ( {  hotel, lang, languageData,query, stockPromise, reviewPromise  }: CardProps )
 {
     // const responseData = await fetchDictionary( params?.lang );
-    const stocksPromise = await stockPromise;
-    const hotelId = query ? hotel?._id : hotel?.id;
+    const stocksPromise =  stockPromise;
+    const hotelId =  hotel?._id ?? hotel?.id;
     const getStock = stocksPromise?.find( stock => hotelId  === stock?.hotelId.toString() );
-    const ratings = await reviewPromise;
+    const ratings =  reviewPromise;
     const rating = ratings?.find( rating => hotelId === rating?.hotelId?.toString() )?.reviews;
     const avgRatings = rating?.reduce( ( sum, review ) => sum + review?.ratings, 0 ) / rating?.length;
-    console.log( hotelId, avgRatings.toFixed( 1 ) );
+    // console.log(languageData, stocksPromise, ratings, lang, hotel, query)
+    // console.log( hotelId, avgRatings.toFixed( 1 ) );
 
     const parseData = {
         ratings : rating?.length > 0 ? avgRatings.toFixed(1) : "0",

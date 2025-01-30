@@ -12,8 +12,8 @@ export default async function TopRatedContainer ( { topTenPromise,lang}: TopRate
 {
   const topTenHotels = await topTenPromise;
   const responseData = await fetchDictionary( lang );
-  const reviewPromise =  getAllReviews();
-  const stockPromise =  getAllStocks();
+  const reviewPromise = await  getAllReviews();
+  const stockPromise =  await getAllStocks();
   // console.log( topTenHotels?.length );
   return (
     <div className="md:py-[20px] py-[10px]">

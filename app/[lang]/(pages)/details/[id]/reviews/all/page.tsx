@@ -21,9 +21,9 @@ export default async function reviewPage ({params, searchParams}: reviewPageProp
 {
   const session: Session = await auth();
   const userId = session?.user?.id ?? session?.user?._id;
-  // console.log( userId );
   const reviews = await fetchReviews( params?.id, searchParams?.page, userId );
   const { lang } = await params;
+  console.log( reviews?.pagination?.totalPages );
   const topRatedHotels = fetchTopTenHotels();
   
   return (
@@ -38,11 +38,13 @@ export default async function reviewPage ({params, searchParams}: reviewPageProp
           ) )
         }
       </div>
-      {
-        reviews?.pagination?.totalPages > 1 && (
-          <Pagination totalPages={reviews?.pagination?.totalPages} />
-        )
-      }
+      <div className="relative">
+        {
+          reviews?.pagination?.totalPages > 1 && (
+            <Pagination totalPages={reviews?.pagination?.totalPages} />
+          )
+        }
+      </div>
       <div className="mt-50">
         <h3 className="text-violet-600 text-2xl font-kanit font-bold">Top Ten Hotels</h3>
         <TopRatedContainer lang={lang} topTenPromise={topRatedHotels} />
