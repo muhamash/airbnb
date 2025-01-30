@@ -32,11 +32,11 @@ export async function POST(request: Request): Promise<Response> {
 
       const langData = await fetchDictionary( lang );
 
-        const emailTemplate = `<html>
+      const emailTemplate = `<html>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${langData?.email?.emailTitle}</title>
+    <title>${ langData?.email?.emailTitle }</title>
   </head>
   <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333;">
     <table
@@ -49,27 +49,27 @@ export async function POST(request: Request): Promise<Response> {
     >
       <tr>
         <td align="center" style="background-color: #087d60; color: #ffffff; padding: 20px 0; border-radius: 10px 10px 0 0;">
-          <h1 style="margin: 0; font-size: 24px;">${langData?.email?.emailHead}</h1>
+          <h1 style="margin: 0; font-size: 24px;">${ langData?.email?.emailHead }</h1>
         </td>
       </tr>
       <tr>
         <td style="padding: 20px;">
           <p style="font-size: 16px; line-height: 1.5; margin: 0;">
-           ${langData?.email?.salam} <strong>${name}</strong>,
+           ${ langData?.email?.salam } <strong>${ name }</strong>,
           </p>
           <p style="font-size: 16px; line-height: 1.5; margin: 15px 0;">
-            ${langData?.email?.emailText}, ${hotelName} ;  ${langData?.email?.place} : ${hotelAddress}
+            ${ langData?.email?.emailText }, ${ hotelName } ;  ${ langData?.email?.place } : ${ hotelAddress }
           </p>
           <p style="text-align: center; margin: 30px 0;">
             <a
               href="https://github.com/muhamash"
               style="background-color: #058648; color: #ffffff; text-decoration: none; padding: 10px 20px; font-size: 16px; border-radius: 5px; display: inline-block;"
             >
-              ${langData?.email?.me}
+              ${ langData?.email?.me }
             </a>
           </p>
           
-          <h2 style="text-align: center; font-size: 18px; margin-top: 30px;">${langData?.email?.bookingDetails}</h2>
+          <h2 style="text-align: center; font-size: 18px; margin-top: 30px;">${ langData?.email?.bookingDetails }</h2>
           <table
             align="center"
             border="1"
@@ -80,42 +80,42 @@ export async function POST(request: Request): Promise<Response> {
           >
             <thead style="background-color: #6d2497; color: #ffffff;">
               <tr>
-                <th style="text-align: center;">${langData?.email?.checkIn}</th>
-                <th style="text-align: center;">${langData?.email?.checkOut}</th>
-                <th style="text-align: center;">${langData?.email?.rent}</th>
-                <th style="text-align: center;">${langData?.email?.count}</th>
-                <th style="text-align: center;">${langData?.email?.unitPrice}</th>
-                <th style="text-align: center;">${langData?.email?.total}</th>
+                <th style="text-align: center;">${ langData?.email?.checkIn }</th>
+                <th style="text-align: center;">${ langData?.email?.checkOut }</th>
+                <th style="text-align: center;">${ langData?.email?.rent }</th>
+                <th style="text-align: center;">${ langData?.email?.count }</th>
+                <th style="text-align: center;">${ langData?.email?.unitPrice }</th>
+                <th style="text-align: center;">${ langData?.email?.total }</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style="text-align: center;">2${checkIn}</td>
-                <td style="text-align: center;">${checkOut}</td>
-                <td style="text-align: center;">${langData?.email[rentType]}</td>
-                <td style="text-align: center;">${count}</td>
-                <td style="text-align: center;">${unitPrice}</td>
-                <td style="text-align: center;">${total}</td>
+                <td style="text-align: center;">2${ checkIn }</td>
+                <td style="text-align: center;">${ checkOut }</td>
+                <td style="text-align: center;">${ langData?.email[ rentType ] }</td>
+                <td style="text-align: center;">${ count }</td>
+                <td style="text-align: center;">${ unitPrice }</td>
+                <td style="text-align: center;">${ total }</td>
               </tr>
             </tbody>
           </table>
 
           <p style="font-size: 14px; line-height: 1.5; color: #c2640c;">
-            ${langData?.email?.text}
+            ${ langData?.email?.text }
           </p>
         </td>
       </tr>
       <tr>
         <td align="center" style="background-color: #f4f4f4; color: #777; padding: 10px; border-radius: 0 0 10px 10px;">
           <p style="margin: 0; font-size: 12px;">
-            &copy; ${langData?.email?.myCompany} ; ${langData?.email?.coppyRight} : github.com/muhamash.
+            &copy; ${ langData?.email?.myCompany } ; ${ langData?.email?.coppyRight } : github.com/muhamash.
           </p>
         </td>
       </tr>
     </table>
   </body>
 </html>
-`
+`;
         // Define email options
         const mailOptions = {
             from: process.env.GMAIL_ADDRESS_HOST, 

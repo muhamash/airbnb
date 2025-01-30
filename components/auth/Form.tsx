@@ -1,6 +1,7 @@
 "use client"
 
 import { fetchDictionary } from '@/utils/fetchFunction';
+import { sendGreetMail } from '@/utils/serverActions';
 import { Skeleton } from 'antd';
 import Link from 'next/link';
 import { useParams, useRouter } from "next/navigation";
@@ -103,7 +104,11 @@ export default function Form({ isLogIn }: FormProps) {
             console.log( result );
             if ( result.status === 201 )
             {
+                const email = formData.get( "email" );
+                const name = formData.get( "name" );
+
                 toast.success( result?.message );
+                await sendGreetMail( email, name );
                 router.push( "/login" );
             } else {
                 toast.error(result.message || language?.login?.error?.regFail );

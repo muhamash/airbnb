@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { getAllReviews, getAllStocks, getReviewsByHotelId } from "@/queries";
+import nodemailer from 'nodemailer';
 interface FormData
 {
     email: string;
@@ -238,3 +239,93 @@ export async function redirectToCard (hotelId: string)
     return null;
   }
 };
+
+export async function sendGreetMail ( email: string, name: string )
+{
+  try
+  {
+    const transporter = nodemailer.createTransport( {
+      service: 'gmail',
+      auth: {
+        user: process.env.GMAIL_ADDRESS_HOST,
+        pass: process.env.GMAIL_APP_PASS,
+      },
+    } );
+
+    const emailTemplate = `<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .content {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="header">Welcome to Our Platform!</h2>
+        <div class="content">
+            <p>Hi <strong>${ name }</strong>,</p>
+            <p>Thank you for registering with us. We are excited to have you on board!</p>
+            <p>Get started by exploring your dashboard and making the most of our services.</p>
+            <a href="https://airbnb-smoky-theta.vercel.app/en/login" class="button">Go to Dashboard</a>
+        </div>
+        <div class="footer">
+            <p>If you did not sign up for this account, please ignore this email.</p>
+            <p>&copy; 2025 Our Platform. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>`;
+
+    const mailOptions = {
+      from: process.env.GMAIL_ADDRESS_HOST,
+      to: email,
+      subject: subject,
+      html: emailTemplate,
+    };
+
+    await transporter.sendMail( mailOptions );
+  }
+  catch ( error )
+  {
+    console.error( error );
+    return null;
+  }
+}
