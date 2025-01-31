@@ -344,14 +344,11 @@ export async function sendMsz ( phoneNumber: never, hotelName: string, name: str
     const mszResponse = await courier.send( {
       message: {
         to: {
-          data: {
-            name: name,
-          },
-           phone_number: phoneNumber,
+          phone_number: phoneNumber,
         },
         content: {
           title: "Confirmation text",
-          body: `Your report is under review.. ${ hotelName }`,
+          body: `assalamu alaikum , ${ name }; Your report is under review.. ${ hotelName }`,
         },
         routing: {
           method: "single",
@@ -368,7 +365,7 @@ export async function sendMsz ( phoneNumber: never, hotelName: string, name: str
     //   requestId: '1-679cf963-7e228adc9111f6f45bfbb4bf',
     // } );
 
-    console.log( statusResponse );
+    // console.log( statusResponse );
   }
 
   catch ( error )
