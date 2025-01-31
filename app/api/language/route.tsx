@@ -7,7 +7,6 @@ export async function GET(request: Request): Promise<Response> {
   try {
     const url = new URL(request.url);
     const locale: string = url.searchParams.get("locale") || "en";
-    
     // console.log('Locale:', locale, url);
 
     const dictionary = await getDictionary(locale);

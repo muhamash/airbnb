@@ -1,8 +1,10 @@
 export async function fetchDictionary(locale) {
   try {
     const response = await fetch(
-      `${ process.env.NEXT_PUBLIC_URL }/api/language?locale=${ locale }`
-    );
+      `${ process.env.NEXT_PUBLIC_URL }/api/language?locale=${ locale }`, {
+      cache: "no-store",
+    } );
+    
     const text = await response.text(); 
     // console.log("Raw Response:", text);
     const data = JSON.parse(text); 
