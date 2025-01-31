@@ -11,8 +11,8 @@ import TripDetails from "./TripDetails";
 interface paymentFormProps
 { 
   isVerified: boolean;
-  searchParams: { [ key: string ]: string };
-  languageData: { [ key: string ]: string };
+  searchParams: URLSearchParams;
+  languageData: { [ key: string ]: string | never };
   params: { lang: string, id: string };
   calculateRentedPrice: number;
   userId: string;
