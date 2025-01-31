@@ -39,6 +39,7 @@
     "react-multi-carousel": "^2.8.5",
     "react-phone-number-input": "^3.4.11",
     "server-only": "^0.0.1",
+    "twilio": "^5.4.3",
     "uuid": "^11.0.5"
   },
   "devDependencies": {

@@ -3,9 +3,8 @@
 import { paymentForm, sendMsz } from "@/utils/serverActions";
 import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import PhoneInput from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import TripDetails from "./TripDetails";
 
@@ -36,7 +35,7 @@ export default function PaymentForm({
   const [ isPending, startTransition ] = useTransition();
   const router = useRouter();
   const rate = searchParams?.rate ? JSON.parse( searchParams?.rate ) : {};
-  const [countryCode, setCountryCode] = useState<string>("");
+  // const [countryCode, setCountryCode] = useState<string>("");
   // const isVerified = await isVerified;
   // const pathname = usePathname();
   // console.log( isVerified, userId );
@@ -78,11 +77,11 @@ export default function PaymentForm({
               ) }&user=${ encodeURIComponent( formObject?.name ) }`
             );
 
-            const phoneNumber = formData.get( "phoneNumber" );
+            // const phoneNumber = formData.get( "phoneNumber" );
             const hotelName = formData.get( "hotelName" );
             const name = formData.get( "name" );
-            const hotelAddress = formData.get( "hotelAddress" );
-            await sendMsz( phoneNumber, hotelName, name , hotelAddress);
+            const email = formData.get( "email" );
+            await sendMsz(  name , hotelName, email);
           }
         } catch ( error )
         {
@@ -123,7 +122,8 @@ export default function PaymentForm({
         <input type="hidden" name="hotelName" value={searchParams?.hotelName} />
         <input type="hidden" name="hotelAddress" value={searchParams?.hotelAddress} />
 
-        <section className="py-[30px]">
+        {/* sfcdsd */}
+        {/* <section className="py-[30px]">
           <label className="uppercase text-transparent bg-clip-text bg-gradient-to-r from-green-700 via-purple-600 to-pink-500  animate-pulse font-bold text-xl font-mono pb-1" htmlFor="phoneNumber">{languageData?.placeholders?.phone}</label>
           <PhoneInput
             name="phoneNumber"
@@ -134,7 +134,7 @@ export default function PaymentForm({
             className="text-green-800 w-full text-sm p-2 rounded-md focus:border-1 border-violet-800"
             required
           />
-        </section>
+        </section> */}
         {/* Payment Section */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4">{languageData?.paymentText}</h2>

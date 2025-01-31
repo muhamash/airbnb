@@ -73,7 +73,7 @@
         "trip": "Your Trip",
         "dates": "Dates",
         "rent": "Rented",
-        "paymentText": "Pay with American Express",
+        "paymentText": "Enter fake payment details",
         "billingText": "Billing Address",
         "buttons": {
             "edit": "Edit",
