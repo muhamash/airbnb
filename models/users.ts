@@ -10,12 +10,19 @@ export interface IUser extends Document {
     verificationToken: string | null;
     tokenExpiration: Date;
     firstLogin: boolean;
+    phoneNumber: string;
 };
 
 const userSchema: Schema<IUser> = new Schema( {
     name: {
         required: true,
         type: String
+    },
+    phoneNumber: {
+        required: false, 
+        type: String,
+        match: /^[0-9]{10}$/,
+        unique: false
     },
     email: {
         required: true,

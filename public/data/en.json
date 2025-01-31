@@ -94,7 +94,8 @@
             "apt": "Apartment",
             "zip": "Zip Code",
             "state": "State",
-            "ccv": "CCV"
+            "ccv": "CCV",
+            "phone": "please enter your original phone number to get notified with sms!!!! yeee!"
         }
     },
     "footer": "© 2024, github.com/muhamash and LWS • Terms • Privacy • Policy of Your Choice",

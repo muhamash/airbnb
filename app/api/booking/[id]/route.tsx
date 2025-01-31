@@ -24,8 +24,7 @@ export async function GET(request: Request): Promise<Response> {
             );
         }
 
-        console.log("Bookings Data:", bookingsData);
-
+        // console.log("Bookings Data:", bookingsData);
         if (bookingId) {
             const filteredBooking = bookingsData?.find(
                 (booking: IBooking) => booking._id.toString() === bookingId
@@ -42,8 +41,7 @@ export async function GET(request: Request): Promise<Response> {
                 );
             }
 
-            console.log("Filtered Booking:", filteredBooking);
-
+            // console.log("Filtered Booking:", filteredBooking);
             return NextResponse.json(
                 {
                     status: 200,

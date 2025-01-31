@@ -2,6 +2,7 @@
 
 import { signIn } from "@/auth";
 import { getAllReviews, getAllStocks, getReviewsByHotelId } from "@/queries";
+import { CourierClient } from '@trycourier/courier';
 import nodemailer from 'nodemailer';
 interface FormData
 {
@@ -325,6 +326,51 @@ export async function sendGreetMail ( email: string, name: string )
 
     await transporter.sendMail( mailOptions );
   }
+  catch ( error )
+  {
+    console.error( error );
+    return null;
+  }
+}
+
+export async function sendMsz ( phoneNumber: never, hotelName: string, name: string )
+{
+  const courier = new CourierClient( {
+    authorizationToken: process.env.COURIER_AUTH_TOKEN,
+  } );
+
+  try
+  {
+    const mszResponse = await courier.send( {
+      message: {
+        to: {
+          data: {
+            name: name,
+          },
+           phone_number: phoneNumber,
+        },
+        content: {
+          title: "Confirmation text",
+          body: `Your report is under review.. ${ hotelName }`,
+        },
+        routing: {
+          method: "single",
+          channels: [ "sms" ],
+        },
+      },
+    } );
+    
+    // const result = await mszResponse.json();
+
+    console.log( mszResponse, name, hotelName, phoneNumber );
+    // return result;
+    // const statusResponse = await courier.getRequestStatus( {
+    //   requestId: '1-679cf963-7e228adc9111f6f45bfbb4bf',
+    // } );
+
+    console.log( statusResponse );
+  }
+
   catch ( error )
   {
     console.error( error );

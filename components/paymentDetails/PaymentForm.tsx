@@ -1,9 +1,11 @@
 'use client';
 
-import { paymentForm } from "@/utils/serverActions";
+import { paymentForm, sendMsz } from "@/utils/serverActions";
 import { useRouter } from "next/navigation";
-import { useEffect, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 import TripDetails from "./TripDetails";
 
 interface paymentFormProps
@@ -33,6 +35,7 @@ export default function PaymentForm({
   const [ isPending, startTransition ] = useTransition();
   const router = useRouter();
   const rate = searchParams?.rate ? JSON.parse( searchParams?.rate ) : {};
+  const [countryCode, setCountryCode] = useState<string>("");
   // const isVerified = await isVerified;
   // const pathname = usePathname();
   // console.log( isVerified, userId );
@@ -73,6 +76,11 @@ export default function PaymentForm({
                 ) }&hotelId=${ encodeURIComponent( formObject?.hotelId ) }`
               ) }&user=${ encodeURIComponent( formObject?.name ) }`
             );
+
+            const phoneNumber = formData.get( "phoneNumber" );
+            const hotelName = formData.get( "hotelName" );
+            const name = formData.get("name")
+            await sendMsz( phoneNumber, hotelName, name );
           }
         } catch ( error )
         {
@@ -98,7 +106,7 @@ export default function PaymentForm({
       <Toaster position="top-center" reverseOrder={false} />
       <TripDetails languageData={languageData} />
       <form className="mt-3" onSubmit={handleSubmit}>
-        <input type="hidden" name="rate" value={rate[searchParams?.selection]} />
+        <input type="hidden" name="rate" value={rate[ searchParams?.selection ]} />
         <input type="hidden" name="thumbnail" value={imageUrl} />
         <input type="hidden" name="total" value={calculateRentedPrice} />
         <input type="hidden" name="name" value={name} />
@@ -106,13 +114,25 @@ export default function PaymentForm({
         <input type="hidden" name="checkOut" value={searchParams?.checkOut} />
         <input type="hidden" name="checkIn" value={searchParams?.checkIn} />
         <input type="hidden" name="type" value={searchParams?.selection} />
-        <input type="hidden" name={searchParams?.selection} value={searchParams[searchParams?.selection]} />
+        <input type="hidden" name={searchParams?.selection} value={searchParams[ searchParams?.selection ]} />
         <input type="hidden" name="hotelId" value={params?.id} />
         <input type="hidden" name="lang" value={params?.lang} />
         <input type="hidden" name="userId" value={userId} />
         <input type="hidden" name="hotelName" value={searchParams?.hotelName} />
         <input type="hidden" name="hotelAddress" value={searchParams?.hotelAddress} />
 
+        <section className="py-[30px]">
+          <label className="uppercase text-transparent bg-clip-text bg-gradient-to-r from-green-700 via-purple-600 to-pink-500  animate-pulse font-bold text-xl font-mono pb-1" htmlFor="phoneNumber">{languageData?.placeholders?.phone}</label>
+          <PhoneInput
+            name="phoneNumber"
+            international
+            onChange={( e ) => setCountryCode( e?.target?.value )}
+            defaultCountry={countryCode}
+            placeholder={languageData?.placeholders?.phone}
+            className="text-green-800 w-full text-sm p-2 rounded-md focus:border-1 border-violet-800"
+            required
+          />
+        </section>
         {/* Payment Section */}
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4">{languageData?.paymentText}</h2>
