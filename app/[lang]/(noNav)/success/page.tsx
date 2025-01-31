@@ -3,6 +3,7 @@ import ActionButton from "@/components/success/ActionButton";
 import BookingCrad from "@/components/success/BookingCrad";
 import { fetchBookingDetails, fetchDictionary } from "@/utils/fetchFunction";
 import type { Metadata } from "next";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -11,8 +12,8 @@ export const metadata: Metadata = {
 };
 interface SuccessProps
 {
-    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-    params: Promise<{ lang: string }>;
+    searchParams: URLSearchParams;
+    params: Params;
 }
 
 export default async function Success ({searchParams, params}: SuccessProps)
@@ -22,10 +23,10 @@ export default async function Success ({searchParams, params}: SuccessProps)
     // {
     //     redirect( "/login" );
     // }
-    const resolvedSearchParams = await searchParams;
-    const hotelId = resolvedSearchParams['hotelId'] as string;
-    const bookingId = resolvedSearchParams[ 'bookingId' ] as string;
-    const { lang } = await params;
+    // const resolvedSearchParams = await searchParams;
+    const hotelId = searchParams['hotelId'] as string;
+    const bookingId = searchParams[ 'bookingId' ] as string;
+    const lang = params?.lang;
     // const lang = lang;
     
     const [ bookingPromise, languagePromise ] = await Promise.all(

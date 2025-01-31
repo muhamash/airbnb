@@ -6,13 +6,6 @@ import Head from "next/head";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface Redirect {
-    [ key: string ]: string;
-}
-
-interface Language {
-    redirect: Redirect;
-}
 
 export default function RedirectionPage() {
     const searchParams : URLSearchParams = useSearchParams();
@@ -23,7 +16,7 @@ export default function RedirectionPage() {
     const bookingId = searchParams?.get("bookingId");
     const hotelAddress = searchParams?.get("hotelAddress");
     const [countdown, setCountdown] = useState(3);
-    const [langData, setLangData] = useState<Language | null>(null);
+    const [langData, setLangData] = useState< null>(null);
     const params = useParams();
 
     useEffect( () =>
