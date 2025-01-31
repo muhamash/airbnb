@@ -79,8 +79,9 @@ export default function PaymentForm({
 
             const phoneNumber = formData.get( "phoneNumber" );
             const hotelName = formData.get( "hotelName" );
-            const name = formData.get("name")
-            await sendMsz( phoneNumber, hotelName, name );
+            const name = formData.get( "name" );
+            const hotelAddress = formData.get( "hotelAddress" );
+            await sendMsz( phoneNumber, hotelName, name , hotelAddress);
           }
         } catch ( error )
         {

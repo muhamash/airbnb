@@ -333,7 +333,7 @@ export async function sendGreetMail ( email: string, name: string )
   }
 }
 
-export async function sendMsz ( phoneNumber: never, hotelName: string, name: string )
+export async function sendMsz ( phoneNumber: never, hotelName: string, name: string, hotelAddress: string )
 {
   const courier = new CourierClient( {
     authorizationToken: process.env.COURIER_AUTH_TOKEN,
@@ -348,7 +348,7 @@ export async function sendMsz ( phoneNumber: never, hotelName: string, name: str
         },
         content: {
           title: "Confirmation text",
-          body: `assalamu alaikum , ${ name }; Your report is under review.. ${ hotelName }`,
+          body: `assalamu alaikum , ${ name }; You have booked a hotel named: ${ hotelName } ; located: ${hotelAddress}`,
         },
         routing: {
           method: "single",
