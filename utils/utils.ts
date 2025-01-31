@@ -61,10 +61,6 @@ export async function generateHtml (content: { checkIn: string; checkOut: string
 <head>
     <title>${ language?.invoice?.head }</title>
     <style>
-        @font-face {
-            font-family: 'NotoSansBengali';
-            src: url('https://raw.githack.com/googlefonts/noto-fonts/main/hinted/ttf/NotoSansBengali/NotoSansBengali-Regular.ttf') format('truetype');
-        }
         body {
             font-family: 'NotoSansBengali', sans-serif;
             background-color: #A0A0A0;
