@@ -1,6 +1,7 @@
 'use client';
 
 import { paymentForm, sendMsz } from "@/utils/serverActions";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -13,7 +14,7 @@ interface paymentFormProps
   isVerified: boolean;
   searchParams: URLSearchParams;
   languageData: { [ key: string ]: string | never };
-  params: { lang: string, id: string };
+  params: Params;
   calculateRentedPrice: number;
   userId: string;
   email: string;

@@ -6,6 +6,7 @@ import { isUserVerified } from "@/queries";
 import { fetchDictionary } from "@/utils/fetchFunction";
 import { calculateDaysBetween } from "@/utils/utils";
 import { Metadata } from "next";
+import { Params } from "next/dist/shared/lib/router/utils/route-matcher";
 
 export const metadata: Metadata = {
   title: "Airbnb || Payment",
@@ -13,13 +14,15 @@ export const metadata: Metadata = {
 };
 
 interface PaymentProps {
-  params: Promise<{ lang: string, id: string }>;
+  params: Params;
   searchParams: URLSearchParams;
 }
 
 export default async function Payment({ searchParams, params }: PaymentProps) {
 //   const resolvedSearchParams = Object.fromEntries(searchParams.entries());
-  const { lang, id } = await params;
+  // const { lang, id } = await params;
+  const lang = params.lang;
+  const id = params?.id
   // const router = useRouter();
   const checkIn = searchParams.checkIn;
   const checkOut = searchParams.checkOut;
@@ -36,14 +39,14 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
 
     const userId = user?.user?._id || user?.user?.id;
     const isVerified = await isUserVerified(user?.user?.email);
-    const responseData = await responseDataDictionary;
+    // const responseData = await responseDataDictionary;
     const hotel = await hotelResponse.json();
     // console.log(isVerified );
     let rate = {};
     try {
       rate = JSON.parse(searchParams?.rate || "{}");
-    } catch (err) {
-      console.error("Invalid rate JSON:", err.message);
+    } catch (error) {
+      console.error("Invalid rate JSON:", error.message);
       throw new Error("Invalid rate parameter.");
     }
 
@@ -57,7 +60,7 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
 
     return (
       <div className="max-w-7xl mx-auto px-6 py-[100px]">
-        <BackButton text={responseData?.payment?.back} />
+        <BackButton text={responseDataDictionary?.payment?.back} />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-3">
           <PaymentForm
             isVerified={isVerified}
@@ -68,12 +71,12 @@ export default async function Payment({ searchParams, params }: PaymentProps) {
             imageUrl={hotel?.data?.thumbNailUrl}
             searchParams={searchParams}
             params={{ lang, id }}
-            languageData={responseData?.payment}
+            languageData={responseDataDictionary?.payment}
           />
           <div>
             <PriceCard
               hotelName={hotel?.data?.name}
-              languageData={responseData?.payment}
+              languageData={responseDataDictionary?.payment}
               calculateRentedPrice={calculateRentedPrice}
               days={days}
               searchParams={searchParams}
