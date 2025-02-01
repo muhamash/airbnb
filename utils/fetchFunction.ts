@@ -25,7 +25,7 @@ export async function fetchDictionary(locale) {
 export async function fetchBookingDetails(hotelId: string, bookingId: string) {
   try {
     const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/booking/${ hotelId }?bookingId=${ bookingId }`, {
-      // cache: "no-store",
+      cache: "no-store",
     } );
 
     const data = await response.json();
@@ -46,10 +46,11 @@ export async function fetchBookingDetails(hotelId: string, bookingId: string) {
 export async function fetchUserBookings(userId: string, page:number) {
   try {
     const response = await fetch(
-      `${ process.env.NEXT_PUBLIC_URL }/api/booking?userId=${userId}&page=${page}`,
+      `${ process.env.NEXT_PUBLIC_URL }/api/booking?userId=${ userId }&page=${ page }`,
       {
         method: "GET",
-      }
+        cache: "no-store",
+      },
     );
 
     if (!response.status === 200) {
@@ -136,7 +137,9 @@ export async function fetchTopTenHotels ()
 {
   try
   {
-    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels/top` );
+    const response = await fetch( `${ process.env.NEXT_PUBLIC_URL }/api/hotels/top`, {
+      cache: "no-store"
+    } );
     const fetchData = await response.text();
     const data = await JSON.parse( fetchData );
     // console.log(data)

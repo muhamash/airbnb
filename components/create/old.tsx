@@ -9,13 +9,16 @@ import toast, { Toaster } from "react-hot-toast";
 export default function Create() {
   const { state, dispatch } = useFormContext();
 
-  useEffect(() => {
-    Object.entries(state).forEach(([field, value]) => {
-      if (typeof value === 'string' || Array.isArray(value)) {
-        dispatch({ type: 'VALIDATE_FIELD', field, value });
-      }
-    });
-  }, []);
+    useEffect( () =>
+    {
+        Object.entries( state ).forEach( ( [ field, value ] ) =>
+        {
+            if ( typeof value === 'string' || Array.isArray( value ) )
+            {
+                dispatch( { type: 'VALIDATE_FIELD', field, value } );
+            }
+        } );
+    }, [] );
 
     const handleSubmit = ( e: React.FormEvent ) =>
     {
@@ -48,14 +51,15 @@ export default function Create() {
 
         console.log( 'Form Data:', state );
         toast.success( 'Form submitted successfully!' );
+        dispatch( { type: 'RESET_FORM' } );
     };
 
-    const handleInputChange = ( field: string, value: string ) =>
+    const handleInputChange = ( field: string, value: never ) =>
     {
         dispatch( { type: 'UPDATE_FIELD', field, value } );
     };
 
-    const handleStockChange = ( index: number, field: keyof Stock, value: string ) =>
+    const handleStockChange = ( index: number, field: keyof Stock, value: never ) =>
     {
         dispatch( {
             type: 'UPDATE_FIELD',
@@ -224,53 +228,82 @@ export default function Create() {
                 {/* Price */}
                 <div className="mb-4">
                     {state.editFields.price ? (
-                        <div className="flex gap-2">
-                            <motion.input
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                value={state.price}
-                                onChange={( e ) => handleInputChange( 'price', e.target.value )}
-                                className="border px-2 py-1 rounded"
-                                placeholder="Price"
-                                type="number"
-                                min="0"
-                            />
-                            <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                                type="button"
-                                onClick={() => toggleEdit( 'price' )}
-                                className="mt-2 text-blue-500"
-                            >
-                                <i className="fas fa-save mr-2"></i>
-                            </motion.button>
-                            <motion.button
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                                type="button"
-                                onClick={() => handleCancel( 'price' )}
-                                className="mt-2 text-red-500"
-                            >
-                                <i className="fas fa-times mr-2"></i>
-                                Cancel
-                            </motion.button>
+                        <div className="flex flex-col gap-2">
+                            <div className="w-[200px]">
+                                <label className="block text-gray-700 font-medium">Rooms (Required)</label>
+                                <motion.input
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    value={state.price.rooms}
+                                    onChange={( e ) => handleInputChange( 'price.rooms', e.target.value )}
+                                    className={`border px-2 py-1 rounded w-full ${ state.errors[ "price.rooms" ] ? "border-red-500" : "" }`}
+                                    placeholder="Enter number of rooms"
+                                    type="number"
+                                    min="1"
+                                    required
+                                />
+                                {state.errors[ "price.rooms" ] && (
+                                    <span className="text-red-500 text-sm">{state.errors[ "price.rooms" ]}</span>
+                                )}
+                            </div>
+
+                            <div className="w-[200px]">
+                                <label className="block text-gray-700 font-medium">Beds (Optional)</label>
+                                <motion.input
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    value={state.price.beds}
+                                    onChange={( e ) => handleInputChange( 'price.beds', e.target.value )}
+                                    className="border px-2 py-1 rounded w-full"
+                                    placeholder={`Recommended`}
+                                    type="number"
+                                    min="0"
+                                />
+                            </div>
+
+                            {/* Buttons */}
+                            <div className="flex gap-2">
+                                <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    type="button"
+                                    onClick={() => toggleEdit( 'price' )}
+                                    className={`mt-2 text-blue-500 ${ !state.price.rooms ? "opacity-50 cursor-not-allowed" : "" }`}
+                                    disabled={!state.price.rooms}
+                                >
+                                    <i className="fas fa-save mr-2"></i> Save
+                                </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    type="button"
+                                    onClick={() => handleCancel( 'price' )}
+                                    className="mt-2 text-red-500"
+                                >
+                                    <i className="fas fa-times mr-2"></i> Cancel
+                                </motion.button>
+                            </div>
                         </div>
                     ) : (
                         <>
-                            <span className="text-xl font-bold edit px-1">
-                                {state.price || "Price in tk"}
-                            </span>
+                            <span className="text-xl font-bold edit px-1">{state.price.rooms || "Prices"}</span>
                             <i
                                 className="fas fa-edit text-violet-500 cursor-pointer"
                                 onClick={() => toggleEdit( 'price' )}
-                            ></i>
-                            <span className="text-gray-600 ml-1 px-1">tk per night</span>
+                                >
+                                    
+                            </i>
+                            <span className="text-gray-600 ml-1 px-1">rooms</span>
+                            {state.price.beds && (
+                                <>
+                                    <span className="text-xl font-bold edit px-1">{state.price.beds}</span>
+                                    <span className="text-gray-600 ml-1 px-1">beds</span>
+                                </>
+                            )}
                         </>
                     )}
-                    {state.errors.price && (
-                        <span className="text-red-500 text-sm">{state.errors.price}</span>
-                    )}
                 </div>
+
 
                 {/* Property Overview */}
                 <div className="mb-4">
@@ -401,8 +434,8 @@ export default function Create() {
                             <motion.div
                                 key={idx}
                                 className={`flex w-fit px-2 items-center gap-2 cursor-pointer p-2 rounded ${ state.amenities.includes( amenity.label )
-                                        ? 'bg-green-500 text-white'
-                                        : 'bg-gray-100'
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-gray-100'
                                     }`}
                                 onClick={() => toggleAmenity( amenity.label )}
                                 whileHover={{ scale: 0.95 }}

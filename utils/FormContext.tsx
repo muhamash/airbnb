@@ -1,19 +1,24 @@
-// contexts/FormContext.tsx
 'use client';
 
 import { createContext, ReactNode, useContext, useReducer } from 'react';
 
 interface Stock {
-  roomsMax: string;
-  guestsMax: string;
-  bedMax: string;
+  roomsMax: number;
+  guestsMax: number;
+  bedMax: number;
+}
+
+interface Price
+{
+  beds?: number;
+  rooms: number;
 }
 
 interface FormState {
   propertyName: string;
   propertyLocation: string;
   overview: string;
-  price: string;
+  price: Price[];
   rooms: string;
   gallery: string[];
   amenities: string[];
@@ -29,7 +34,8 @@ type FormAction =
   | { type: 'TOGGLE_AMENITY'; amenity: string }
   | { type: 'ADD_STOCK' }
   | { type: 'REMOVE_STOCK'; index: number }
-  | { type: 'VALIDATE_FIELD'; field: string; value: never };
+  | { type: 'VALIDATE_FIELD'; field: string; value: never }
+  | { type: "RESET_FORM" };
 
 const FormContext = createContext<{
   state: FormState;
@@ -37,7 +43,15 @@ const FormContext = createContext<{
 } | undefined>(undefined);
 
 const formReducer = (state: FormState, action: FormAction): FormState => {
-  switch (action.type) {
+  switch ( action.type )
+  {
+    case 'RESET_FORM':
+      return {
+        ...initialState, 
+        errors: {}, 
+        editFields: {},
+      };
+    
     case 'UPDATE_FIELD': {
       if ( action.field.startsWith( 'stocks.' ) )
       {
@@ -51,7 +65,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
           [ fieldName ]: action.value
         };
 
-        // Create temporary state for validation
+        // temporary state for validation
         const tempState = {
           ...state,
           stocks: updatedStocks,
@@ -92,6 +106,25 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
           }
         };
       }
+
+      if (action.field.startsWith('price.')) {
+        const pathParts = action.field.split('.');
+        const fieldName = pathParts[1] as keyof Price;
+
+        const updatedPrice = {
+          ...state.price,
+          [fieldName]: action.value,
+        };
+
+        return {
+          ...state,
+          price: updatedPrice,
+          errors: {
+            ...state.errors,
+            [action.field]: validateField(action.field, action.value, state),
+          },
+        };
+      }
       
       return {
         ...state,
@@ -115,10 +148,10 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
     case 'RESET_FIELD':
       return {
         ...state,
-        [action.field]: initialState[action.field as keyof FormState],
+        // [ action.field ]: initialState[ action.field as keyof FormState ],
         editFields: {
           ...state.editFields,
-          [action.field]: false,
+          [ action.field ]: false,
         },
       };
 
@@ -167,6 +200,14 @@ const validateField = ( field: string, value: never, state: FormState ): string 
       return 'Invalid URL format';
     }
   }
+
+  if (field === 'price.rooms' && !value) {
+    return 'Rooms field is required';
+  }
+
+  if (field === 'price.beds' && value < 0) {
+    return 'Beds cannot be negative';
+  }
   
   if( field.startsWith( 'stocks.' ) ) {
     const pathParts = field.split( '.' );
@@ -190,7 +231,7 @@ const initialState: FormState = {
     propertyName: '',
     propertyLocation: '',
     overview: '',
-    price: '',
+     price: { beds: '', rooms: '' },
     gallery: Array( 5 ).fill( '' ),
     amenities: [],
     stocks: [ { roomsMax: '', guestsMax: '', bedMax: '' } ],
