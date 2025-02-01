@@ -1,4 +1,13 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
+
+interface OwnerInfo
+{
+    ownerId: string;
+    ownerImage: string;
+    ownerName: string;
+    ownerEmail: string;
+}
+
 export interface IHotel extends Document
 {
   id: string;
@@ -13,8 +22,16 @@ export interface IHotel extends Document
   thumbNailUrl?: string;
   gallery?: string[];
   overview?: string;
-  amenities?: string[];
+    amenities?: string[];
+    ownerInfo?: OwnerInfo;
 };
+
+const ownerInfoSchema = new Schema( {
+    ownerId: { type: String, required: true },
+    ownerImage: { type: String, required: true },
+    ownerName: { type: String, required: true },
+    ownerEmail: { type: String, required: true }
+} );
 
 const hotelSchema: Schema<IHotel> = new Schema( {
     name: {
@@ -64,7 +81,8 @@ const hotelSchema: Schema<IHotel> = new Schema( {
     amenities: {
         required: false,
         type: [ String ]
-    }
+    },
+    ownerInfo: ownerInfoSchema
 } );
 
 hotelSchema.index({ name: 1 });

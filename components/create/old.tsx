@@ -6,9 +6,23 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-export default function Create() {
-  const { state, dispatch } = useFormContext();
+interface userProps
+{
+    image: string;
+    name: string;
+    email: string;
+    userId: string;
+    emailVerified: boolean;
+    firstLogin: boolean;
+}
+interface CreateProps
+{
+    user: userProps[];
+}
 
+export default function Create({user}: CreateProps) {
+    const { state, dispatch } = useFormContext();
+    // console.log( user );
     useEffect( () =>
     {
         Object.entries( state ).forEach( ( [ field, value ] ) =>
@@ -49,7 +63,23 @@ export default function Create() {
             return;
         }
 
-        console.log( 'Form Data:', state );
+        const formData = new FormData( e.currentTarget as HTMLFormElement );
+        const name = formData.get( 'name' ) as string;
+        const email = formData.get( 'email' ) as string;
+        const userId = formData.get( 'userId' ) as string;
+        const image = formData.get( 'image' ) as string;
+
+        const formState = {
+            ...state,
+            owner: {
+                name,
+                email,
+                userId,
+                image,
+            },
+        };
+
+        console.log( 'Form Data:', formState );
         toast.success( 'Form submitted successfully!' );
         dispatch( { type: 'RESET_FORM' } );
     };
@@ -87,6 +117,10 @@ export default function Create() {
         <>
             <Toaster position="top-center" reverseOrder={false} />
             <form onSubmit={handleSubmit} className="max-w-7xl pt-[40px] mx-auto px-6 my-[100px] flex flex-col relative gap-5">
+                <input name="name" value={user?.name} type="hidden" />
+                <input name="email" value={user?.email} type="hidden" />
+                <input name="userId" value={user?.id ?? user?._id} type="hidden" />
+                <input name="image" value={user?.image} type="hidden"/>
                 <div className="flex gap-1 justify-end">
                     <motion.button
                         whileHover={{ scale: 1.1 }}
@@ -417,19 +451,19 @@ export default function Create() {
                 </div>
 
                 {/* Amenities */}
-                <div>
-                    <h3 className="text-xl font-semibold mb-4">What this place offers</h3>
+                <div className="">
+                    <h3 className="text-xl font-semibold">What this place offers</h3>
                     <p className="text-[11px] font-semibold text-transparent bg-clip-text bg-gradient-to-r from-green-700 via-purple-600 to-pink-500 font-mono animate-pulse">
                         ***select the extra features for your hotel you are providing to the users!!
                     </p>
-                    <div className="grid grid-cols-2 gap-4" id="amenities">
+                    <div className="grid grid-cols-2 gap-4 pt-4" id="amenities">
                         {[
-                            { icon: "fa-umbrella-beach", label: "Beach access" },
-                            { icon: "fa-person-swimming", label: "Private pool" },
-                            { icon: "fa-wifi", label: "Free Wi-Fi" },
+                            { icon: "fa-umbrella-beach", label: "Beach" },
+                            { icon: "fa-person-swimming", label: "Pool" },
+                            { icon: "fa-wifi", label: "Wi-Fi" },
                             { icon: "fa-sink", label: "Kitchen" },
-                            { icon: "fa-square-parking", label: "Free Parking" },
-                            { icon: "fa-dumbbell", label: "Fitness Center" },
+                            { icon: "fa-square-parking", label: "Parking" },
+                            { icon: "fa-dumbbell", label: "Fitness" },
                         ].map( ( amenity, idx ) => (
                             <motion.div
                                 key={idx}
