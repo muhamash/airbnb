@@ -53,7 +53,12 @@ export default function Search({ placeholder }: SearchProps) {
     const query = e.target.value;
     dispatch({ type: "SET_QUERY", payload: query });
     dispatch({ type: "TOGGLE_DROPDOWN", payload: true });
-    fetchSearchResults(query);
+    fetchSearchResults( query );
+    
+    if ( !query )
+    {
+      dispatch( { type: "TOGGLE_DROPDOWN", payload: false } );
+    }
   };
 
   const handleButton = () => {
@@ -70,10 +75,18 @@ export default function Search({ placeholder }: SearchProps) {
   {
     if ( e.key === "Enter" && query.trim() )
     {
+      e.preventDefault();
       const parseData = { query };
-      const queryString = new URLSearchParams( parseData ).toString();
-      router.replace( `/${ params?.lang }?page=${ page }&${ queryString }` );
+      // console.log("Current Query:", query);
+      const queryString = new URLSearchParams( parseData );
       dispatch( { type: "TOGGLE_DROPDOWN", payload: false } );
+      try
+      {
+        router.push( `${ process.env.NEXT_PUBLIC_URL }/${ params?.lang }?page=${ page }&${ queryString }` );
+      } catch ( error )
+      {
+        console.error( "Router push failed:", error );
+      }
     }
   };
 
@@ -142,7 +155,7 @@ export default function Search({ placeholder }: SearchProps) {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            {results?.length === 0 || results === undefined  && query.trim() && !isPending && (
+            {results && results?.length === 0 || results === undefined  && query.trim() && !isPending && (
                 <motion.li
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
