@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
             );
         }
     } catch (error) {
-        // console.error("Error during login:", error);
+        console.error("Error during login:", error);
         return NextResponse.json(
             { success: false, error: "user not found for something else!!" },
             { status: 500 }

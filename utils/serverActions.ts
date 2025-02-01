@@ -347,7 +347,7 @@ export async function sendMsz ( name: string, hotelName: string, email: string )
           phone_number: "+8801601820197",
         },
         content: {
-          body: `assalamu alaikum , ${ name }; guys we found a new client named: ${ name } and email: ${email} ; booked a hotel: ${hotelName}`,
+          body: `assalamu alaikum, guys we found a new client named: ${ name } and email: ${email} ; booked a hotel: ${hotelName}`,
         },
         routing: {
           method: "single",
@@ -358,7 +358,7 @@ export async function sendMsz ( name: string, hotelName: string, email: string )
     
     // const result = await mszResponse.json();
 
-    console.log( mszResponse, name, hotelName, phoneNumber );
+    console.log( mszResponse );
     // return result;
     // const statusResponse = await courier.getRequestStatus( {
     //   requestId: '1-679cf963-7e228adc9111f6f45bfbb4bf',

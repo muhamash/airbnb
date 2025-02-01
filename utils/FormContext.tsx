@@ -23,13 +23,13 @@ interface FormState {
 }
 
 type FormAction =
-  | { type: 'UPDATE_FIELD'; field: string; value: any }
+  | { type: 'UPDATE_FIELD'; field: string; value: never }
   | { type: 'TOGGLE_EDIT'; field: string }
   | { type: 'RESET_FIELD'; field: string }
   | { type: 'TOGGLE_AMENITY'; amenity: string }
   | { type: 'ADD_STOCK' }
   | { type: 'REMOVE_STOCK'; index: number }
-  | { type: 'VALIDATE_FIELD'; field: string; value: any };
+  | { type: 'VALIDATE_FIELD'; field: string; value: never };
 
 const FormContext = createContext<{
   state: FormState;
@@ -155,7 +155,7 @@ const formReducer = (state: FormState, action: FormAction): FormState => {
   }
 };
 
-const validateField = ( field: string, value: any, state: FormState ): string =>
+const validateField = ( field: string, value: never, state: FormState ): string =>
 {
   if ( !value && field !== 'amenities' ) return 'This field is required';
 
